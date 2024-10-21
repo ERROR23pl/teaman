@@ -1,0 +1,184 @@
+<diagram program="umletino" version="15.1"><zoom_level>8</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>0</x><y>132</y><w>520</w><h>424</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>32</x><y>172</y><w>152</w><h>96</h></coordinates><panel_attributes>Część użytkownika
+
+1. Szyfrowanie end-to-end
+2. Część wspólna</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>304</x><y>172</y><w>152</w><h>96</h></coordinates><panel_attributes>GUI
+
+1. Koncepcyjny projekt wizualny
+2. Część wspólna</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>48</x><y>388</y><w>152</w><h>96</h></coordinates><panel_attributes>Serwer
+
+1. Część wspólna</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>312</x><y>388</y><w>152</w><h>96</h></coordinates><panel_attributes>Baza
+
+1. Dane użytkowników (w wersji
+bezpiecznej)
+2. Część wspólna
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>176</x><y>172</y><w>144</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;160;10</additional_attributes></element><element><id>Relation</id><coordinates><x>176</x><y>236</y><w>144</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>160;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>88</x><y>260</y><w>24</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;160;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>144</x><y>260</y><w>24</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element><element><id>Relation</id><coordinates><x>192</x><y>444</y><w>136</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>150;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>192</x><y>404</y><w>136</w><h>24</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;150;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>696</x><y>252</y><w>48</w><h>240</h></coordinates><panel_attributes>
+
+--
+
+
+      F
+
+
+--
+
+
+      R
+
+
+--
+
+
+      A</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>744</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 22.10
+
+--
+
+
+
+
+
+
+Diagramy UML; 
+Przygotowanie środowiska;
+Uzgadnianie pkt. 2. z części
+wspólnej</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>880</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 29.10
+
+--
+Serwer-baza:
+
+Obsługa logowania;
+Obsługa zespołów-pokojów;
+Przechowywanie danych
+użytkowników
+--
+Cz. użytkownika:
+
+Obsługa logowania;
+Obsługa zespołów-pokojów
+
+--
+GUI:
+
+Obsługa logowania;
+Obsługa zespołów-pokojów</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1016</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 05.11
+
+--
+Serwer-baza:
+
+Obsługa tasków
+
+
+
+--
+Cz. użytkownika:
+
+Obsługa tasków
+
+
+--
+GUI:
+
+Obsługa tasków</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1152</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 12.11
+
+--
+Serwer-baza:
+
+Obsługa chatów;
+Obsługa kalendarza
+
+
+--
+Cz. użytkownika:
+
+Obsługa chatów;
+Obsługa kalendarza
+
+--
+GUI:
+
+Obsługa chatów;
+Obsługa kalendarza</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1288</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 19.11
+
+--
+Serwer-baza:
+
+Obsługa udostępniania
+plików;
+Obsługa wydarzeń
+
+--
+Cz. użytkownika:
+
+Obsługa udostępniania
+plików;
+Obsługa wydarzeń
+--
+GUI:
+
+Obsługa udostępniania
+plików;
+Obsługa wydarzeń</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1424</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 26.11
+
+--
+Serwer-baza:
+
+Dodanie modułu szyfrowania
+danych end-to-end
+
+
+--
+Cz. użytkownika:
+
+Dodanie modułu szyfrowania
+danych end-to-end
+
+--
+GUI:
+
+Dodanie modułu szyfrowania
+danych end-to-end</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1560</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 03.12
+
+--
+
+
+
+
+
+Dopracowanie szczegółów
+systemu i elementów
+łączących;
+Testy i ewentualne poprawki
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1696</x><y>252</y><w>136</w><h>240</h></coordinates><panel_attributes>Na 10.12
+
+--
+
+
+
+
+
+
+Ostateczne testy
+i ewentualne drobne
+poprawki</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>200</x><y>132</y><w>112</w><h>48</h></coordinates><panel_attributes>Przekazywanie do części biznesowej komunikatów przekazanych poprzez interakcję użytkownika z elementami GUI
+style=wordwrap
+fontsize=8</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>184</x><y>244</y><w>112</w><h>48</h></coordinates><panel_attributes>Przekazywanie zmian w aktualnym stanie systemu do wyświetlenia
+style=wordwrap
+fontsize=8</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>152</x><y>284</y><w>80</w><h>88</h></coordinates><panel_attributes>Status uwierzytelnienia; requestowane dane; informowanie o aktualizacjach wprowadzonych przez innych użytkowników
+style=wordwrap
+fontsize=8</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>16</x><y>276</y><w>80</w><h>88</h></coordinates><panel_attributes>Prośba o uwierzytelnienie; prośby o dane; aktualizacje danych
+style=wordwrap
+fontsize=8</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>216</x><y>396</y><w>96</w><h>24</h></coordinates><panel_attributes>Pobieranie danych z bazy
+style=wordwrap
+fontsize=8</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>200</x><y>452</y><w>112</w><h>24</h></coordinates><panel_attributes>Przekazywanie aktualizacji danych; requesty o dane
+style=wordwrap
+fontsize=8</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>520</x><y>44</y><w>208</w><h>184</h></coordinates><panel_attributes>Część wspólna:
+1. Prototyp  (proof of concept)
+2. Uzgodnienie używanych interfejsów i protokołów (oprócz szyfr.)
+3. Moduły  i funkcjonalności (lista przybliżona):
+*system logowania i role użytkowników
+*task listy, boardy
+*chaty, pokoje
+*kalendarz
+*wydarzenia
+*udostępnianie i przesył plików
+4. Testowanie
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element></diagram>
