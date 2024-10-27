@@ -1,0 +1,23 @@
+ <div class="welcome-container">
+        <h1>Welcome to the Web App</h1>
+        <p>Search for anything:</p>
+
+        <label for="searchInput">
+            <input type="text" id="searchInput" placeholder="Your name">
+        </label>
+
+        <button onclick="showWelcomeMessage()">Submit</button>
+
+        <div class="message" id="welcomeMessage"></div>
+    </div>
+
+    <script>
+        function showWelcomeMessage() {
+            const searchInput = document.getElementById('searchInput').value;
+            const welcomeMessage = document.getElementById('welcomeMessage');
+
+            if (searchInput) {
+                welcomeMessage.textContent = 'Searching '+ searchInput +' for !';
+            }
+        }
+    </script>

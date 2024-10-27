@@ -1,0 +1,28 @@
+/*<!--TODO DELETE THIS FILE -->*/
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 50px;
+}
+
+form {
+    width: 300px;
+    margin: auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+}
+
+button {
+    padding: 8px;
+    width: 100%;
+}
