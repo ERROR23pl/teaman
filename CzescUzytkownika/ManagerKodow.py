@@ -16,6 +16,9 @@ def wygenerujKod() -> str:
 
 
 def przetestujKod(kod: str) -> bool:
+    if(len(kod) not in range(20,31)):
+        return False
+    
     for znak in kod:
         kodZnaku: int = ord(znak)
         if ((kodZnaku not in range (48,58)) and (kodZnaku not in range (65,91)) and (kodZnaku not in range (97,122))):  #nie cyfra i nie wielka lub mała litera

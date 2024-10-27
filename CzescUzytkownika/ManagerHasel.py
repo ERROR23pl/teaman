@@ -1,3 +1,5 @@
+import typing
+
 def sprawdzAtakSlownikowy(haslo: str) -> bool:      #TODO - DO IMPLEMENTACJI W PRZYSZŁOŚCI; true=nie występuje w słowniku
     return True
 
@@ -43,3 +45,18 @@ def czyMaWszystkieTypyZnakow(haslo: str) -> bool:
     return (sprawdzCzyMaCyfre(haslo) and sprawdzCzyMaMalaLitere(haslo) and sprawdzCzyMaWielkaLitere(haslo) and sprawdzCzyMaZnakSpecjalny(haslo) and (not czyMaCosSpoza(haslo)))
 
 
+
+def czyBrakZabronionychZnakow(haslo: str) -> bool:
+    zabronionyZbior: typing.List = [" ",".",",","-","=","/","\\","\'","\""]
+    
+    for znak in haslo:
+        if (znak in zabronionyZbior):
+            return False
+    
+    return True
+
+
+
+
+def poprawnoscHasla(haslo: str) -> bool:
+    return (len(haslo)>=10 and czyMaWszystkieTypyZnakow(haslo) and czyBrakZabronionychZnakow(haslo) and sprawdzAtakSlownikowy(haslo))
