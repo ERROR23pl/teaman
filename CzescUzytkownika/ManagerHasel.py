@@ -56,7 +56,9 @@ def czyBrakZabronionychZnakow(haslo: str) -> bool:
     return True
 
 
+def testDlugosci(haslo: str) -> bool:
+    return len(haslo)>=10
 
 
 def poprawnoscHasla(haslo: str) -> bool:
-    return (len(haslo)>=10 and czyMaWszystkieTypyZnakow(haslo) and czyBrakZabronionychZnakow(haslo) and sprawdzAtakSlownikowy(haslo))
+    return (testDlugosci(haslo) and czyMaWszystkieTypyZnakow(haslo) and czyBrakZabronionychZnakow(haslo) and sprawdzAtakSlownikowy(haslo))

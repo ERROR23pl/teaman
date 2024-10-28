@@ -1,0 +1,1 @@
+Testy należy przenieść do folderu zawierającego testowane pliki
