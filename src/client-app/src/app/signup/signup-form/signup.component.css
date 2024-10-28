@@ -1,0 +1,25 @@
+.signup_button {
+  margin: 10px;
+  padding: 10px 20px;
+}
+
+input {
+  padding: 10px;
+  min-width: 30%;
+  margin: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+.email_box{
+  /*width: 100%;*/
+  /*border: #45a049 3px;*/
+  /*border-radius: 8px;*/
+}
+
+.page_link {
+  margin-top: 50px;
+  border: #45a049 2px;
+  padding-top: 10px;
+}

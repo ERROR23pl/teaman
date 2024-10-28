@@ -2,8 +2,8 @@ import asyncio
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.middleware.cors import CORSMiddleware
 import models, schemas
 from database import AsyncSessionLocal, engine, get_db
 import uvicorn
@@ -13,16 +13,21 @@ from src.server.datasource.crud import user_crud
 from src.server.datasource.init_db import init_db
 
 app = FastAPI(title="TEAMAN")
+HOST = "localhost"
 PORT = 8000
-AUX_PORT = 3000
+AUX_PORT = 4200
 
 origins = [
-    f'https://localhost:${AUX_PORT}'
+    f"http://${HOST}:${AUX_PORT}",
+    "http://localhost:4200"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=['*']
 )
 
 @app.post("/signup/", response_model=schemas.User)
@@ -58,7 +63,7 @@ async def read_users_me(
 
 async def main():
     # await init_db() # TODO uncomment
-    uvicorn.run("tmp:app", host="localhost", port=PORT, reload=True)
+    uvicorn.run("tmp:app", host=HOST, port=PORT, reload=True)
 
 
 if __name__ == "__main__":

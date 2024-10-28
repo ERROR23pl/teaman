@@ -15,3 +15,14 @@ pip install -r requirements.txt
 pip install nodeenv
 nodeenv -p nenv
 ```
+
+### Run server
+in order to start the server run the [tmp.py](./src/server/datasource/tmp.py)
+
+### Run client
+ensure node.js has been set up, 
+navigate to the [client-app](./src/client-app), 
+and type following the prompt
+```bash
+ng serve
+```

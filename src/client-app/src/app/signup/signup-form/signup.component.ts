@@ -1,16 +1,18 @@
 import {Component, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-signup-form',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    RouterLink
   ],
-  templateUrl: './signup-page.component.html',
-  styleUrl: './signup-page.component.css'
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.css'
 })
-export class SignupPageComponent {
+export class SignupComponent {
   @Input() errorMessage = "signup error"
   @Input() isValid: Boolean = true
 }
