@@ -25,5 +25,7 @@ while (haslo!="\0"):
             print("-posiada niedozwolony znak")
         if(not Hasla.testDlugosci(haslo)):
             print("-nie ma minimum dziesięciu znaków")
-    print("")
+        
+    print("\nPodaj hasło do sprawdzenia: ",end="")
+    haslo: str = input()
         

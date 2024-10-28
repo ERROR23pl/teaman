@@ -9,4 +9,6 @@ while (nazwa!="\0"):
         print("Nazwa poprawna")
     else:
         print("Nazwa niepoprawna")
-    print("")
+        
+    print("\nPodaj nazwę do sprawdzenia: ",end="")
+    nazwa: str = input()

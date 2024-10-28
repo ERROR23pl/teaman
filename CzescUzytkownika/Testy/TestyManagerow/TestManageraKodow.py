@@ -18,4 +18,6 @@ while (kod!="\0"):
         print("Kod poprawny")
     else:
         print("Kod niepoprawny")
-    print("")
+        
+    print("\nPodaj kod do sprawdzenia: ",end="")
+    kod: str = input()
