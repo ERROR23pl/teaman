@@ -16,32 +16,27 @@ def analizaOdpowiedzi(odpowiedz: bytes) -> typing.Tuple[bool, str]:             
     return [False,""]    #tymczasowo
 
 
-def probaRejestracji(adresSerwera: typing.Tuple[str,int], projekt: str, kodZapr: str, login: str, haslo: str, powtHaslo: str) -> typing.Tuple[str, str]:    #w przypadku sukcesu zwraca token sesji oraz (dla celów wizualnych) rolę w projekcie
-    if (projekt=="" or login=="" or haslo==""):
-        raise NameError("PustePole")
-    if(haslo!=powtHaslo):
-        raise NameError("RozneHasla")
+def probaZaproszenia(adresSerwera: typing.Tuple[str,int], projekt: str, login: str, tokenSesji: str) -> str:    #w przypadku sukcesu zwraca kod zaproszeniowy
+    if (projekt==""):
+        raise NameError("NiepolZProj")
+    if(tokenSesji==""):
+        raise NameError("BrakTokenu")
     if (not Nazwy.przetestujNazwe(projekt)):
         raise NameError("ZlaNazwaProjektu")
-    if (not Nazwy.przetestujNazwe(login)):
-        raise NameError("ZlyLogin")
-    if(not Kody.przetestujKod(kodZapr)):
-        raise NameError("ZlyKod")
-    if (not Hasla.czyBrakZabronionychZnakow(haslo)):
-        raise NameError("ZlyZnakWHasle")
-    if (not Hasla.poprawnoscHasla(haslo)):
-        raise NameError("ZleHaslo")
+    
+    if(not Kody.przetestujKod(tokenSesji)):
+        raise NameError("ZlyToken")
     
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
         serwer.sendall(projekt)                                             #TODO póżniej zmienić w rzeczywistą wersję
-        czyProjektIstnieje: bool = analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
+        czyProjektIstnieje: bool = analizaTrueFalse(serwer.recv(4096))      #TODO póżniej zmienić w rzeczywistą wersję
         
         if(not czyProjektIstnieje):
             raise NameError("__ProjNieIstnieje")
         
-        serwer.sendall(kodZapr)                                             #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
-        czyKodPopr: bool = analizaTrueFalse(serwer.recv(4096))                          #TODO póżniej zmienić w rzeczywistą wersję
+        serwer.sendall(tokenSesji)                                          #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
+        czyTokenPopr: bool = bool(serwer.recv(4096))                          #TODO póżniej zmienić w rzeczywistą wersję
         
         if(not czyKodPopr):
             raise NameError("__KodNieIstnieje")

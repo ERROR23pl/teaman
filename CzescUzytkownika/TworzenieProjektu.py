@@ -6,6 +6,11 @@ import ManagerKodow as Kody
 import ManagerNazw as Nazwy
 
 
+def analizaTrueFalse(odpowiedz: bytes) -> bool:         #TODO
+    #zmiana odpowiedzi serwera w False lub True
+    return True    #tymczasowo
+
+
 def analizaOdpowiedzi(odpowiedz: bytes) -> typing.Tuple[bool, str]:                    #TODO
     #zmiana odpowiedzi serwera w [False,""] lub [True, odszyfrowany token sesji]
     return [False,""]    #tymczasowo
@@ -30,7 +35,7 @@ def probaRejestracji(adresSerwera: typing.Tuple[str,int], projekt: str, kodZapr:
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
         serwer.sendall(projekt)                                             #TODO póżniej zmienić w rzeczywistą wersję
-        czyProjektIstnieje: bool = bool(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
+        czyProjektIstnieje: bool = analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
         
         if(czyProjektIstnieje):
             raise NameError("__ProjIstnieje")

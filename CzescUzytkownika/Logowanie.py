@@ -4,6 +4,11 @@ import ManagerHasel as Hasla
 import ManagerNazw as Nazwy
 
 
+def analizaTrueFalse(odpowiedz: bytes) -> bool:         #TODO
+    #zmiana odpowiedzi serwera w False lub True
+    return True    #tymczasowo
+
+
 def analizaOdpowiedzi(odpowiedz: bytes) -> typing.Tuple[bool, str, str]:                    #TODO
     #zmiana odpowiedzi serwera w [False,"",""] lub [True, odszyfrowany token sesji, rola]
     return [False,"",""]    #tymczasowo
@@ -22,7 +27,7 @@ def probaLogowania(adresSerwera: typing.Tuple[str,int], projekt: str, login: str
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
         serwer.sendall(projekt)                                             #TODO póżniej zmienić w rzeczywistą wersję
-        czyProjektIstnieje: bool = bool(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
+        czyProjektIstnieje: bool = analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
         
         if(not czyProjektIstnieje):
             raise NameError("__ProjNieIstnieje")
