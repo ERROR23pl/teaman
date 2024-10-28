@@ -1,15 +1,1 @@
 
-.welcome-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.message {
-    margin-top: 20px;
-    font-size: 1.2em;
-    color: #555;
-}

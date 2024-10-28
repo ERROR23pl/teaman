@@ -1,6 +1,7 @@
 .signup_button {
   margin: 10px;
-  padding: 10px 20px;
+  padding: 15px;
+  width: 20%;
 }
 
 input {
@@ -11,6 +12,10 @@ input {
   border-radius: 4px;
 }
 
+error-message{
+  color: red
+}
+
 
 .email_box{
   /*width: 100%;*/
@@ -18,8 +23,3 @@ input {
   /*border-radius: 8px;*/
 }
 
-.page_link {
-  margin-top: 50px;
-  border: #45a049 2px;
-  padding-top: 10px;
-}
