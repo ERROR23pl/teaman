@@ -21,7 +21,7 @@ def przetestujKod(kod: str) -> bool:
     
     for znak in kod:
         kodZnaku: int = ord(znak)
-        if ((kodZnaku not in range (48,58)) and (kodZnaku not in range (65,91)) and (kodZnaku not in range (97,122))):  #nie cyfra i nie wielka lub mała litera
+        if ((kodZnaku not in range (48,58)) and (kodZnaku not in range (65,91)) and (kodZnaku not in range (97,123))):  #nie cyfra i nie wielka lub mała litera
             return False    #to nie jest poprawny kod
     
     return True     #to jest poprawny kod
