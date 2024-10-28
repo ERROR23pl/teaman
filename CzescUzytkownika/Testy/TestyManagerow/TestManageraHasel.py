@@ -5,7 +5,7 @@ print("Test sprawdzania poprawności:\n")
 print("Podaj hasło do sprawdzenia: ",end="")
 haslo: str = input()
 while (haslo!="\0"):
-    if(Hasla.przetestujHaslo(haslo)):
+    if(Hasla.poprawnoscHasla(haslo)):
         print("Hasło poprawne")
     else:
         print("Hasło niepoprawne - łamie następujące reguły:")
