@@ -4,16 +4,8 @@ import hashlib as hash
 import ManagerHasel as Hasla
 import ManagerKodow as Kody
 import ManagerNazw as Nazwy
+import AnalizyOdpowiedzi as Analizy
 
-
-def analizaTrueFalse(odpowiedz: bytes) -> bool:         #TODO
-    #zmiana odpowiedzi serwera w False lub True
-    return True    #tymczasowo
-
-
-def analizaOdpowiedzi(odpowiedz: bytes) -> typing.Tuple[bool, str]:                    #TODO
-    #zmiana odpowiedzi serwera w [False,""] lub [True, odszyfrowany token sesji]
-    return [False,""]    #tymczasowo
 
 
 def probaRejestracji(adresSerwera: typing.Tuple[str,int], projekt: str, kodZapr: str, login: str, haslo: str, powtHaslo: str) -> typing.Tuple[str, str]:    #w przypadku sukcesu zwraca token sesji oraz (dla celów wizualnych) rolę w projekcie
@@ -35,14 +27,14 @@ def probaRejestracji(adresSerwera: typing.Tuple[str,int], projekt: str, kodZapr:
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
         serwer.sendall(projekt)                                             #TODO póżniej zmienić w rzeczywistą wersję
-        czyProjektIstnieje: bool = analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
+        czyProjektIstnieje: bool = Analizy.analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
         
         if(czyProjektIstnieje):
             raise NameError("__ProjIstnieje")
         
         serwer.sendall(hash.sha3_512(login),hash.sha3_512(haslo))           #TODO póżniej zmienić w rzeczywistą i dodatkowo zaszyfrowaną wersję
         odpowiedz: bytes = serwer.recv(4096)
-        rezultat: typing.Tuple = analizaOdpowiedzi(odpowiedz)
+        rezultat: typing.Tuple = Analizy.analizaBoolStr(odpowiedz)
         
         serwer.close()
         return rezultat[1], "Właściciel zespołu"

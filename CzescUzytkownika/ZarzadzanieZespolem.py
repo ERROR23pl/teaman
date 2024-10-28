@@ -1,19 +1,8 @@
 import socket
 import typing
-import hashlib as hash
-import ManagerHasel as Hasla
 import ManagerKodow as Kody
 import ManagerNazw as Nazwy
-
-
-def analizaTrueFalse(odpowiedz: bytes) -> bool:         #TODO
-    #zmiana odpowiedzi serwera w False lub True
-    return True    #tymczasowo
-
-
-def analizaOdpowiedzi(odpowiedz: bytes) -> typing.Tuple[bool, str]:                    #TODO
-    #zmiana odpowiedzi serwera w [False,""] lub [True, odszyfrowany token sesji]
-    return [False,""]    #tymczasowo
+import AnalizyOdpowiedzi as Analizy
 
 
 def probaZaproszenia(adresSerwera: typing.Tuple[str,int], projekt: str, login: str, tokenSesji: str) -> str:    #w przypadku sukcesu zwraca kod zaproszeniowy
@@ -23,33 +12,35 @@ def probaZaproszenia(adresSerwera: typing.Tuple[str,int], projekt: str, login: s
         raise NameError("BrakTokenu")
     if (not Nazwy.przetestujNazwe(projekt)):
         raise NameError("ZlaNazwaProjektu")
-    
+    if (not Nazwy.przetestujNazwe(login)):
+        raise NameError("ZlyLogin")
     if(not Kody.przetestujKod(tokenSesji)):
         raise NameError("ZlyToken")
     
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
-        serwer.sendall(projekt)                                             #TODO póżniej zmienić w rzeczywistą wersję
-        czyProjektIstnieje: bool = analizaTrueFalse(serwer.recv(4096))      #TODO póżniej zmienić w rzeczywistą wersję
+        serwer.sendall(projekt)                                                     #TODO póżniej zmienić w rzeczywistą wersję
+        czyProjektIstnieje: bool = Analizy.analizaTrueFalse(serwer.recv(4096))      #TODO póżniej zmienić w rzeczywistą wersję
         
         if(not czyProjektIstnieje):
             raise NameError("__ProjNieIstnieje")
         
-        serwer.sendall(tokenSesji)                                          #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
-        czyTokenPopr: bool = bool(serwer.recv(4096))                          #TODO póżniej zmienić w rzeczywistą wersję
+        serwer.sendall(login,tokenSesji)                                            #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
+        czyTokenPopr: bool = Analizy.analizaTrueFalse(serwer.recv(4096))            #TODO póżniej zmienić w rzeczywistą wersję
         
-        if(not czyKodPopr):
-            raise NameError("__KodNieIstnieje")
+        if(not czyTokenPopr):
+            raise NameError("__TokenNiepopr")
         
-        serwer.sendall(hash.sha3_512(login),hash.sha3_512(haslo))           #TODO póżniej zmienić w rzeczywistą i dodatkowo zaszyfrowaną wersję
-        odpowiedz: bytes = serwer.recv(4096)
-        rezultat: typing.Tuple = analizaOdpowiedzi(odpowiedz)
+        kodZapr: str = Kody.wygenerujKod()
+        serwer.sendall(kodZapr)                                                     #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
+        czySukces: bool = Analizy.analizaTrueFalse(serwer.recv(4096))
+        while (not czySukces):
+            kodZapr = Kody.wygenerujKod()
+            serwer.sendall(kodZapr)                                                 #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
+            czySukces = Analizy.analizaTrueFalse(serwer.recv(4096))
         
-        if(not rezultat[0]):
-            raise NameError("__LoginIstnieje")
-        else:
-            serwer.close
-            return rezultat[1], "Członek zespołu"
+        serwer.close()
+        return kodZapr
     
     except NameError as error:
         if(str(error)[:2]=="__"):
