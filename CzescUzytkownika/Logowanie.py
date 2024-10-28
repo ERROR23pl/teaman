@@ -18,6 +18,9 @@ def probaLogowania(adresSerwera: typing.Tuple[str,int], projekt: str, login: str
     
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
+        
+        #poinformuj, że akcją jest logowanie
+        
         serwer.sendall(projekt)                                                                 #TODO póżniej zmienić w rzeczywistą wersję
         czyProjektIstnieje: bool = Analizy.analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
         

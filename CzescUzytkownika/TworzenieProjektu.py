@@ -26,13 +26,16 @@ def probaRejestracji(adresSerwera: typing.Tuple[str,int], projekt: str, kodZapr:
     
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
-        serwer.sendall(projekt)                                             #TODO póżniej zmienić w rzeczywistą wersję
-        czyProjektIstnieje: bool = Analizy.analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
+        
+        #poinformuj, że akcją jest tworzenie projektu
+        
+        serwer.sendall(projekt)                                                             #TODO póżniej zmienić w rzeczywistą wersję
+        czyProjektIstnieje: bool = Analizy.analizaTrueFalse(serwer.recv(4096))              #TODO póżniej zmienić w rzeczywistą wersję
         
         if(czyProjektIstnieje):
             raise NameError("__ProjIstnieje")
         
-        serwer.sendall(hash.sha3_512(login),hash.sha3_512(haslo))           #TODO póżniej zmienić w rzeczywistą i dodatkowo zaszyfrowaną wersję
+        serwer.sendall(hash.sha3_512(login),hash.sha3_512(haslo))                           #TODO póżniej zmienić w rzeczywistą i dodatkowo zaszyfrowaną wersję
         odpowiedz: bytes = serwer.recv(4096)
         rezultat: typing.Tuple = Analizy.analizaBoolStr(odpowiedz)
         

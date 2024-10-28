@@ -26,6 +26,14 @@ def wyslijBladDoGUI(GUI, blad: NameError):
         komunikat="Podany login już istnieje w wybranym projekcie!"
     elif(kodBledu=="ProjIstnieje"):
         komunikat="Projekt o podanej nazwie już istnieje!"
+    elif(kodBledu=="NiepolZProj"):
+        komunikat="Nie jesteś połączony z żadnym projektem!"
+    elif(kodBledu=="BrakTokenu"):
+        komunikat="Nie jesteś zalogowany!"
+    elif(kodBledu=="ZlyToken"):
+        komunikat="Wystąpił błąd sesji - zaloguj się jeszcze raz!"
+    elif(kodBledu=="TokenNiepopr"):
+        komunikat="Sesja wygasła lub nie posiadasz wymaganych uprawnień do tej operacji!"
     
     else:
         komunikat="Wystąpił nieznany błąd!"
