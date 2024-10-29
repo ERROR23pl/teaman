@@ -1,16 +1,12 @@
 import socket
 import typing
 import ManagerHasel as Hasla
-import ManagerKodow as Kody
 import ManagerNazw as Nazwy
+import AnalizyOdpowiedzi as Analizy
 
 
-def analizaOdpowiedzi(odpowiedz: bytes) -> typing.Tuple[bool, str, str]:                    #TODO
-    #zmiana odpowiedzi serwera w [False,"",""] lub [True, odszyfrowany token sesji, rola]
-    return [False,"",""]    #tymczasowo
 
-
-def probaLogowania(adresSerwera: typing.Tuple[str,int], projekt: str, login: str, haslo: str) -> typing.Tuple[str, str]:
+def probaLogowania(adresSerwera: typing.Tuple[str,int], projekt: str, login: str, haslo: str) -> typing.Tuple[str, str]:    #w przypadku sukcesu zwraca token sesji oraz (dla celów wizualnych) rolę w projekcie
     if (projekt=="" or login=="" or haslo==""):
         raise NameError("PustePole")
     if (not Nazwy.przetestujNazwe(projekt)):
@@ -22,20 +18,23 @@ def probaLogowania(adresSerwera: typing.Tuple[str,int], projekt: str, login: str
     
     try:
         serwer: socket.socket = socket.create_connection(adresSerwera)
-        serwer.sendall(projekt)                                             #TODO póżniej zmienić w rzeczywistą wersję
-        czyProjektIstnieje: bool = bool(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
+        
+        #poinformuj, że akcją jest logowanie
+        
+        serwer.sendall(projekt)                                                                 #TODO póżniej zmienić w rzeczywistą wersję
+        czyProjektIstnieje: bool = Analizy.analizaTrueFalse(serwer.recv(4096))                  #TODO póżniej zmienić w rzeczywistą wersję
         
         if(not czyProjektIstnieje):
             raise NameError("__ProjNieIstnieje")
         
-        serwer.sendall(login,haslo)                                         #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
+        serwer.sendall(login,haslo)                                                             #TODO póżniej zmienić w rzeczywistą i zaszyfrowaną wersję
         odpowiedz: bytes = serwer.recv(4096)
-        rezultat: typing.Tuple = analizaOdpowiedzi(odpowiedz)
+        rezultat: typing.Tuple = Analizy.analizaBool2Str(odpowiedz)
         
         if(not rezultat[0]):
             raise NameError("__NieudaneLogowanie")
         else:
-            serwer.close
+            serwer.close()
             return rezultat[1], rezultat[2]
     
     except NameError as error:
