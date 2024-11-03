@@ -3,10 +3,10 @@ import typing
 import ManagerKodow as Kody
 
 
-def stworzProjekt(login: str, haslo: str) -> str: #token sesji
+def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token sesji
     #login i hasło już zahashowane
     
-    #TODO wywołanie prepared statement do stworzenia wszystkich tabel
+    #TODO wywołanie prepared statement do stworzenia wszystkich tabel z daną nazwą projektu
     
     token: str = Kody.wygenerujKod()
     hashTok: str = hash.sha3_512(token)

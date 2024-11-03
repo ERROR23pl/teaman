@@ -1,6 +1,6 @@
 import typing
 
-def AnalizaPliku(otrzymanyPlik) -> typing.List:
+def analizaPliku(otrzymanyPlik) -> typing.List:
     #TODO tutaj w przyszłości będzie analiza informacji otrzymanych od klienta w żądaniu i zamiana w informacje dla serwera
     
     return ["operacja","nazwa serwera","dane"]
