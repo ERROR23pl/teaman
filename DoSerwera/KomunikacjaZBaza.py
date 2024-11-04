@@ -110,3 +110,10 @@ def polaczZBaza(nazwaProj: str) -> None:
 def rozlaczZBaza() -> None:
     #TODO wywołanie prepared statement do rozłączenia z aktualnie połączoną bazą
     return None
+
+
+def czyszczeniePolnocowe() -> None:
+    #TODO wywołanie prepared statement do usunięcia z tabeli Kody starych kodów zaproszeniowych o datach o dwa dni starszych od obecnej
+    #TODO wywołanie prepared statement do usunięcia z tabeli Uzytkownicy starych tokenów dla użytkowników o datach ostatniej aktywności o dwa dni starszych od obecnej
+    
+    return None
