@@ -4,6 +4,7 @@ import ManagerKodow as Kody
 import ManagerNazw as Nazwy
 import LaczenieZProjektem as LogIRej
 import WlasnyProjekt as WlProj
+import KomunikacjaZBaza as Bazy
 import typing
 
 def ObsluzZapytanie(plikKomunikacyjny):
@@ -16,11 +17,11 @@ def ObsluzZapytanie(plikKomunikacyjny):
     
     
     if(operacja=="logowanie"):
-        czyProjektIstnieje: bool = True
-        #TODO wywołanie prepared statement sprawdzającego czy jest baza danych takiego projektu i, jeśli tak łącząca się z nią; 
-        #jeśli nie ma, ustawia czyProjektIstnieje=False
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
-        if(not czyProjektIstnieje):
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
             return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
         
         login: str = zapytanie[2]
@@ -31,15 +32,16 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         rezultat: typing.Tuple[bool,str,str] = LogIRej.probaLogowania(login,haslo)
         
+        Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[0], dane=[rezultat[1],rezultat[2]])
 
     
     elif(operacja=="rejestracja"):
-        czyProjektIstnieje: bool = True
-        #TODO wywołanie prepared statement sprawdzającego czy jest baza danych takiego projektu i, jeśli tak łącząca się z nią; 
-        #jeśli nie ma, ustawia czyProjektIstnieje=False
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
-        if(not czyProjektIstnieje):
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
             return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
         
         kodZapr: str = zapytanie[2]
@@ -51,16 +53,15 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         rezultat: typing.Tuple[bool,bool,str] = LogIRej.probaRejestracji(kodZapr,login,haslo)
         
+        Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[rezultat[2]])
 
     
     elif(operacja=="tworzenie projektu"):
-        czyMoznaStworzycProj: bool = True
-        #TODO wywołanie prepared statement sprawdzającego czy jest baza danych takiego projektu; 
-        #jeśli jest, ustawia czyMoznaStworzycProj=False
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
-        if(not czyMoznaStworzycProj):
-            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        if(czyProjektIstnieje):
+            return Pliki.stworzPlikZOdpowiedzia()   #nie można stworzyć projektu, bo już istnieje
         
         login: str = zapytanie[2]
         haslo: str = zapytanie[3]
@@ -70,15 +71,16 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         rezultat: str = WlProj.stworzProjekt(nazwaProjektu,login,haslo)
         
+        Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True, sukcesOperacji=True, dane=[rezultat])
 
     
     elif(operacja=="zapraszanie"):
-        czyProjektIstnieje: bool = True
-        #TODO wywołanie prepared statement sprawdzającego czy jest baza danych takiego projektu i, jeśli tak łącząca się z nią; 
-        #jeśli nie ma, ustawia czyProjektIstnieje=False
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
-        if(not czyProjektIstnieje):
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
             return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
         
         login: str = zapytanie[2]
@@ -93,15 +95,16 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         rezultat: typing.Tuple[bool,bool] = WlProj.dodajZaproszenie(login,token,kodZapr)
         
+        Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
     
     
     elif(operacja=="usuwanie projektu"):
-        czyProjektIstnieje: bool = True
-        #TODO wywołanie prepared statement sprawdzającego czy jest baza danych takiego projektu i, jeśli tak łącząca się z nią; 
-        #jeśli nie ma, ustawia czyProjektIstnieje=False
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
-        if(not czyProjektIstnieje):
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
             return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
         
         login: str = zapytanie[2]

@@ -1,16 +1,17 @@
 import hashlib as hash
 import typing
 import ManagerKodow as Kody
+import KomunikacjaZBaza as Bazy
 
 
 def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token sesji
     #login i hasło już zahashowane
     
-    #TODO wywołanie prepared statement do stworzenia wszystkich tabel z daną nazwą projektu
+    Bazy.stworzBaze(nazwaProjektu)
     
     token: str = Kody.wygenerujKod()
     hashTok: str = hash.sha3_512(token)
-    #TODO wywołanie prepared statement do wstawienia nowego użytkownika "INSERT INTO Uzytownicy(Login, Haslo, Token, Rola) VALUES ("+login+", "+haslo+", "+hashTok+", 'Właściciel zespołu');"
+    Bazy.wstawUzytkownika(login,haslo,hashTok,"Właściciel zespołu")
         
     return token
 
@@ -22,34 +23,32 @@ def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tu
     hashLog: str = hash.sha3_512(login)
     hashTok: str = hash.sha3_512(token)
     
-    #TODO wywołanie prepared statement do testu poprawności sesji oraz uprawnień "SELECT COUNT * FROM Uzytkownicy WHERE Login="+hashLog+" AND Token="+hashTok+" AND Rola='Właściciel zespolu';"
-    wynik: int = 0 #mock; tu będzie odebranie liczby
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
     if(wynik!=1):
         return False, False
         
-    #TODO wywołanie prepared statement do sprawdzenia czy taki kod nie jest już w bazie "SELECT COUNT * FROM Kody WHERE Kod="+kodZaproszeniowy+";"
-    wynik: int = 0 #mock; tu będzie odebranie liczby
+    czyKodJuzJest: bool = Bazy.czyJestKod(kodZaproszeniowy)
     
-    if(wynik!=0):
+    if(czyKodJuzJest):
         return True, False
     
     else:
-        #TODO wywołanie prepared statement do wstawienia nowego kodu zaproszeniowego "INSERT INTO Kody(Kod, Data) VALUES ("+kodZaproszeniowy+", CURRENT_DATE());"
+        Bazy.wstawKod(hashLog,hashTok,kodZaproszeniowy)
         return True, True
 
 
 
-def usunProjekt(login: str, token: str) -> bool: #czy się udało
+def usunProjekt(nazwaProjektu: str, login: str, token: str) -> bool: #czy się udało
     hashLog: str = hash.sha3_512(login)
     hashTok: str = hash.sha3_512(token)
     
-    #TODO wywołanie prepared statement do testu poprawności sesji oraz uprawnień "SELECT COUNT * FROM Uzytkownicy WHERE Login="+hashLog+" AND Token="+hashTok+" AND Rola='Właściciel zespolu';"
-    wynik: int = 0 #mock; tu będzie odebranie liczby
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
     if(wynik!=1):
         return False
         
     else:
-        #TODO wywołanie prepared statement do usuwania bazy danych projektu
+        Bazy.rozlaczZBaza()
+        Bazy.usunBaze(nazwaProjektu)
         return True
