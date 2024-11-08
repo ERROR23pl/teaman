@@ -1,0 +1,18 @@
+.signup_button {
+  margin: 10px;
+  padding: 15px;
+  width: 20%;
+}
+
+input {
+  padding: 10px;
+  min-width: 30%;
+  margin: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+error-message{
+  color: red
+}
+
