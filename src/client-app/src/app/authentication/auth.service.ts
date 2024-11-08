@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -13,8 +13,9 @@ export class AuthService {
     this.checkToken();
   }
 
+
   private checkToken(): void {
-    const token = localStorage.getItem(this.TOKEN_KEY);
+    const token = localStorage?.getItem(this.TOKEN_KEY);
     console.log("from checkToken(), token = ", token)
     this.isAuthenticatedSubject.next(token != null);
   }
@@ -22,7 +23,13 @@ export class AuthService {
   login(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
     this.isAuthenticatedSubject.next(true);
-    this.router.navigate(['/home']);
+    this.router.navigate(['/home']).then(
+      (success: any) => {
+        if (!success)
+          throwError(() =>
+            new Error('Error while routing in login authentication service'))
+      }
+    );
   }
 
   logout(): void {

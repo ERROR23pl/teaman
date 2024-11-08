@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {catchError, Observable} from 'rxjs';
 import {AccessToken, TokenRequest, TokenResponse} from '../../data.interfaces';
+import {AuthService} from '../auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +19,7 @@ export class SigninService {
   };
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private handleError(error: any, caught: Observable<Object>): Observable<Object> {
     console.error('Error occurred:', error);
@@ -45,6 +46,7 @@ export class SigninService {
     result.subscribe({
       next: data => {
         this.accessToken = data
+        this.authService.login(this.accessToken.access_token)
         console.log("accessToken: ", this.accessToken)
       },
       error: error => errorMsg = 'Error reading data from server' + error.message

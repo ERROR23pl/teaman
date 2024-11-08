@@ -1,0 +1,12 @@
+.graph-container {
+      position: relative;
+      border: 1px solid #ccc;
+    }
+    canvas {
+      background: white;
+    }
+    .controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }

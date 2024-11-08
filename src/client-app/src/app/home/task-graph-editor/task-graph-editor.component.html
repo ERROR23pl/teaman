@@ -1,0 +1,14 @@
+<div class="graph-container">
+      <canvas #canvas
+        (mousedown)="onMouseDown($event)"
+        (click)="onMouseClick($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+        [width]="width"
+        [height]="height">
+      </canvas>
+      <div class="controls">
+        <button (click)="addNode()">Add Node</button>
+        <button (click)="clearCanvas()">Clear</button>
+      </div>
+    </div>
