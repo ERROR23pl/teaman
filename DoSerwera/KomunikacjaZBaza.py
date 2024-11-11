@@ -163,7 +163,7 @@ def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawanyLo
     return None
 
 
-def czyUzytkownikJestWPokoju(nazwaPokoju: str, dodawanyLogin: str) -> bool:
+def czyUzytkownikJestWPokoju(nazwaPokoju: str, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do sprawdzenia obecności użytkownika w projekcie "SELECT COUNT * FROM Nalezenie WHERE IDUzytkownika="..." AND IDProjektu="...
