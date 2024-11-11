@@ -5,7 +5,12 @@ import ManagerNazw as Nazwy
 import LaczenieZProjektem as LogIRej
 import WlasnyProjekt as WlProj
 import KomunikacjaZBaza as Bazy
+import ZarzadzaniePokojami as Pokoje
+import ZarzadzanieCzlonkamiPokojow as CzlPokojow
 import typing
+
+
+#TODO plik w rozwoju; po zakończeniu, przerzucić case'y do osobnych plików, a tut tylko wywołania
 
 def ObsluzZapytanie(plikKomunikacyjny):
     zapytanie: typing.List = Pliki.analizaPliku(plikKomunikacyjny)
@@ -116,6 +121,104 @@ def ObsluzZapytanie(plikKomunikacyjny):
         rezultat: bool = WlProj.usunProjekt(login,token)
         
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat, sukcesOperacji=rezultat, dane=[""])
+    
+    
+    elif(operacja=="tworzenie pokoju"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
+        
+        rezultat: typing.Tuple[bool,bool] = Pokoje.stworzPokoj(login,token,nazwaPokoju)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
+    
+    
+    elif(operacja=="usuwanie pokoju"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
+        
+        rezultat: typing.Tuple[bool,bool] = Pokoje.stworzPokoj(login,token,nazwaPokoju)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
+    
+    
+    elif(operacja=="dodawanie do pokoju"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        dodawanyUzytkownik: str = zapytanie[5]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
+        
+        rezultat: typing.Tuple[bool,bool,bool] = CzlPokojow.dodajDoPokoju(login,token,nazwaPokoju,dodawanyUzytkownik)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]), dane=[""])
+    
+    
+    elif(operacja=="usuwanie z pokoju"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        usuwanyUzytkownik: str = zapytanie[5]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(usuwanyUzytkownik))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login usuwanego użytkownika
+        
+        rezultat: typing.Tuple[bool,bool] = CzlPokojow.usunZPokoju(login,token,nazwaPokoju,usuwanyUzytkownik)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
     
     
     #tu w przyszłości dalsze operacje
