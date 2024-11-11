@@ -221,6 +221,27 @@ def ObsluzZapytanie(plikKomunikacyjny):
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
     
     
+    elif(operacja=="lista pokojów"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+
+        
+        rezultat: typing.Tuple[bool, typing.List[str]] = Pokoje.listaPokojow(login,token)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[0], dane=rezultat[1])
+    
+    
     #tu w przyszłości dalsze operacje
     
     else:              #nieznana operacja

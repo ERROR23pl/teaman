@@ -19,12 +19,12 @@ def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str) 
     
     else:
         hashDod: str = hash.sha3_512(dodawanaOsoba)
-        czyMoznaDodac: bool = ((Bazy.iloscUzytkownikow(login=hashLog)>0) and (not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashDod)))   #TODO  #użytkownik istnieje w projekcie, ale nie ma go w pokoju
+        czyMoznaDodac: bool = ((Bazy.iloscUzytkownikow(login=hashLog)>0) and (not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashDod)))  #użytkownik istnieje w projekcie, ale nie ma go w pokoju
 
         if(not czyMoznaDodac):
             return True,True,False
         else:        
-            Bazy.dodajDoPokoju(nazwaPokoju,hashDod) 
+            Bazy.dodajDoPokoju(hashLog,hashTok,nazwaPokoju,hashDod) 
             return True, True, True
 
 
@@ -46,5 +46,5 @@ def usunZPokoju(login: str, token: str, nazwaPokoju: str, usuwanaOsoba: str) -> 
     else:
         hashUs: str = hash.sha3_512(usuwanaOsoba)
         
-        Bazy.usunZPokoju(nazwaPokoju,hashUs)    #TODO   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
+        Bazy.usunZPokoju(hashLog,hashTok,nazwaPokoju,hashUs)   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
         return True, True

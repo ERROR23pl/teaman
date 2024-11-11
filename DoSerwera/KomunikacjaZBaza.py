@@ -1,3 +1,6 @@
+import typing
+
+
 def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = "") -> int:
     #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     ilosc: int
@@ -117,3 +120,63 @@ def czyszczeniePolnocowe() -> None:
     #TODO wywołanie prepared statement do usunięcia z tabeli Uzytkownicy starych tokenów dla użytkowników o datach ostatniej aktywności o dwa dni starszych od obecnej
     
     return None
+
+
+def czyJestPokoj(nazwaPokoju: str) -> bool:
+    #nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do sprawdzenia czy taki pokój istnieje "SELECT COUNT * FROM Pokoje WHERE Pokoj="+nazwaPokoju+";"
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    
+    return wynik
+
+
+def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> None:
+    #login, token zahashowane i przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do wstawienia nowego pokoju "INSERT INTO Pokoje(Pokoj) VALUES ("+nazwaPokoju+");"      ID jest autoinkrementowane
+    dataAktywnosci(login,token)
+    return None
+
+
+def usunPokoj(login: str, token: str, nazwaPokoju: str) -> None:
+    #login, token zahashowane i przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do usuwania pokoju "DELETE FROM Pokoje WHERE Pokoj="+nazwaPokoju+";"      triggery usuwające z innych tabel dane związane z usuniętym pokojem
+    dataAktywnosci(login,token)
+    return None
+
+
+def dodajDoPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawanyLogin: str) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do wstawienia nowego użytkownika do projektu "INSERT INTO Nalezenie(IDPokoju,IDUzytkownika) VALUES"...
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    return None
+
+
+def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawanyLogin: str) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do usunięcia użytkownika z projektu "DELETE FROM Nalezenie WHERE IDUzytkownika="...
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    return None
+
+
+def czyUzytkownikJestWPokoju(nazwaPokoju: str, dodawanyLogin: str) -> bool:
+    #login zahashowany oraz przetestowany pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do sprawdzenia obecności użytkownika w projekcie "SELECT COUNT * FROM Nalezenie WHERE IDUzytkownika="..." AND IDProjektu="...
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    
+    return wynik
+
+
+def pokojeCzlonkowskie(login: str, token: str) -> typing.List[str]:
+    #login zahashowany oraz przetestowany pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do, w których projektach jest użytkownik "SELECT DISTINCT Projekt FROM (Projekty JOIN...) WHERE Login="+login+";"
+    wynik: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana w listę stringów
+    dataAktywnosci(login,token)
+    
+    return wynik

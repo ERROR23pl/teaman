@@ -12,14 +12,14 @@ def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, 
     if(wynik!=1):
         return False, False
         
-    czyPokojJuzJest: bool = Bazy.czyJestPokoj(nazwaPokoju)      #TODO
+    czyPokojJuzJest: bool = Bazy.czyJestPokoj(nazwaPokoju)
     
     if(czyPokojJuzJest):
         return True, False
     
     else:
-        Bazy.stworzPokoj(nazwaPokoju)           #TODO
-        Bazy.dodajDoPokoju(nazwaPokoju,hashLog) #TODO        #dodaj siebie (właściciela) do pokoju
+        Bazy.stworzPokoj(hashLog,hashTok,nazwaPokoju)
+        Bazy.dodajDoPokoju(hashLog,hashTok,nazwaPokoju,hashLog)        #dodaj siebie (właściciela) do pokoju
         return True, True
 
 
@@ -39,7 +39,7 @@ def usunPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bo
         return True, False
     
     else:
-        Bazy.usunPokoj(nazwaPokoju)           #TODO
+        Bazy.usunPokoj(hashLog,hashTok,nazwaPokoju)
         return True, True
 
 
@@ -54,5 +54,5 @@ def listaPokojow(login: str, token: str) -> typing.Tuple[bool, typing.List[str]]
         return False, []
     
     else:
-        lista: typing.List = Bazy.pokojeCzlonkowskie(hashLog)           #TODO
+        lista: typing.List[str] = Bazy.pokojeCzlonkowskie(hashLog,hashTok)
         return True, lista
