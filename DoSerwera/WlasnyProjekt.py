@@ -12,6 +12,9 @@ def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token ses
     token: str = Kody.wygenerujKod()
     hashTok: str = hash.sha3_512(token)
     Bazy.wstawUzytkownika(login,haslo,hashTok,"Właściciel zespołu")
+    
+    Bazy.stworzPokoj(login,hashTok,nazwaProjektu)                #automatycznie stwórz pokój główny o nazwie takiej samej jak nazwa projektu
+    Bazy.dodajDoPokoju(login,hashTok,nazwaProjektu,login)        #dodaj siebie (właściciela) do pokoju głównego
         
     return token
 
@@ -36,6 +39,7 @@ def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tu
     else:
         Bazy.wstawKod(hashLog,hashTok,kodZaproszeniowy)
         return True, True
+
 
 
 

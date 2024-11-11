@@ -56,7 +56,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Kody.przetestujKod(kodZapr))  or (not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
-        rezultat: typing.Tuple[bool,bool,str] = LogIRej.probaRejestracji(kodZapr,login,haslo)
+        rezultat: typing.Tuple[bool,bool,str] = LogIRej.probaRejestracji(nazwaProjektu,kodZapr,login,haslo)
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[rezultat[2]])

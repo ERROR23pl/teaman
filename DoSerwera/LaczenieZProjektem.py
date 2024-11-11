@@ -24,7 +24,7 @@ def probaLogowania(login: str, haslo: str) -> typing.Tuple[bool,str,str]: #[popr
 
 
 
-def probaRejestracji(kodZaproszeniowy: str, hashLog: str, hashHas: str) -> typing.Tuple[bool,bool,str]: #[poprawność kodu, sukces rejestracji, token sesji]
+def probaRejestracji(nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, hashHas: str) -> typing.Tuple[bool,bool,str]: #[poprawność kodu, sukces rejestracji, token sesji]
     #login i hasło już zahashowane
     hashKod: str = hash.sha3_512(kodZaproszeniowy)
     
@@ -42,6 +42,7 @@ def probaRejestracji(kodZaproszeniowy: str, hashLog: str, hashHas: str) -> typin
         token: str = Kody.wygenerujKod()
         hashTok: str = hash.sha3_512(token)
         Bazy.wstawUzytkownika(hashLog,hashHas,hashTok,"Członek zespołu")
+        Bazy.dodajDoPokoju(hashLog,hashTok,nazwaProjektu,hashLog)        #dodaj nowego użytkownika do pokoju głównego
         Bazy.usunKod(hashKod)
         
         return True, True, token
