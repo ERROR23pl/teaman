@@ -7,6 +7,7 @@ import WlasnyProjekt as WlProj
 import KomunikacjaZBaza as Bazy
 import ZarzadzaniePokojami as Pokoje
 import ZarzadzanieCzlonkamiPokojow as CzlPokojow
+import ZarzadzanieTaskami as Taski
 import typing
 
 
@@ -101,7 +102,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         rezultat: typing.Tuple[bool,bool] = WlProj.dodajZaproszenie(login,token,kodZapr)
         
         Bazy.rozlaczZBaza()
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
     
     
     elif(operacja=="usuwanie projektu"):
@@ -120,7 +121,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         rezultat: bool = WlProj.usunProjekt(login,token)
         
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat, sukcesOperacji=rezultat, dane=[""])
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat, sukcesOperacji=rezultat)
     
     
     elif(operacja=="tworzenie pokoju"):
@@ -144,7 +145,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         rezultat: typing.Tuple[bool,bool] = Pokoje.stworzPokoj(login,token,nazwaPokoju)
         
         Bazy.rozlaczZBaza()
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
     
     
     elif(operacja=="usuwanie pokoju"):
@@ -171,7 +172,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         rezultat: typing.Tuple[bool,bool] = Pokoje.stworzPokoj(login,token,nazwaPokoju)
         
         Bazy.rozlaczZBaza()
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
     
     
     elif(operacja=="dodawanie do pokoju"):
@@ -196,7 +197,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         rezultat: typing.Tuple[bool,bool,bool] = CzlPokojow.dodajDoPokoju(login,token,nazwaPokoju,dodawanyUzytkownik)
         
         Bazy.rozlaczZBaza()
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]), dane=[""])
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]))
     
     
     elif(operacja=="usuwanie z pokoju"):
@@ -221,7 +222,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         rezultat: typing.Tuple[bool,bool] = CzlPokojow.usunZPokoju(login,token,nazwaPokoju,usuwanyUzytkownik)
         
         Bazy.rozlaczZBaza()
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[""])
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
     
     
     elif(operacja=="lista pokojów"):
@@ -243,6 +244,185 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[0], dane=rezultat[1])
+    
+    
+    
+    elif(operacja=="modyfikacja tasków"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        dodawaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[5]
+        usuwaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[6]
+        modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[7]
+        
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
+        
+        i: int = 0
+        while(i<len(dodawaneTaski)):
+            if(Nazwy.przetestujNazwe(dodawaneTaski[i][1])):
+                i+=1
+            else:
+                if(i<len(dodawaneTaski)):
+                    dodawaneTaski=dodawaneTaski[:i]+dodawaneTaski[i+1:]
+                else:
+                    dodawaneTaski=dodawaneTaski[:i]
+
+        i=0
+        while(i<len(usuwaneTaski)):
+            if(Nazwy.przetestujNazwe(usuwaneTaski[i][1])):
+                i+=1
+            else:
+                if(i<len(usuwaneTaski)):
+                    usuwaneTaski=usuwaneTaski[:i]+usuwaneTaski[i+1:]
+                else:
+                    usuwaneTaski=usuwaneTaski[:i]
+        
+        i=0
+        while(i<len(modyfikowaneTaski)):
+            if(Nazwy.przetestujNazwe(modyfikowaneTaski[i][1])):
+                i+=1
+            else:
+                if(i<len(modyfikowaneTaski)):
+                    modyfikowaneTaski=modyfikowaneTaski[:i]+modyfikowaneTaski[i+1:]
+                else:
+                    modyfikowaneTaski=modyfikowaneTaski[:i]
+                
+        
+        rezultat: typing.Tuple[bool,bool] = Taski.obslugaTaskow(login,token,nazwaPokoju,[dodawaneTaski,usuwaneTaski,modyfikowaneTaski])
+        nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[2]
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=nowaListaTaskow)
+    
+    
+    
+    elif(operacja=="koordynaty tasków"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[5]
+        
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
+        
+        i: int = 0
+        while(i<len(modyfikowaneTaski)):
+            if(Nazwy.przetestujNazwe(modyfikowaneTaski[i][1])):
+                i+=1
+            else:
+                if(i<len(modyfikowaneTaski)):
+                    modyfikowaneTaski=modyfikowaneTaski[:i]+modyfikowaneTaski[i+1:]
+                else:
+                    modyfikowaneTaski=modyfikowaneTaski[:i]
+                
+        
+        rezultat: typing.Tuple[bool,bool] = Taski.zaktualizujKoordynaty(login,token,nazwaPokoju,modyfikowaneTaski)
+        nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[2]
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=nowaListaTaskow)
+    
+    
+    
+    elif(operacja=="pobierz taski"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]        
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+        
+        rezultat: typing.Tuple[bool,bool,typing.List[str]] = Taski.pobierzTaski(login,token,nazwaPokoju)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
+    
+    
+    
+    elif(operacja=="zaznacz task"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        idTaska: int = zapytanie[5]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+        
+        rezultat: typing.Tuple[bool,bool,bool] = Taski.oznaczJakoWykonany(login,token,nazwaPokoju,idTaska)
+        nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[2]
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]), dane=nowaListaTaskow)
+    
+    
+    
+    elif(operacja=="odznacz task"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        idTaska: int = zapytanie[5]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+        
+        rezultat: typing.Tuple[bool,bool,bool] = Taski.oznaczJakoNiewykonany(login,token,nazwaPokoju,idTaska)
+        nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[2]
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]), dane=nowaListaTaskow)
     
     
     #tu w przyszłości dalsze operacje

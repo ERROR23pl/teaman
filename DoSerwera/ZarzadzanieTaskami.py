@@ -104,3 +104,28 @@ def oznaczJakoNiewykonany(login: str, token: str, nazwaPokoju: str, idTaska: int
         else:
             czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(login,token,nazwaPokoju,idTaska)   #TODO
             return True, True, czyMozna
+
+
+
+def pobierzTaski(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, lista tasków pokoju w formie listy stringów]
+    hashLog: str = hash.sha3_512(login)
+    hashTok: str = hash.sha3_512(token)
+    
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
+    
+    if(wynik!=1):
+        return False, False, [""]
+        
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    
+    if(not czyPokojIstnieje):
+        return True, False, [""]
+    
+    else:
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        if(not czyNalezyDoPokoju):
+            return True, False, [""]
+        
+        else:
+            lista: typing.List[str] = Bazy.listaTaskow(login,token,nazwaPokoju)   #TODO
+            return True, True, lista
