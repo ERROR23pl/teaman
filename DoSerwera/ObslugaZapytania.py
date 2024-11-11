@@ -159,6 +159,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
         token: str = zapytanie[3]
         nazwaPokoju: str = zapytanie[4]
         
+        if(nazwaProjektu==nazwaPokoju):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, dane=["Nie można usunąć pokoju głównego"])
+        
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
