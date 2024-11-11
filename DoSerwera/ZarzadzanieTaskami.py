@@ -23,10 +23,10 @@ def obslugaTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.
     
     else:
         #listaTaskow=[taski dodane, taski usunięte, taski zmodyfikowane]
-        Bazy.dodajTaski(login,token,nazwaPokoju,listaTaskow[0])                                 #TODO  #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
-        Bazy.usunTaski(login,token,nazwaPokoju,listaTaskow[1])                                  #TODO
-        Bazy.zauktualizujWlasnosci(login,token,nazwaPokoju,listaTaskow[0]+listaTaskow[2])       #TODO   #operacje niemożliwe są pomijane
-        Bazy.zauktualizujKoordynaty(login,token,nazwaPokoju,listaTaskow[0]+listaTaskow[2])      #TODO   #operacje niemożliwe są pomijane
+        Bazy.dodajTaski(login,token,nazwaPokoju,listaTaskow[0])                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
+        Bazy.usunTaski(login,token,nazwaPokoju,listaTaskow[1])
+        Bazy.zauktualizujWlasnosciTaskow(login,token,nazwaPokoju,listaTaskow[0]+listaTaskow[2])       #operacje niemożliwe są pomijane
+        Bazy.zauktualizujKoordynatyTaskow(login,token,nazwaPokoju,listaTaskow[0]+listaTaskow[2])      #operacje niemożliwe są pomijane
         
         return True, True
 
@@ -52,7 +52,7 @@ def zaktualizujKoordynaty(login: str, token: str, nazwaPokoju: str, listaTaskow:
             return True, False
         
         else:
-            Bazy.zauktualizujKoordynaty(login,token,nazwaPokoju,listaTaskow[0]+listaTaskow[2])   #operacje niemożliwe są pomijane
+            Bazy.zauktualizujKoordynatyTaskow(login,token,nazwaPokoju,listaTaskow[0]+listaTaskow[2])   #operacje niemożliwe są pomijane
             return True, True
 
 
@@ -77,7 +77,7 @@ def oznaczJakoWykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -
             return True, False, False
         
         else:
-            czyMozna: bool = Bazy.ukonczTask(login,token,nazwaPokoju,idTaska)   #TODO
+            czyMozna: bool = Bazy.ukonczTask(login,token,nazwaPokoju,idTaska)
             return True, True, czyMozna
 
 
@@ -102,7 +102,7 @@ def oznaczJakoNiewykonany(login: str, token: str, nazwaPokoju: str, idTaska: int
             return True, False, False
         
         else:
-            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(login,token,nazwaPokoju,idTaska)   #TODO
+            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(login,token,nazwaPokoju,idTaska)
             return True, True, czyMozna
 
 
@@ -127,5 +127,5 @@ def pobierzTaski(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,
             return True, False, [""]
         
         else:
-            lista: typing.List[str] = Bazy.listaTaskow(login,token,nazwaPokoju)   #TODO
+            lista: typing.List[str] = Bazy.listaTaskow(login,token,nazwaPokoju)
             return True, True, lista

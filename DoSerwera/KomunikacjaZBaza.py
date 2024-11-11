@@ -166,7 +166,7 @@ def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawanyLo
 def czyUzytkownikJestWPokoju(nazwaPokoju: str, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia obecności użytkownika w projekcie "SELECT COUNT * FROM Nalezenie WHERE IDUzytkownika="..." AND IDProjektu="...
+    #TODO wywołanie prepared statement do sprawdzenia obecności użytkownika w pokoju "SELECT COUNT * FROM Nalezenie WHERE IDUzytkownika="..." AND IDPokoju="...
     wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
     return wynik
@@ -175,8 +175,74 @@ def czyUzytkownikJestWPokoju(nazwaPokoju: str, login: str) -> bool:
 def pokojeCzlonkowskie(login: str, token: str) -> typing.List[str]:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do, w których projektach jest użytkownik "SELECT DISTINCT Projekt FROM (Projekty JOIN...) WHERE Login="+login+";"
+    #TODO wywołanie prepared statement do, w których pokojach jest użytkownik "SELECT DISTINCT Pokoj FROM (Pokoje JOIN...) WHERE Login="+login+";"
     wynik: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana w listę stringów
     dataAktywnosci(login,token)
     
     return wynik
+
+
+def dodajTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do wstawienia nowych tasków do pokoju (bez informacji o taskach incydentnych); jeśli jakiś istnieje, usuń go i zastąp nowym - TRANSKACYJNIE
+    dataAktywnosci(login,token)
+    return None
+
+
+def usunTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do usunięcia tasków z pokoju; jeśli jakiś nie istnieje, nic nie rób; po każdym usunięciu, usuń triggerem wszystkie zależności od niego - TRANSKACYJNIE
+    dataAktywnosci(login,token)
+    return None
+
+
+def zauktualizujWlasnosciTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do zaktualizowania tasków (nazwy, dat, incydencji) z pokoju; jeśli jakiś nie istnieje (lub incydentny nie istnieje), nic nie rób - TRANSKACYJNIE
+    dataAktywnosci(login,token)
+    return None
+
+
+def zauktualizujKoordynatyTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do zaktualizowania koordynatów tasków z pokoju; jeśli jakiś nie istnieje, nic nie rób - TRANSKACYJNIE
+    dataAktywnosci(login,token)
+    return None
+
+
+def ukonczTask(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje zaznaczenia tego taska (wymagany, ale nieukończony)
+    czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
+    
+    if(czyMozna):
+        None #TODO wywołanie prepared statement do zaznaczenia taska o podanym ID jako ukończony
+    dataAktywnosci(login,token)
+    return czyMozna
+
+
+def odznaczTaskJakoNieukonczony(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje odznaczenia tego taska (wymaga go i jest ukończony)
+    czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
+    
+    if(czyMozna):
+        None #TODO wywołanie prepared statement do odznaczenia taska o podanym ID jako nieukończony
+    dataAktywnosci(login,token)
+    return czyMozna
+
+
+def listaTaskow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do pobrania danych tasków z pokoju
+    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    
+    dataAktywnosci(login,token)
+    return lista
