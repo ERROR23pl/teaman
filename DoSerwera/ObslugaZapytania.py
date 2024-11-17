@@ -461,7 +461,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         login: str = zapytanie[2]
         token: str = zapytanie[3]
         nazwaPokoju: str = zapytanie[4]  
-        ostatniaPosiadana: typing.List[str,str] = [zapytanie[5],zapytanie[6]]
+        ostatniaPosiadana: typing.List[str,int] = [zapytanie[5],int(zapytanie[6])]
         
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
@@ -486,8 +486,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
         login: str = zapytanie[2]
         token: str = zapytanie[3]
         nazwaPokoju: str = zapytanie[4]  
-        ostatniaPosiadana: typing.List[str,str] = [zapytanie[5],zapytanie[6]]
-        wiadomosc: typing.List[str,str] = [zapytanie[7],zapytanie[8]]
+        ostatniaPosiadana: typing.List[str,int] = [zapytanie[5],int(zapytanie[6])]
+        wiadomosc: typing.List[str,int] = [zapytanie[7],int(zapytanie[8])]
         
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane

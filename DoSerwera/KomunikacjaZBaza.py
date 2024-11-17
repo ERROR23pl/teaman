@@ -246,3 +246,32 @@ def listaTaskow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     
     dataAktywnosci(login,token)
     return lista
+
+
+def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do pobrania 100 ostatnich wiadomości z chatu pokoju
+    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    
+    dataAktywnosci(login,token)
+    return lista
+
+
+def aktualizacjaChatu(login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int) -> typing.List[str]:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i autor ostatniej wiadomości przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do pobrania wszystkich wiadomości z chatu pokoju od ostatnio posiadanej
+    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    
+    dataAktywnosci(login,token)
+    return lista
+
+
+def dodajWiadomosc(login: str, token: str, nazwaPokoju: str, wiadomosc: str, data: int) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wiadomości z zabezpieczonymi cudzysłowami
+    
+    #TODO wywołanie prepared statement do dodania nowej wiadomości wiadomości do chatu pokoju
+    
+    dataAktywnosci(login,token)
+    return None
