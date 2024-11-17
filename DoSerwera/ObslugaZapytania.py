@@ -9,6 +9,7 @@ import ZarzadzaniePokojami as Pokoje
 import ZarzadzanieCzlonkamiPokojow as CzlPokojow
 import ZarzadzanieTaskami as Taski
 import ZarzadzanieChatami as Chaty
+import ZarzadzanieKalendarzem as Kalendarz
 import typing
 
 
@@ -461,6 +462,110 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
+    
+    
+    elif(operacja=="pobierz kalendarz"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]        
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+        
+        rezultat: typing.Tuple[bool,bool,typing.List[str]] = Kalendarz.pobierzKalendarz(login,token,nazwaPokoju)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
+    
+    
+    elif(operacja=="dodawanie wpisu kalendarza"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[5],zapytanie[6]]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
+        
+        wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
+        rezultat: typing.Tuple[bool,bool,bool] = Kalendarz.dodajDoKalendarza(login,token,nazwaPokoju,wpis)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]))
+    
+    
+    elif(operacja=="usuwanie wpisu kalendarza"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[5],zapytanie[6]]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
+        
+        wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
+        rezultat: typing.Tuple[bool,bool] = Kalendarz.usunZKalendarza(login,token,nazwaPokoju,wpis)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
+    
+    
+    elif(operacja=="modyfikacja wpisu kalendarza"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]
+        wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[5],zapytanie[6]]
+        noweDane: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[7],zapytanie[8]]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
+        
+        wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
+        noweDane[0]=Nazwy.zabezpieczCudzyslowy(noweDane[0])
+        rezultat: typing.Tuple[bool,bool,bool] = Kalendarz.modyfikujWpisKalendarza(login,token,nazwaPokoju,wpis,noweDane)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]))
     
     
     #tu w przyszłości dalsze operacje
