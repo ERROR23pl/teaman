@@ -8,3 +8,13 @@ def przetestujNazwe(nazwa: str) -> bool:        #test poprawności loginu lub na
             return False    #to nie jest poprawny kod
     
     return True     #to jest poprawny kod
+
+
+def zabezpieczCudzyslowy(tekst: str) -> str:
+    wynik=""
+    for znak in tekst:
+        if(znak=="'" or znak=="\""):
+            wynik = wynik+"\\"+znak
+        else:
+            wynik+=znak
+    return wynik

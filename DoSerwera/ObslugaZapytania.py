@@ -8,6 +8,7 @@ import KomunikacjaZBaza as Bazy
 import ZarzadzaniePokojami as Pokoje
 import ZarzadzanieCzlonkamiPokojow as CzlPokojow
 import ZarzadzanieTaskami as Taski
+import ZarzadzanieChatami as Chaty
 import typing
 
 
@@ -423,6 +424,82 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]), dane=nowaListaTaskow)
+    
+    
+    elif(operacja=="pobierz chat"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]        
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+        
+        rezultat: typing.Tuple[bool,bool,typing.List[str]] = Chaty.pobierzChat(login,token,nazwaPokoju)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
+    
+    
+    elif(operacja=="zaktualizuj chat"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]  
+        ostatniaPosiadana: typing.List[str,str] = [zapytanie[5],zapytanie[6]]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(zapytanie[5]))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+        
+        rezultat: typing.Tuple[bool,bool,typing.List[str]] = Chaty.zaktualizujChat(login,token,nazwaPokoju,ostatniaPosiadana)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
+    
+    
+    elif(operacja=="wyslij wiadomosc"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nazwaPokoju: str = zapytanie[4]  
+        ostatniaPosiadana: typing.List[str,str] = [zapytanie[5],zapytanie[6]]
+        wiadomosc: typing.List[str,str] = [zapytanie[7],zapytanie[8]]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(zapytanie[5]))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+        
+        wiadomosc[0]=Nazwy.zabezpieczCudzyslowy(wiadomosc[0])
+        rezultat: typing.Tuple[bool,bool,typing.List[str]] = Chaty.wyslijWiadomosc(login,token,nazwaPokoju,ostatniaPosiadana,wiadomosc)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
     
     
     #tu w przyszłości dalsze operacje
