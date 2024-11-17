@@ -201,15 +201,7 @@ def usunTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List
 def zauktualizujWlasnosciTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do zaktualizowania tasków (nazwy, dat, incydencji) z pokoju; jeśli jakiś nie istnieje (lub incydentny nie istnieje), nic nie rób - TRANSKACYJNIE
-    dataAktywnosci(login,token)
-    return None
-
-
-def zauktualizujKoordynatyTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
-    
-    #TODO wywołanie prepared statement do zaktualizowania koordynatów tasków z pokoju; jeśli jakiś nie istnieje, nic nie rób - TRANSKACYJNIE
+    #TODO wywołanie prepared statement do zaktualizowania tasków (nazwy, dat, incydencji, koordynatów) z pokoju; jeśli jakiś nie istnieje (lub incydentny nie istnieje), nic nie rób - TRANSKACYJNIE
     dataAktywnosci(login,token)
     return None
 

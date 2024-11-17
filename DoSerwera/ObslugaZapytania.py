@@ -12,7 +12,7 @@ import ZarzadzanieChatami as Chaty
 import typing
 
 
-#TODO plik w rozwoju; po zakończeniu, przerzucić case'y do osobnych plików, a tut tylko wywołania
+#TODO plik w rozwoju; po zakończeniu, przerzucić case'y do osobnych plików, a tu tylko wywołania
 
 def ObsluzZapytanie(plikKomunikacyjny):
     zapytanie: typing.List = Pliki.analizaPliku(plikKomunikacyjny)
@@ -309,45 +309,6 @@ def ObsluzZapytanie(plikKomunikacyjny):
     
     
     
-    elif(operacja=="koordynaty tasków"):
-        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-        
-        if(czyProjektIstnieje):
-            Bazy.polaczZBaza(nazwaProjektu)
-        else:
-            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
-        
-        login: str = zapytanie[2]
-        token: str = zapytanie[3]
-        nazwaPokoju: str = zapytanie[4]
-        modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[5]
-        
-        
-        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
-            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
-        
-        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
-        
-        i: int = 0
-        while(i<len(modyfikowaneTaski)):
-            if(Nazwy.przetestujNazwe(modyfikowaneTaski[i][1])):
-                i+=1
-            else:
-                if(i<len(modyfikowaneTaski)):
-                    modyfikowaneTaski=modyfikowaneTaski[:i]+modyfikowaneTaski[i+1:]
-                else:
-                    modyfikowaneTaski=modyfikowaneTaski[:i]
-                
-        
-        rezultat: typing.Tuple[bool,bool] = Taski.zaktualizujKoordynaty(login,token,nazwaPokoju,modyfikowaneTaski)
-        nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[2]
-        
-        Bazy.rozlaczZBaza()
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=nowaListaTaskow)
-    
-    
-    
     elif(operacja=="pobierz taski"):
         czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
@@ -461,7 +422,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         login: str = zapytanie[2]
         token: str = zapytanie[3]
         nazwaPokoju: str = zapytanie[4]  
-        ostatniaPosiadana: typing.List[str,int] = [zapytanie[5],int(zapytanie[6])]
+        ostatniaPosiadana: typing.List[str,int] = [zapytanie[5],zapytanie[6]]
         
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
@@ -486,8 +447,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
         login: str = zapytanie[2]
         token: str = zapytanie[3]
         nazwaPokoju: str = zapytanie[4]  
-        ostatniaPosiadana: typing.List[str,int] = [zapytanie[5],int(zapytanie[6])]
-        wiadomosc: typing.List[str,int] = [zapytanie[7],int(zapytanie[8])]
+        ostatniaPosiadana: typing.List[str,int] = [zapytanie[5],zapytanie[6]]
+        wiadomosc: typing.List[str,int] = [zapytanie[7],zapytanie[8]]
         
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
