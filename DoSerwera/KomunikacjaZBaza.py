@@ -183,7 +183,7 @@ def pokojeCzlonkowskie(login: str, token: str) -> typing.List[str]:
 
 
 def dodajTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do wstawienia nowych tasków do pokoju (bez informacji o taskach incydentnych); jeśli jakiś istnieje, usuń go i zastąp nowym - TRANSKACYJNIE
     dataAktywnosci(login,token)
@@ -191,7 +191,7 @@ def dodajTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.Lis
 
 
 def usunTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do usunięcia tasków z pokoju; jeśli jakiś nie istnieje, nic nie rób; po każdym usunięciu, usuń triggerem wszystkie zależności od niego - TRANSKACYJNIE
     dataAktywnosci(login,token)
@@ -199,7 +199,7 @@ def usunTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List
 
 
 def zauktualizujWlasnosciTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do zaktualizowania tasków (nazwy, dat, incydencji, koordynatów) z pokoju; jeśli jakiś nie istnieje (lub incydentny nie istnieje), nic nie rób - TRANSKACYJNIE
     dataAktywnosci(login,token)
@@ -207,7 +207,7 @@ def zauktualizujWlasnosciTaskow(login: str, token: str, nazwaPokoju: str, listaT
 
 
 def ukonczTask(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje zaznaczenia tego taska (wymagany, ale nieukończony)
     czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
@@ -219,7 +219,7 @@ def ukonczTask(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
 
 
 def odznaczTaskJakoNieukonczony(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje odznaczenia tego taska (wymaga go i jest ukończony)
     czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
@@ -231,7 +231,7 @@ def odznaczTaskJakoNieukonczony(login: str, token: str, nazwaPokoju: str, idTask
 
 
 def listaTaskow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do pobrania danych tasków z pokoju
     lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
@@ -241,7 +241,7 @@ def listaTaskow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
 
 
 def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do pobrania 100 ostatnich wiadomości z chatu pokoju
     lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
@@ -251,7 +251,7 @@ def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
 
 
 def aktualizacjaChatu(login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int) -> typing.List[str]:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i autor ostatniej wiadomości przetestowane pod względem bezpieczeństwa
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i autor ostatniej wiadomości przetestowane pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do pobrania wszystkich wiadomości z chatu pokoju od ostatnio posiadanej
     lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
@@ -261,9 +261,52 @@ def aktualizacjaChatu(login: str, token: str, nazwaPokoju: str, autorOstatnioPos
 
 
 def dodajWiadomosc(login: str, token: str, nazwaPokoju: str, wiadomosc: str, data: int) -> None:
-    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wiadomości z zabezpieczonymi cudzysłowami
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wiadomości z zabezpieczonymi cudzysłowami
     
     #TODO wywołanie prepared statement do dodania nowej wiadomości wiadomości do chatu pokoju
     
     dataAktywnosci(login,token)
     return None
+
+
+def czyWpisIstnieje(nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> bool:
+    #nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
+    
+    #TODO wywołanie prepared statement do sprawdzenia obecności wpisu w kalendarzu pokoju "SELECT COUNT * FROM Kalendarze WHERE IDPokoju="..." AND Tresc="..." AND Data="...
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    
+    return wynik
+
+
+def dodajWpisDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
+    
+    #TODO wywołanie prepared statement do wstawienia nowego wpisu do kalendarza pokoju
+    dataAktywnosci(login,token)
+    return None
+
+
+def usunWpisZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
+    
+    #TODO wywołanie prepared statement do usunięcia wpisu z kalendarza pokoju
+    dataAktywnosci(login,token)
+    return None
+
+
+def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]], noweDane: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treści wpisów z zabezpieczonymi cudzysłowami
+    
+    #TODO wywołanie prepared statement do modyfikacji wpisu z kalendarza pokoju
+    dataAktywnosci(login,token)
+    return None
+
+
+def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do pobrania wpisów z kalendarza pokoju
+    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    
+    dataAktywnosci(login,token)
+    return lista

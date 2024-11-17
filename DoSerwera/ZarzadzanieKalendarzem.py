@@ -27,7 +27,9 @@ def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tup
             return True, False, False
         
         else:
-            czyMozna: bool = Bazy.dodajWpisDoKalendarza(login,token,nazwaPokoju,wpis)       #TODO
+            czyMozna: bool = not (Bazy.czyWpisIstnieje(nazwaPokoju,wpis))
+            if(czyMozna):
+                Bazy.dodajWpisDoKalendarza(login,token,nazwaPokoju,wpis)
             return True, True, czyMozna
 
 
@@ -52,7 +54,7 @@ def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple
             return True, False
         
         else:
-            Bazy.usunWpisZKalendarza(login,token,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane    #TODO
+            Bazy.usunWpisZKalendarza(login,token,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
             return True, True
 
 
@@ -77,7 +79,9 @@ def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typi
             return True, False, False
         
         else:
-            czyMozna: bool = Bazy.modyfikujWpisKalendarza(login,token,nazwaPokoju,wpis,noweDane)       #TODO
+            czyMozna: bool = Bazy.czyWpisIstnieje(nazwaPokoju,wpis) and (not Bazy.czyWpisIstnieje(nazwaPokoju,noweDane))
+            if(czyMozna):
+                Bazy.modyfikujWpisKalendarza(login,token,nazwaPokoju,wpis,noweDane)
             return True, True, czyMozna
 
 
@@ -102,5 +106,5 @@ def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[b
             return True, False, [""]
         
         else:
-            lista: typing.List[str] = Bazy.pobierzKalendarz(login,token,nazwaPokoju)        #TODO
+            lista: typing.List[str] = Bazy.pobierzKalendarz(login,token,nazwaPokoju)
             return True, True, lista
