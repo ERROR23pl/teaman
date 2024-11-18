@@ -431,7 +431,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
         if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(zapytanie[5]))):
-            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju    
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login autora ostatniej wiadomości   
         
         rezultat: typing.Tuple[bool,bool,typing.List[str]] = Chaty.zaktualizujChat(login,token,nazwaPokoju,ostatniaPosiadana)
         
@@ -506,8 +506,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
-        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
-            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
         
         wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
         rezultat: typing.Tuple[bool,bool,bool] = Kalendarz.dodajDoKalendarza(login,token,nazwaPokoju,wpis)
@@ -532,8 +532,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
-        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
-            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
         
         wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
         rezultat: typing.Tuple[bool,bool] = Kalendarz.usunZKalendarza(login,token,nazwaPokoju,wpis)
@@ -559,8 +559,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
-        if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
-            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
+        if(not Nazwy.przetestujNazwe(nazwaPokoju)):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
         
         wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
         noweDane[0]=Nazwy.zabezpieczCudzyslowy(noweDane[0])

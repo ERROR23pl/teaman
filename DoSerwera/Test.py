@@ -88,5 +88,24 @@ else:
         #Test wysyłania wiadomości
         wynik = OZ.ObsluzZapytanie(["wyslij wiadomosc","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788","Uzytkownik711711",1234567788,"Wiadomość'admina",123456795])
     
+    elif(nr==20):
+        #Test pobierania kalendarza
+        wynik = OZ.ObsluzZapytanie(["pobierz kalendarz","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788"])
     
+    elif(nr==21):
+        #Test dodawania wpisu do kalendarza
+        wynik = OZ.ObsluzZapytanie(["dodawanie wpisu kalendarza","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788","Wpis12345'",[6,7,2025]])
+    
+    elif(nr==22):
+        #Test usuwania wpisu z kalendarza
+        wynik = OZ.ObsluzZapytanie(["usuwanie wpisu kalendarza","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788","Wpis12345'",[6,7,2025]])
+    
+    elif(nr==23):
+        #Test modyfikowania wpisu kalendarza
+        wynik = OZ.ObsluzZapytanie(["modyfikacja wpisu kalendarza","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788","Wpis12345'",[6,7,2025],"Wpis711",[7,11,2025]])
+    
+    
+    
+    else:
+        wynik = "Niepoprawny numer testu\n\n"
     print(wynik)

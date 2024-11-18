@@ -294,7 +294,7 @@ def czyWpisIstnieje(nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,in
     #nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     print("Sprawdzenie istnienia w kalendarzu pokoju: "+nazwaPokoju+"\nWpisu o nazwie "+wpis[0]+"\nI dacie: "+str(wpis[1][0])+"."+str(wpis[1][1])+"."+str(wpis[1][2])+"\n")
     #TODO wywołanie prepared statement do sprawdzenia obecności wpisu w kalendarzu pokoju "SELECT COUNT * FROM Kalendarze WHERE IDPokoju="..." AND Tresc="..." AND Data="...
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    wynik: bool = True #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
     return wynik
 
@@ -327,7 +327,7 @@ def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.List[st
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nKalendarzu pokoju: "+nazwaPokoju+"\n")
     #TODO wywołanie prepared statement do pobrania wpisów z kalendarza pokoju
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    lista: typing.List[str] = ["Spotkanie 1.","1, 3, 2025","Spotkanie 2.","12, 4, 2025","Inne wydarzenie","1, 1, 2026"] #mock, tu będzie przekształcenie rezultatu operacji powyżej
     
     dataAktywnosci(login,token)
     return lista
