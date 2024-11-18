@@ -76,5 +76,17 @@ else:
         #Test odznaczania tasku jako niewykonanego
         wynik = OZ.ObsluzZapytanie(["odznacz task","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788",1])
     
+    elif(nr==17):
+        #Test pobierania chatu
+        wynik = OZ.ObsluzZapytanie(["pobierz chat","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788"])
+    
+    elif(nr==18):
+        #Test aktualizacji chatu
+        wynik = OZ.ObsluzZapytanie(["zaktualizuj chat","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788","Uzytkownik711711",1234567788])
+    
+    elif(nr==19):
+        #Test wysyłania wiadomości
+        wynik = OZ.ObsluzZapytanie(["wyslij wiadomosc","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788","Uzytkownik711711",1234567788,"Wiadomość'admina",123456795])
+    
     
     print(wynik)

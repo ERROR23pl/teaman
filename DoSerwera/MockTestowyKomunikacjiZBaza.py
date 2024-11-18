@@ -265,7 +265,7 @@ def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nChatu pokoju: "+nazwaPokoju+"\n")
     #TODO wywołanie prepared statement do pobrania 100 ostatnich wiadomości z chatu pokoju
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    lista: typing.List[str] = ["Wiadomość 1.","Uzytkownik1","123456789","Wiadomość 2.","Uzytkownik2","123456790","Wiadomość 3.","Uzytkownik3","123456791","Wiadomość 4.","Uzytkownik4","123456792"] #mock, tu będzie przekształcenie rezultatu operacji powyżej
     
     dataAktywnosci(login,token)
     return lista
@@ -273,9 +273,9 @@ def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
 
 def aktualizacjaChatu(login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i autor ostatniej wiadomości przetestowane pod względem bezpieczeństwa
-    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nAktualizacji chatu pokoju: "+nazwaPokoju+"\nOd wiadomości użytkownika "+autorOstatnioPosiadanej+" z daty o kodzie + "+str(dataOstatnioPosiadanej)+"\n")
+    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nAktualizacji chatu pokoju: "+nazwaPokoju+"\nOd wiadomości użytkownika: "+autorOstatnioPosiadanej+"\nz daty o kodzie: "+str(dataOstatnioPosiadanej)+"\n")
     #TODO wywołanie prepared statement do pobrania wszystkich wiadomości z chatu pokoju od ostatnio posiadanej
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    lista: typing.List[str] = ["Wiadomość 3.","Uzytkownik3","123456791","Wiadomość 4.","Uzytkownik4","123456792","Wiadomość'admina","Uzytkownik711","123456795"] #mock, tu będzie przekształcenie rezultatu operacji powyżej
     
     dataAktywnosci(login,token)
     return lista
