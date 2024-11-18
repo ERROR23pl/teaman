@@ -64,5 +64,17 @@ else:
         #Test pobierania listy pokojów
         wynik = OZ.ObsluzZapytanie(["lista pokojow","Projekt12345","Uzytkownik711","token12345token0987654321A"])
     
+    elif(nr==14):
+        #Test modyfikacji (dodawanie, usuwanie, modyfikacja) tasków (od razu razem z pobraniem)
+        wynik = OZ.ObsluzZapytanie(["modyfikacja taskow","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788",[[1,"nazwaTaska1",[12,2,2025],[100.06,157.0],[2,3,5]],[2,"nazwaTaska2",[1,1,2025],[120.06,17.0],[3]],[3,"nazwaTaska3",[10,1,2025],[20.06,1007.47],[4,5]],[4,"nazwa4",[20,12,2024],[220.06,1004.7],[5]],[5,"nazwaTaska5",[1,12,2024],[426.66,711.711],[]]],[[6,"nazwaTaska6",[11,12,2026],[46.66,71.711],[7]]],[[7,"nazwaTaska7",[1,12,2026],[469.66,71.711],[8]],[8,"nazwaTaska8",[14,7,2026],[568.66,711.711],[1,2,3,4,5]]]])
+    
+    elif(nr==15):
+        #Test zaznaczania tasku jako wykonanego
+        wynik = OZ.ObsluzZapytanie(["zaznacz task","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788",1])
+    
+    elif(nr==16):
+        #Test odznaczania tasku jako niewykonanego
+        wynik = OZ.ObsluzZapytanie(["odznacz task","Projekt12345","Uzytkownik711","token12345token0987654321A","Pokoj123456788",1])
+    
     
     print(wynik)

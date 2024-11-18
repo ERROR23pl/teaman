@@ -184,7 +184,7 @@ def pokojeCzlonkowskie(login: str, token: str) -> typing.List[str]:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
     print("Sprawdzanie pokojów członkowskich użytkownika:\nlogin = "+login+"\ntoken = "+token+"\n")
     #TODO wywołanie prepared statement do, w których pokojach jest użytkownik "SELECT DISTINCT Pokoj FROM (Pokoje JOIN...) WHERE Login="+login+";"
-    wynik: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana w listę stringów
+    wynik: typing.List[str] = ["pokoj1, pokoj2, pokoj3, X, main"] #mock; tu będzie odebranie wyniku i zmiana w listę stringów
     dataAktywnosci(login,token)
     
     return wynik
@@ -225,9 +225,9 @@ def zauktualizujWlasnosciTaskow(login: str, token: str, nazwaPokoju: str, listaT
 
 def ukonczTask(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Próba zaznaczenia przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nW pokoju: "+nazwaPokoju+"\nTaska o ID = "+int(idTaska)+" jako ukończony")
+    print("Próba zaznaczenia przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nW pokoju: "+nazwaPokoju+"\nTaska o ID = "+str(idTaska)+" jako ukończony")
     #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje zaznaczenia tego taska (wymagany, ale nieukończony)
-    czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
+    czyMozna: bool = True #mock, tu będzie rezultat otrzymany z operacji powyżej
     
     if(czyMozna):
         print("Sukces")
@@ -239,9 +239,9 @@ def ukonczTask(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
 
 def odznaczTaskJakoNieukonczony(login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Próba odznaczenia przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nW pokoju: "+nazwaPokoju+"\nTaska o ID = "+int(idTaska)+" jako nieukończony")
+    print("Próba odznaczenia przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nW pokoju: "+nazwaPokoju+"\nTaska o ID = "+str(idTaska)+" jako nieukończony")
     #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje odznaczenia tego taska (wymaga go i jest ukończony)
-    czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
+    czyMozna: bool = True #mock, tu będzie rezultat otrzymany z operacji powyżej
     
     if(czyMozna):
         print("Sukces")
@@ -255,7 +255,7 @@ def listaTaskow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nTasków z pokoju: "+nazwaPokoju+"\n")
     #TODO wywołanie prepared statement do pobrania danych tasków z pokoju
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
+    lista: typing.List[str] = ["1; nazwaTaska1; 12, 2, 2025; true; 100.06, 157.0; 2, 3, 5","2; nazwaTaska2; 1, 1, 2025; true; 120.06, 17.0; 3","3; nazwaTaska3; 10, 1, 2025; true; 20.06, 1007.47; 4, 5","5; nazwaTaska5; 1, 12, 2024; true; 426.66, 711.711; ","7; nazwaTaska7; 1, 12, 2026; false; 469.66, 71.711; 8","8; nazwaTaska8; 14, 7, 2026; false; 568.66, 711.711; 1, 2, 3, 4, 5"] #mock, tu będzie przekształcenie rezultatu operacji powyżej
     
     dataAktywnosci(login,token)
     return lista
