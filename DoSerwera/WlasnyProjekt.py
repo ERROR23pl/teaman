@@ -9,6 +9,7 @@ def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token ses
     #login i hasło już zahashowane
     
     Bazy.stworzBaze(nazwaProjektu)
+    Bazy.polaczZBaza(nazwaProjektu)
     
     token: str = Kody.wygenerujKod()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()

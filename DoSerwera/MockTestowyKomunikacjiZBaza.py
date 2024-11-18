@@ -14,17 +14,17 @@ def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = 
     elif(haslo!="" and token=="" and rola==""):
         print("Login = "+login+"\nhasło = "+haslo+"\n")
         #TODO wywołanie prepared statement do próby logowania "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Haslo="+haslo+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
+        ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
     elif(haslo=="" and token!="" and rola==""):
-        print("Login = "+login+"\token = "+token+"\n")
+        print("Login = "+login+"\ntoken = "+token+"\n")
         #TODO wywołanie prepared statement do testu poprawności sesji"SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
         ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
     
     elif(haslo=="" and token!="" and rola!=""):
-        print("Login = "+login+"\token = "+token+"\nrola = "+rola+"\n")
+        print("Login = "+login+"\ntoken = "+token+"\nrola = "+rola+"\n")
         #TODO wywołanie prepared statement do testu poprawności sesji oraz uprawnień "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+" AND Rola="+rola+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
+        ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
     else:           #nieznana opcja
         print("Błąd - nieznana opcja!\n")
@@ -37,7 +37,7 @@ def rolaUzytkownika(login: str, token: str) -> str:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     print("Sprawdzanie roli użytkownika dla:\nlogin = "+login+"\ntoken = "+token+"\n")
     #TODO wywołanie prepared statement do odebrania roli użytkownika "SELECT Rola FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
-    rola: str = ""  #mock; tu będzie zamina rezultatu w string
+    rola: str = "rolaTest"  #mock; tu będzie zamina rezultatu w string
     return rola
 
 
@@ -157,7 +157,7 @@ def usunPokoj(login: str, token: str, nazwaPokoju: str) -> None:
 
 def dodajDoPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawanyLogin: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Dodanie do pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+dodawanyLogin+"\nPrzez admina:\nlogin"+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
+    print("Dodanie do pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+dodawanyLogin+"\nPrzez:\nlogin = "+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
     #TODO wywołanie prepared statement do wstawienia nowego użytkownika do projektu "INSERT INTO Nalezenie(IDPokoju,IDUzytkownika) VALUES"...
     dataAktywnosci(loginAdmina,tokenAdmina)
     return None
@@ -165,7 +165,7 @@ def dodajDoPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawany
 
 def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, usuwanyLogin: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Usuwanie z pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+usuwanyLogin+"\nPrzez admina:\nlogin"+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
+    print("Usuwanie z pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+usuwanyLogin+"\nPrzez:\nlogin"+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
     #TODO wywołanie prepared statement do usunięcia użytkownika z projektu "DELETE FROM Nalezenie WHERE IDUzytkownika="...
     dataAktywnosci(loginAdmina,tokenAdmina)
     return None

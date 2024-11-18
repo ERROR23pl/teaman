@@ -123,7 +123,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
-        rezultat: bool = WlProj.usunProjekt(login,token)
+        rezultat: bool = WlProj.usunProjekt(nazwaProjektu,login,token)
         
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat, sukcesOperacji=rezultat)
     
