@@ -29,7 +29,7 @@ def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, 
         
 
 
-def zaktualizujChat(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: typing.List[str, int]) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
+def zaktualizujChat(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: typing.Tuple[str, int]) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
     #ostatniaPosiadana = [wysyłający,data]
     hashLog: str = hash.sha3_512(login)
     hashTok: str = hash.sha3_512(token)
@@ -55,7 +55,7 @@ def zaktualizujChat(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana:
 
 
 
-def wyslijWiadomosc(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: typing.List[str, int], nowaWiadomosc: typing.List[str, int]) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
+def wyslijWiadomosc(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: typing.Tuple[str, int], nowaWiadomosc: typing.Tuple[str, int]) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
     #nowaWiadomosc = [treść,data] (wysyłający jest znany, bo login)
     hashLog: str = hash.sha3_512(login)
     hashTok: str = hash.sha3_512(token)
