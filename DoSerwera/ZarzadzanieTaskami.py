@@ -1,7 +1,7 @@
 import hashlib as hash
 import typing
-import ManagerKodow as Kody
-import KomunikacjaZBaza as Bazy
+#import KomunikacjaZBaza as Bazy
+import MockTestowyKomunikacjiZBaza as Bazy
 
 
 #budowa taska: typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]] -> [id, nazwa, [data wymaganego końca: dzień,miesiąc,rok], [koordynaty wizualne: x,y], [lista id tasków, od których zależny]]

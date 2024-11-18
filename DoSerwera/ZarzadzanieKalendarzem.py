@@ -1,7 +1,7 @@
 import hashlib as hash
 import typing
-import ManagerKodow as Kody
-import KomunikacjaZBaza as Bazy
+#import KomunikacjaZBaza as Bazy
+import MockTestowyKomunikacjiZBaza as Bazy
 
 
 #budowa wpisu: typing.Tuple[str,typing.Tuple[int,int,int]] -> [nazwa/opis, [data: dzień,miesiąc,rok]]

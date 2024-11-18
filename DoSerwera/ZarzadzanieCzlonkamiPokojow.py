@@ -1,6 +1,7 @@
 import typing
 import hashlib as hash
-import KomunikacjaZBaza as Bazy
+#import KomunikacjaZBaza as Bazy
+import MockTestowyKomunikacjiZBaza as Bazy
     
     
 def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str) -> typing.Tuple[bool, bool, bool]: #[czy są uprawnienia, czy pokój istniał, czy się udało]

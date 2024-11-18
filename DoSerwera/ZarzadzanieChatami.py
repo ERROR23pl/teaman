@@ -1,7 +1,7 @@
 import hashlib as hash
 import typing
-import ManagerKodow as Kody
-import KomunikacjaZBaza as Bazy
+#import KomunikacjaZBaza as Bazy
+import MockTestowyKomunikacjiZBaza as Bazy
 
 
 def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, 100 ostatnich wiadomości z chatu pokoju w formie listy stringów]

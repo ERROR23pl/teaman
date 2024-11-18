@@ -1,7 +1,8 @@
 import hashlib as hash
 import typing
 import ManagerKodow as Kody
-import KomunikacjaZBaza as Bazy
+#import KomunikacjaZBaza as Bazy
+import MockTestowyKomunikacjiZBaza as Bazy
 
 
 def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token sesji

@@ -1,7 +1,8 @@
 import hashlib as hash
 import typing
 import ManagerKodow as Kody
-import KomunikacjaZBaza as Bazy
+#import KomunikacjaZBaza as Bazy
+import MockTestowyKomunikacjiZBaza as Bazy
 
 
 

@@ -1,6 +1,7 @@
 import typing
 import hashlib as hash
-import KomunikacjaZBaza as Bazy
+#import KomunikacjaZBaza as Bazy
+import MockTestowyKomunikacjiZBaza as Bazy
 
 
 def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy nazwa była unikalna dla projektu]
