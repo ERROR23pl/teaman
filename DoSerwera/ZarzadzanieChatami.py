@@ -5,8 +5,8 @@ import MockTestowyKomunikacjiZBaza as Bazy
 
 
 def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, 100 ostatnich wiadomości z chatu pokoju w formie listy stringów]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
@@ -31,8 +31,8 @@ def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, 
 
 def zaktualizujChat(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: typing.Tuple[str, int]) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
     #ostatniaPosiadana = [wysyłający,data]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
@@ -57,8 +57,8 @@ def zaktualizujChat(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana:
 
 def wyslijWiadomosc(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: typing.Tuple[str, int], nowaWiadomosc: typing.Tuple[str, int]) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
     #nowaWiadomosc = [treść,data] (wysyłający jest znany, bo login)
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     

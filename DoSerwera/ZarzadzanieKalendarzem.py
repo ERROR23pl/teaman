@@ -8,8 +8,8 @@ import MockTestowyKomunikacjiZBaza as Bazy
 
 
 def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane i ma się uprawnienia, czy pokój istniał i się do niego należy, czy nie był kopią już istniejącego]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
@@ -35,8 +35,8 @@ def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tup
 
 
 def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> typing.Tuple[bool, bool]: #[czy poprawne dane i ma się uprawnienia, czy pokój istniał i się do niego należy]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
@@ -60,8 +60,8 @@ def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple
 
 
 def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]], noweDane: typing.Tuple[str,typing.Tuple[int,int,int]]) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane i ma się uprawnienia, czy pokój istniał i się do niego należy, czy wpis istniał i czy nowa wersja nie byłaby kopią już istniejącego]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
@@ -87,8 +87,8 @@ def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typi
 
 
 def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, kalendarz pokoju w formie listy stringów]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     

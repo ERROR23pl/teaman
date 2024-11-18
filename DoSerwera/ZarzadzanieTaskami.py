@@ -8,8 +8,8 @@ import MockTestowyKomunikacjiZBaza as Bazy
 
 
 def obslugaTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]]) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy pokój istniał i się udało]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
@@ -32,8 +32,8 @@ def obslugaTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.
 
 
 def oznaczJakoWykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane, czy pokój istniał i się do niego należy, czy inne taski nie blokują]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
@@ -57,8 +57,8 @@ def oznaczJakoWykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -
 
 
 def oznaczJakoNiewykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane, czy pokój istniał i się do niego należy, czy inne taski nie blokują]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
@@ -82,8 +82,8 @@ def oznaczJakoNiewykonany(login: str, token: str, nazwaPokoju: str, idTaska: int
 
 
 def pobierzTaski(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, lista tasków pokoju w formie listy stringów]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     

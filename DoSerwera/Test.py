@@ -39,3 +39,4 @@ else:
         #Test usuwania projektu
         wynik = OZ.ObsluzZapytanie(["usuwanie projektu","Projekt12345","Uzytkownik711","token12345token0987654321A"])
     
+    print(wynik)

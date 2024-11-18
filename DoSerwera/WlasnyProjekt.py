@@ -11,7 +11,7 @@ def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token ses
     Bazy.stworzBaze(nazwaProjektu)
     
     token: str = Kody.wygenerujKod()
-    hashTok: str = hash.sha3_512(token)
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     Bazy.wstawUzytkownika(login,haslo,hashTok,"Właściciel zespołu")
     
     Bazy.stworzPokoj(login,hashTok,nazwaProjektu)                #automatycznie stwórz pokój główny o nazwie takiej samej jak nazwa projektu
@@ -24,8 +24,8 @@ def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token ses
 
 def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy się udało]
     #kod zaproszeniowy już zahashowany
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
@@ -45,8 +45,8 @@ def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tu
 
 
 def usunProjekt(nazwaProjektu: str, login: str, token: str) -> bool: #czy się udało
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     

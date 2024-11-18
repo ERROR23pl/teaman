@@ -106,7 +106,7 @@ def czyBazaIstnieje(nazwaProj: str) -> bool:
     #nazwa projektu przetestowana pod względem bezpieczeństwa
     print("Sprawdzenie istnienia bazy projektu o nazwie "+nazwaProj+"\n")
     #TODO wywołanie prepared statement do sprawdzenia istnienia bazy
-    wynik: bool = False #mock; tu będzie zamiana otrzymaneg wyniku w prawda-fałsz
+    wynik: bool = True #mock; tu będzie zamiana otrzymaneg wyniku w prawda-fałsz
     return wynik
 
 
@@ -163,9 +163,9 @@ def dodajDoPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawany
     return None
 
 
-def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawanyLogin: str) -> None:
+def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, usuwanyLogin: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Usuwanie z pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+dodawanyLogin+"\nPrzez admina:\nlogin"+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
+    print("Usuwanie z pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+usuwanyLogin+"\nPrzez admina:\nlogin"+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
     #TODO wywołanie prepared statement do usunięcia użytkownika z projektu "DELETE FROM Nalezenie WHERE IDUzytkownika="...
     dataAktywnosci(loginAdmina,tokenAdmina)
     return None

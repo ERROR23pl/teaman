@@ -5,8 +5,8 @@ import MockTestowyKomunikacjiZBaza as Bazy
 
 
 def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy nazwa była unikalna dla projektu]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
@@ -26,8 +26,8 @@ def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, 
 
 
 def usunPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy pokój istniał]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
@@ -46,8 +46,8 @@ def usunPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bo
 
 
 def listaPokojow(login: str, token: str) -> typing.Tuple[bool, typing.List[str]]: #[czy poprawne dane, [lista pokojów, do których się należy]]
-    hashLog: str = hash.sha3_512(login)
-    hashTok: str = hash.sha3_512(token)
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
