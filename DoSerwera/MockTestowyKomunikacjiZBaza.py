@@ -9,7 +9,7 @@ def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = 
     if(haslo=="" and token=="" and rola==""):
         print("Login = "+login+"\n")
         #TODO wywołanie prepared statement do sprawdzenia czy taki login już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
+        ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
     elif(haslo!="" and token=="" and rola==""):
         print("Login = "+login+"\nhasło = "+haslo+"\n")
@@ -19,7 +19,7 @@ def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = 
     elif(haslo=="" and token!="" and rola==""):
         print("Login = "+login+"\ntoken = "+token+"\n")
         #TODO wywołanie prepared statement do testu poprawności sesji"SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
+        ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
     elif(haslo=="" and token!="" and rola!=""):
         print("Login = "+login+"\ntoken = "+token+"\nrola = "+rola+"\n")
@@ -134,7 +134,7 @@ def czyJestPokoj(nazwaPokoju: str) -> bool:
     #nazwa pokoju przetestowana pod względem bezpieczeństwa
     print("Sprawdzenie istnienia pokoju o nazwie "+nazwaPokoju+"\n")
     #TODO wywołanie prepared statement do sprawdzenia czy taki pokój istnieje "SELECT COUNT * FROM Pokoje WHERE Pokoj="+nazwaPokoju+";"
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    wynik: bool = True #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
     return wynik
 
@@ -165,7 +165,7 @@ def dodajDoPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawany
 
 def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, usuwanyLogin: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Usuwanie z pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+usuwanyLogin+"\nPrzez:\nlogin"+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
+    print("Usuwanie z pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+usuwanyLogin+"\nPrzez:\nlogin = "+loginAdmina+"\ntoken = "+tokenAdmina+"\n")
     #TODO wywołanie prepared statement do usunięcia użytkownika z projektu "DELETE FROM Nalezenie WHERE IDUzytkownika="...
     dataAktywnosci(loginAdmina,tokenAdmina)
     return None
@@ -175,7 +175,7 @@ def czyUzytkownikJestWPokoju(nazwaPokoju: str, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     print("Sprawdzanie należenia do pokoju o nazwie "+nazwaPokoju+"\nUżytkownika:\nlogin = "+login+"\n")
     #TODO wywołanie prepared statement do sprawdzenia obecności użytkownika w pokoju "SELECT COUNT * FROM Nalezenie WHERE IDUzytkownika="..." AND IDPokoju="...
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    wynik: bool = True #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
     return wynik
 

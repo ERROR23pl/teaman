@@ -173,10 +173,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Nazwy.przetestujNazwe(nazwaPokoju))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
         
-        rezultat: typing.Tuple[bool,bool] = Pokoje.stworzPokoj(login,token,nazwaPokoju)
+        rezultat: bool = Pokoje.usunPokoj(login,token,nazwaPokoju)
         
         Bazy.rozlaczZBaza()
-        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat, sukcesOperacji=rezultat)
     
     
     elif(operacja=="dodawanie do pokoju"):
@@ -229,7 +229,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
     
     
-    elif(operacja=="lista pokojów"):
+    elif(operacja=="lista pokojow"):
         czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
         if(czyProjektIstnieje):
@@ -251,7 +251,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
     
     
     
-    elif(operacja=="modyfikacja tasków"):
+    elif(operacja=="modyfikacja taskow"):
         czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
         
         if(czyProjektIstnieje):

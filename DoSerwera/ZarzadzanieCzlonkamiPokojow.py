@@ -20,7 +20,7 @@ def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str) 
     
     else:
         hashDod: str = hash.sha3_512(dodawanaOsoba.encode()).hexdigest()
-        czyMoznaDodac: bool = ((Bazy.iloscUzytkownikow(login=hashLog)>0) and (not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashDod)))  #użytkownik istnieje w projekcie, ale nie ma go w pokoju
+        czyMoznaDodac: bool = ((Bazy.iloscUzytkownikow(login=hashDod)>0) and (not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashDod)))  #użytkownik istnieje w projekcie, ale nie ma go w pokoju
 
         if(not czyMoznaDodac):
             return True,True,False

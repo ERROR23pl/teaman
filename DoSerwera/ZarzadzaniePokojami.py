@@ -25,23 +25,21 @@ def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, 
 
 
 
-def usunPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy pokój istniał]
+def usunPokoj(login: str, token: str, nazwaPokoju: str) -> bool: #[czy były uprawnienia]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
     
     if(wynik!=1):
-        return False, False
+        return False
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
     
-    if(not czyPokojIstnieje):
-        return True, False
-    
-    else:
+    if(czyPokojIstnieje):                               #jeśli nie istniał, to usuwanie uznane za udane
         Bazy.usunPokoj(hashLog,hashTok,nazwaPokoju)
-        return True, True
+        
+    return True
 
 
 
@@ -52,7 +50,7 @@ def listaPokojow(login: str, token: str) -> typing.Tuple[bool, typing.List[str]]
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, []
+        return False, [""]
     
     else:
         lista: typing.List[str] = Bazy.pokojeCzlonkowskie(hashLog,hashTok)
