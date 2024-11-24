@@ -1,29 +1,34 @@
 import typing
 
 
-def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = "") -> int:
+def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = "", nickPubliczny: str = "") -> int:
     #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     ilosc: int
     print("Sprawdzanie ilości użytkowników dla:")
     
-    if(haslo=="" and token=="" and rola==""):
+    if(haslo=="" and token=="" and rola=="" and nickPubliczny==""):
         print("Login = "+login+"\n")
         #TODO wywołanie prepared statement do sprawdzenia czy taki login już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
-    elif(haslo!="" and token=="" and rola==""):
+    elif(haslo!="" and token=="" and rola=="" and nickPubliczny==""):
         print("Login = "+login+"\nhasło = "+haslo+"\n")
         #TODO wywołanie prepared statement do próby logowania "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Haslo="+haslo+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
-    elif(haslo=="" and token!="" and rola==""):
+    elif(haslo=="" and token!="" and rola=="" and nickPubliczny==""):
         print("Login = "+login+"\ntoken = "+token+"\n")
         #TODO wywołanie prepared statement do testu poprawności sesji"SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
-    elif(haslo=="" and token!="" and rola!=""):
+    elif(haslo=="" and token!="" and rola!="" and nickPubliczny==""):
         print("Login = "+login+"\ntoken = "+token+"\nrola = "+rola+"\n")
         #TODO wywołanie prepared statement do testu poprawności sesji oraz uprawnień "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+" AND Rola="+rola+";"
+        ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
+    
+    elif(login=="" and haslo=="" and token=="" and rola=="" and nickPubliczny!=""):
+        print("Nick = "+nickPubliczny+"\n")
+        #TODO wywołanie prepared statement do sprawdzenia czy taki nick już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE NickPubliczny="+nickPubliczny+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
     else:           #nieznana opcja
@@ -80,10 +85,10 @@ def wstawKod(login: str, token: str, kodZapr: str) -> None:
     return None
 
 
-def wstawUzytkownika(login: str, haslo: str, token: str, rola: str) -> None:
-    #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa
-    print("Wstawienie użytkownika: \nlogin = "+login+"\nhasło = "+haslo+"\ntoken = "+token+"\nrola = "+rola+"\n")
-    #TODO wywołanie prepared statement do wstawienia nowego użytkownika "INSERT INTO Uzytownicy(Login, Haslo, Token, Rola) VALUES ("+login+", "+haslo+", "+token+","+rola+");"
+def wstawUzytkownika(login: str, haslo: str, token: str, rola: str, nickPubliczny: str) -> None:
+    #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nick przetestowany pod względem bezpieczeństwa
+    print("Wstawienie użytkownika: \nlogin = "+login+"\nhasło = "+haslo+"\ntoken = "+token+"\nrola = "+rola+"\nnick = "+nickPubliczny+"\n")
+    #TODO wywołanie prepared statement do wstawienia nowego użytkownika "INSERT INTO Uzytownicy(Login, Haslo, Token, Rola, NickPubliczny) VALUES ("+login+", "+haslo+", "+token+","+rola+","+nickPubliczny+");"
     dataAktywnosci(login,token)
     return None
 

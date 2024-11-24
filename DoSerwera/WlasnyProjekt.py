@@ -5,7 +5,7 @@ import ManagerKodow as Kody
 import MockTestowyKomunikacjiZBaza as Bazy
 
 
-def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token sesji
+def stworzProjekt(nazwaProjektu: str, login: str, haslo: str, nick: str) -> str: #token sesji
     #login i hasło już zahashowane
     
     Bazy.stworzBaze(nazwaProjektu)
@@ -13,7 +13,7 @@ def stworzProjekt(nazwaProjektu: str, login: str, haslo: str) -> str: #token ses
     
     token: str = Kody.wygenerujKod()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
-    Bazy.wstawUzytkownika(login,haslo,hashTok,"Właściciel zespołu")
+    Bazy.wstawUzytkownika(login,haslo,hashTok,"Właściciel zespołu",nick)
     
     Bazy.stworzPokoj(login,hashTok,nazwaProjektu)                #automatycznie stwórz pokój główny o nazwie takiej samej jak nazwa projektu
     Bazy.dodajDoPokoju(login,hashTok,nazwaProjektu,login)        #dodaj siebie (właściciela) do pokoju głównego

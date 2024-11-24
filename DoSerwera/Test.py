@@ -30,11 +30,11 @@ else:
     
     elif(nr==5):
         #Test rejestracji
-        wynik = OZ.ObsluzZapytanie(["rejestracja","Projekt12345","1234567890abcde12345AA","Uzytkownik711","Haslo12345!"])
+        wynik = OZ.ObsluzZapytanie(["rejestracja","Projekt12345","1234567890abcde12345AA","Uzytkownik711","Haslo12345!","NickUzytkownika711"])
     
     elif(nr==6):
         #Test tworzenia projektu
-        wynik = OZ.ObsluzZapytanie(["tworzenie projektu","Projekt12345","Uzytkownik711","Haslo12345!"])
+        wynik = OZ.ObsluzZapytanie(["tworzenie projektu","Projekt12345","Uzytkownik711","Haslo12345!","NickUzytkownika711"])
     
     elif(nr==7):
         #Test zapraszania do projektu

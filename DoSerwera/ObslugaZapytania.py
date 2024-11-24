@@ -58,11 +58,12 @@ def ObsluzZapytanie(plikKomunikacyjny):
         kodZapr: str = zapytanie[2]
         login: str = zapytanie[3]
         haslo: str = zapytanie[4]
+        nick: str = zapytanie[5]
         
-        if((not Kody.przetestujKod(kodZapr))  or (not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo))):
+        if((not Kody.przetestujKod(kodZapr))  or (not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
-        rezultat: typing.Tuple[bool,bool,str] = LogIRej.probaRejestracji(nazwaProjektu,kodZapr,login,haslo)
+        rezultat: typing.Tuple[bool,bool,str] = LogIRej.probaRejestracji(nazwaProjektu,kodZapr,login,haslo,nick)
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=[rezultat[2]])
@@ -76,11 +77,12 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         login: str = zapytanie[2]
         haslo: str = zapytanie[3]
+        nick: str = zapytanie[4]
         
-        if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo))):
+        if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
-        rezultat: str = WlProj.stworzProjekt(nazwaProjektu,login,haslo)
+        rezultat: str = WlProj.stworzProjekt(nazwaProjektu,login,haslo,nick)
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True, sukcesOperacji=True, dane=[rezultat])
