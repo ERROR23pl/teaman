@@ -14,6 +14,7 @@ import ZarzadzanieChatami as Chaty
 import ZarzadzanieKalendarzem as Kalendarz
 import UdostepnianiePlikow as udPlikow
 import typing
+import hashlib as hash
 
 
 #TODO plik w rozwoju; po zakończeniu, przerzucić case'y do osobnych plików, a tu tylko wywołania
@@ -63,6 +64,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Kody.przetestujKod(kodZapr))  or (not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
+        if(login==hash.sha3_512(nick.encode()).hexdigest()):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane - nazwa publiczna nie może być taka jak login
+        
         rezultat: typing.Tuple[bool,bool,str] = LogIRej.probaRejestracji(nazwaProjektu,kodZapr,login,haslo,nick)
         
         Bazy.rozlaczZBaza()
@@ -81,6 +85,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if(login==hash.sha3_512(nick.encode()).hexdigest()):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane - nazwa publiczna nie może być taka jak login
         
         rezultat: str = WlProj.stworzProjekt(nazwaProjektu,login,haslo,nick)
         
