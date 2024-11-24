@@ -314,3 +314,50 @@ def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.List[st
     
     dataAktywnosci(login,token)
     return lista
+
+
+def czyPlikIstnieje(nazwaPokoju: str, nazwaPliku: str) -> bool:
+    #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do sprawdzenia obecności pliku o podanej nazwie w pokoju "SELECT COUNT * FROM Pliki WHERE IDPokoju="..." AND NazwaPliku="...""
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    
+    return wynik
+
+
+def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> None:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do dodania nowego pliku dla pokoju
+    
+    dataAktywnosci(login,token)
+    return None
+
+
+def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> None:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do usunięcia pliku z pokoju
+    
+    dataAktywnosci(login,token)
+    return None
+
+
+def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> bytes:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do pobrania pliku o wskazanej nazwie
+    wynik: bytes = None #mock; tu będzie odebranie rezultatu
+    
+    dataAktywnosci(login,token)
+    return wynik
+
+
+def listaPlikow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do pobrania listy nazw i autorów plików
+    wynik: typing.List[str] = [""] #mock; tu będzie odebranie rezultatu
+    
+    dataAktywnosci(login,token)
+    return wynik

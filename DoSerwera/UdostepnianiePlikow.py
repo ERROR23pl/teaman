@@ -24,9 +24,9 @@ def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawarto
             return True, False, False
         
         else:
-            czyMozna: bool = not (Bazy.czyPlikIstnieje(nazwaPokoju,nazwaPliku))   #TODO
+            czyMozna: bool = not (Bazy.czyPlikIstnieje(nazwaPokoju,nazwaPliku))
             if(czyMozna):
-                Bazy.dodajPlik(login,token,nazwaPokoju,nazwaPliku,zawartoscPliku)                #TODO
+                Bazy.dodajPlik(login,token,nazwaPokoju,nazwaPliku,zawartoscPliku)
             return True, True, czyMozna
 
 
@@ -56,7 +56,7 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typin
                 return True, True, True         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
 
             if (Bazy.iloscUzytkownikow(login=hashLog,token=hashTok,rola="Właściciel zespołu")==1 or Bazy.autorPliku(nazwaPokoju,nazwaPliku)==hashLog):  #TODO
-                Bazy.usunPlik(login,token,nazwaPokoju,nazwaPliku)       #TODO
+                Bazy.usunPlik(login,token,nazwaPokoju,nazwaPliku)
                 return True, True, True
             
             return True, True, False
@@ -87,7 +87,7 @@ def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> ty
             if (not czyPlikJest):
                 return True, True, False, ""
             
-            zawartosc: bytes = Bazy.pobierzPlik(login,token,nazwaPokoju,nazwaPliku)       #TODO
+            zawartosc: bytes = Bazy.pobierzPlik(login,token,nazwaPokoju,nazwaPliku)
             strZawartosci: str = zawartosc.decode()
             return True, True, True, strZawartosci
 
@@ -113,5 +113,5 @@ def pobierzListePlikow(login: str, token: str, nazwaPokoju: str) -> typing.Tuple
             return True, False, [""]
         
         else:
-            lista: typing.List[str] = Bazy.listaPlikow(login,token,nazwaPokoju) #TODO
+            lista: typing.List[str] = Bazy.listaPlikow(login,token,nazwaPokoju)
             return True, True, lista
