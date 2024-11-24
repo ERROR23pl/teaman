@@ -31,7 +31,7 @@ def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawarto
 
 
 
-def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane, czy pokój istniał i się do niego należy, czy miało się uprawnienia do usunięcia tego danego pliku (lub plik nie istniał, więc usunięcie udane z założenia)]
+def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane, czy pokój istniał i się do niego należy, czy miało się uprawnienia do usunięcia tego danego pliku (lub plik nie istniał, więc usunięcie udane z założenia)]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
