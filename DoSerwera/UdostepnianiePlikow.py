@@ -55,7 +55,7 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typin
             if (not czyPlikJest):
                 return True, True, True         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
 
-            if (Bazy.iloscUzytkownikow(login=hashLog,token=hashTok,rola="Właściciel zespołu")==1 or Bazy.autorPliku(nazwaPokoju,nazwaPliku)==hashLog):  #TODO
+            if (Bazy.iloscUzytkownikow(login=hashLog,token=hashTok,rola="Właściciel zespołu")==1 or Bazy.autorPliku(nazwaPokoju,nazwaPliku,dana="login")==hashLog):  #TODO
                 Bazy.usunPlik(login,token,nazwaPokoju,nazwaPliku)
                 return True, True, True
             
@@ -93,7 +93,7 @@ def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> ty
 
 
 
-def pobierzListePlikow(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, lista plików (nazwa, autor) w pokoju w formie listy stringów]
+def pobierzListePlikow(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, lista plików (nazwa, nick autora) w pokoju w formie listy stringów]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     

@@ -19,14 +19,18 @@ def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str, 
         return True, False, False
     
     else:
-        hashDod: str = hash.sha3_512(dodawanaOsoba.encode()).hexdigest()
-        czyMoznaDodac: bool = ((Bazy.iloscUzytkownikow(login=hashDod)>0) and (not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashDod)) and Bazy.czyZweryfikowany(hashDod))  #użytkownik istnieje w projekcie i jest zweryfikowany, ale nie ma go w pokoju
+        czyUzytkownikWProjekcie: bool = (Bazy.iloscUzytkownikow(nickPubliczny=dodawanaOsoba))
+        if(not czyUzytkownikWProjekcie):
+            return True,True,False
+        
+        loginDodawanego: str = Bazy.loginUzytkownika(dodawanaOsoba) #hash loginu dodawanego użytkownika
+        czyMoznaDodac: bool = ((not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,loginDodawanego)) and Bazy.czyZweryfikowany(loginDodawanego))  #użytkownik istnieje w projekcie i jest zweryfikowany, ale nie ma go w pokoju
 
         if(not czyMoznaDodac):
             return True,True,False
         else:        
-            Bazy.dodajDoPokoju(hashLog,hashTok,nazwaPokoju,hashDod)
-            Bazy.dodajKluczPokoju(login,hashTok,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],hashDod)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym dodawanego użytkownika
+            Bazy.dodajDoPokoju(hashLog,hashTok,nazwaPokoju,loginDodawanego)
+            Bazy.dodajKluczPokoju(login,hashTok,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],loginDodawanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym dodawanego użytkownika
             return True, True, True
 
 
@@ -46,8 +50,12 @@ def usunZPokoju(login: str, token: str, nazwaPokoju: str, usuwanaOsoba: str) -> 
         return True, False
     
     else:
-        hashUs: str = hash.sha3_512(usuwanaOsoba.encode()).hexdigest()
+        czyUzytkownikWProjekcie: bool = (Bazy.iloscUzytkownikow(nickPubliczny=usuwanaOsoba))
+        if(not czyUzytkownikWProjekcie):
+            return True,True
         
-        Bazy.usunZPokoju(hashLog,hashTok,nazwaPokoju,hashUs)   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
-        Bazy.usunKluczeDlaUzytkownika(hashLog,hashTok,nazwaPokoju,hashUs)   #usunięcie kluczy serwera zaszyfrowanych kluczem publicznym usuniętego użytkownika
+        loginUsuwanego: str = Bazy.loginUzytkownika(usuwanaOsoba) #hash loginu usuwanego użytkownika
+        
+        Bazy.usunZPokoju(hashLog,hashTok,nazwaPokoju,loginUsuwanego)   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
+        Bazy.usunKluczeDlaUzytkownika(hashLog,hashTok,nazwaPokoju,loginUsuwanego)   #usunięcie kluczy serwera zaszyfrowanych kluczem publicznym usuniętego użytkownika
         return True, True

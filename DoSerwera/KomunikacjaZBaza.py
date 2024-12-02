@@ -363,6 +363,20 @@ def listaPlikow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     return wynik
 
 
+def autorPliku(nazwaPokoju: str, nazwaPliku: str, dana: str = "nick") -> str:
+    #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
+    if(dana=="nick"):
+         #TODO wywołanie prepared statement do pobrania nicku publicznego autora pliku
+         wynik="" #mock; tu będzie odebranie rezultatu
+    elif(dana=="login"):
+         #TODO wywołanie prepared statement do pobrania zahashowanego loginu autora pliku
+         wynik="" #mock; tu będzie odebranie rezultatu
+    else:
+        wynik=""
+        
+    return wynik
+
+
 def czyKluczIstnieje(kluczPub: str) -> bool:
     #klucz przetestowany pod względem bezpieczeństwa
     
@@ -422,5 +436,14 @@ def kluczUzytkownika(loginAdmina: str, tokenAdmina: str, nickPosiadaczaKlucza: s
     #TODO wywołanie prepared statement do odebrania klucza użytkownika "SELECT KluczPub FROM Uzytkownicy WHERE NickPubliczny="+nickPosiadaczaKlucza+";"
     wynik: str = "" #mock; tu będzie odebranie wyniku
     dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return wynik
+
+
+def loginUzytkownika(nick: str) -> str:
+    #nick przetestowany pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do odebrania loginu użytkownika "SELECT Login FROM Uzytkownicy WHERE NickPubliczny="+nick+";"
+    wynik: str = "" #mock; tu będzie odebranie wyniku
     
     return wynik
