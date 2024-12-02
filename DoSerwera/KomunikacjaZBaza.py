@@ -447,3 +447,21 @@ def loginUzytkownika(nick: str) -> str:
     wynik: str = "" #mock; tu będzie odebranie wyniku
     
     return wynik
+
+
+def ustawRole(loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; rola przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do zmiany roli użytkownika
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return None
+
+def listaNiezweryfikowanych(login: str, token: str) -> typing.List[str]:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do odebrania listy niezweryfikowanych użytkowików "SELECT NickPubliczny FROM Uzytkownicy WHERE Rola=\"Niezweryfikowany\";"
+    lista: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana go w listę stringów
+    dataAktywnosci(login,token)
+    
+    return lista

@@ -43,7 +43,6 @@ def probaRejestracji(nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, ha
         token: str = Kody.wygenerujKod()
         hashTok: str = hash.sha3_512(token.encode()).hexdigest()
         Bazy.wstawUzytkownika(hashLog,hashHas,hashTok,"Niezweryfikowany",nick)
-        Bazy.dodajDoPokoju(hashLog,hashTok,nazwaProjektu,hashLog)        #dodaj nowego użytkownika do pokoju głównego   #TODO - przenieść do weryfikacji!
         Bazy.usunKod(hashKod)
         
         return True, True, token

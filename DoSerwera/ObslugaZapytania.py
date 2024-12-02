@@ -14,6 +14,7 @@ import ZarzadzanieTaskami as Taski
 import ZarzadzanieChatami as Chaty
 import ZarzadzanieKalendarzem as Kalendarz
 import UdostepnianiePlikow as udPlikow
+import WeryfikacjaIRole as Wer
 import typing
 import hashlib as hash
 
@@ -726,6 +727,72 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
+    
+    
+    elif(operacja=="lista niezweryfikowanych"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+
+        
+        rezultat: typing.Tuple[bool, typing.List[str]] = Wer.listaNiezweryfikowanych(login,token)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[0], dane=rezultat[1])
+    
+    
+    elif(operacja=="zmiana roli"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nickUzytkownika: str = zapytanie[4]
+        nowaRola: str = zapytanie[5]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token)) or (not Nazwy.przetestujNazwe(nickUzytkownika)) or (not Hasla.poprawnoscHasla(nowaRola))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        rezultat: typing.Tuple[bool,bool] = Wer.ustawRole(login,token,nickUzytkownika,nowaRola)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
+    
+    
+    elif(operacja=="weryfikacja"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nickUzytkownika: str = zapytanie[4]
+        nowaRola: str = zapytanie[5]
+        kluczePokojuGl: typing.Tuple[str,str] = [zapytanie[6], zapytanie[7]]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token)) or (not Nazwy.przetestujNazwe(nickUzytkownika)) or (not Hasla.poprawnoscHasla(nowaRola))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        rezultat: typing.Tuple[bool,bool] = Wer.zweryfikuj(login,token,nickUzytkownika,nowaRola,nazwaProjektu,kluczePokojuGl)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
     
     
     #tu w przyszłości dalsze operacje
