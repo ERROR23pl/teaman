@@ -34,6 +34,6 @@ def przetestujNazwePliku(nazwa: str) -> bool:        #test poprawności nazwy pl
         else:
             kodZnaku: int = ord(znak)
             if ((kodZnaku not in range (48,58)) and (kodZnaku not in range (65,91)) and (kodZnaku not in range (97,123)) and znak!="_"):  #nie cyfra, nie wielka lub mała litera i nie _
-                return False    #to nie jest poprawny kod
+                return False    #to nie jest poprawna nazwa pliku
     
-    return True     #to jest poprawny kod
+    return True     #to jest poprawna nazwa pliku

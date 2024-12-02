@@ -179,7 +179,7 @@ def czyUzytkownikJestWPokoju(nazwaPokoju: str, login: str) -> bool:
 def pokojeCzlonkowskie(login: str, token: str) -> typing.List[str]:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do, w których pokojach jest użytkownik "SELECT DISTINCT Pokoj FROM (Pokoje JOIN...) WHERE Login="+login+";"
+    #TODO wywołanie prepared statement do pobrania listy pokojów, do których należy użytkownik WRAZ Z ICH KLUCZAMI KLUCZAMI PUBLICZNYMI I PRYWATNYMI ZASZYFROWANYMI JEGO PUBLICZNYM
     wynik: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana w listę stringów
     dataAktywnosci(login,token)
     
@@ -360,4 +360,67 @@ def listaPlikow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     wynik: typing.List[str] = [""] #mock; tu będzie odebranie rezultatu
     
     dataAktywnosci(login,token)
+    return wynik
+
+
+def czyKluczIstnieje(kluczPub: str) -> bool:
+    #klucz przetestowany pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do sprawdzenia czy podany klucz już istnieje
+    wynik: bool = False #mock; tu będzie odebranie rezultatu i zmiana w prawda-fałsz
+    
+    return wynik
+
+
+def ustawKlucz(login: str, token: str, kluczPub: str) -> None:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; klucz przetestowany pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do ustawienia klucza publicznego dla danego użytkownika
+    
+    return None
+
+
+def dodajKluczPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i klucze przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do wstawienia kluczy (IDPokoju, kluczPub, kluczPriv, IDUzytkownika)
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return None
+
+
+def czyKluczPokojuJuzIstnieje(kluczePubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str) -> bool:
+    #login zahashowany oraz przetestowany pod względem bezpieczeństwa; klucze przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do testu istnienia pary kluczy (kluczPub, kluczPriv, IDUzytkownika)
+    wynik: bool = False #mock; tu będzie zamiana rezultatu w prawda-fałsz
+    
+    return wynik
+
+
+def czyZweryfikowany(login: str) -> bool:
+    #login zahashowany oraz przetestowany pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do odebrania roli użytkownika "SELECT Rola FROM Uzytkownicy WHERE Login="+login+";"
+    rola: str = ""  #mock; tu będzie zamina rezultatu w string
+    
+    return (not (rola=="Niezweryfikowany"))
+
+
+def usunKluczeDlaUzytkownika(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, loginPosiadaczaKlucza: str):
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do usunięcia kluczy (IDPokoju, IDUzytkownika)
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return None
+
+
+def kluczUzytkownika(loginAdmina: str, tokenAdmina: str, nickPosiadaczaKlucza: str) -> str:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa
+    
+    #TODO wywołanie prepared statement do odebrania klucza użytkownika "SELECT KluczPub FROM Uzytkownicy WHERE NickPubliczny="+nickPosiadaczaKlucza+";"
+    wynik: str = "" #mock; tu będzie odebranie wyniku
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
     return wynik

@@ -3,6 +3,7 @@ import MockTestowyObslugiPlikowKomunikacyjnych as Pliki
 import ManagerHasel as Hasla
 import ManagerKodow as Kody
 import ManagerNazw as Nazwy
+import ManagerKluczy as Klucze
 import LaczenieZProjektem as LogIRej
 import WlasnyProjekt as WlProj
 #import KomunikacjaZBaza as Bazy
@@ -82,14 +83,15 @@ def ObsluzZapytanie(plikKomunikacyjny):
         login: str = zapytanie[2]
         haslo: str = zapytanie[3]
         nick: str = zapytanie[4]
+        kluczPub: str = zapytanie[5]
         
-        if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick))):
+        if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick)) or(not Klucze.testPoprawnosciKlucza(kluczPub))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
         
         if(login==hash.sha3_512(nick.encode()).hexdigest()):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane - nazwa publiczna nie może być taka jak login
         
-        rezultat: str = WlProj.stworzProjekt(nazwaProjektu,login,haslo,nick)
+        rezultat: str = WlProj.stworzProjekt(nazwaProjektu,login,haslo,nick,kluczPub)
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True, sukcesOperacji=True, dane=[rezultat])
@@ -201,6 +203,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         token: str = zapytanie[3]
         nazwaPokoju: str = zapytanie[4]
         dodawanyUzytkownik: str = zapytanie[5]
+        kluczePokojuZaszyfrowaneKluczemDodawanego: typing.Tuple[str,str] = [zapytanie[6],zapytanie[7]]
         
         if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
@@ -208,7 +211,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         if((not Nazwy.przetestujNazwe(nazwaPokoju)) or (not Nazwy.przetestujNazwe(dodawanyUzytkownik))):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju lub login dodawanego użytkownika
         
-        rezultat: typing.Tuple[bool,bool,bool] = CzlPokojow.dodajDoPokoju(login,token,nazwaPokoju,dodawanyUzytkownik)
+        rezultat: typing.Tuple[bool,bool,bool] = CzlPokojow.dodajDoPokoju(login,token,nazwaPokoju,dodawanyUzytkownik,kluczePokojuZaszyfrowaneKluczemDodawanego)
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=(rezultat[1] and rezultat[2]))
@@ -675,6 +678,51 @@ def ObsluzZapytanie(plikKomunikacyjny):
             return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawna nazwa pokoju
         
         rezultat: typing.Tuple[bool,bool,typing.List[str]] = udPlikow.pobierzListePlikow(login,token,nazwaPokoju)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])
+    
+    
+    elif(operacja=="ustawianie klucza"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        kluczPub: str = zapytanie[4]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        if((not Klucze.testPoprawnosciKlucza(kluczPub))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=True)   #niepoprawny klucz - prośba o nowy
+        
+        rezultat: typing.Tuple[bool,bool] = LogIRej.probaUstawieniaKluczaPublicznego(login,token,kluczPub)
+        
+        Bazy.rozlaczZBaza()
+        return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1])
+    
+    
+    elif(operacja=="pobieranie klucza uzytkownika"):
+        czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
+        
+        if(czyProjektIstnieje):
+            Bazy.polaczZBaza(nazwaProjektu)
+        else:
+            return Pliki.stworzPlikZOdpowiedzia()   #niepoprawna nazwa projektu
+        
+        login: str = zapytanie[2]
+        token: str = zapytanie[3]
+        nickUzytkownika: str = zapytanie[4]
+        
+        if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token)) or (not Nazwy.przetestujNazwe(nickUzytkownika))):
+            return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True)   #niepoprawne dane
+        
+        rezultat: typing.Tuple[bool,bool,str] = WlProj.pobierzKluczPublicznyUzytkownika(login,token,nickUzytkownika)
         
         Bazy.rozlaczZBaza()
         return Pliki.stworzPlikZOdpowiedzia(poprawnyProjekt=True, poprawnoscDanych=rezultat[0], sukcesOperacji=rezultat[1], dane=rezultat[2])

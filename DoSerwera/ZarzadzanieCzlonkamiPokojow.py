@@ -4,7 +4,7 @@ import hashlib as hash
 import MockTestowyKomunikacjiZBaza as Bazy
     
     
-def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str) -> typing.Tuple[bool, bool, bool]: #[czy są uprawnienia, czy pokój istniał, czy się udało]
+def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str, kluczePokoju: typing.Tuple[str,str]) -> typing.Tuple[bool, bool, bool]: #[czy są uprawnienia, czy pokój istniał, czy się udało]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
@@ -20,12 +20,13 @@ def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str) 
     
     else:
         hashDod: str = hash.sha3_512(dodawanaOsoba.encode()).hexdigest()
-        czyMoznaDodac: bool = ((Bazy.iloscUzytkownikow(login=hashDod)>0) and (not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashDod)))  #użytkownik istnieje w projekcie, ale nie ma go w pokoju
+        czyMoznaDodac: bool = ((Bazy.iloscUzytkownikow(login=hashDod)>0) and (not Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashDod)) and Bazy.czyZweryfikowany(hashDod))  #użytkownik istnieje w projekcie i jest zweryfikowany, ale nie ma go w pokoju
 
         if(not czyMoznaDodac):
             return True,True,False
         else:        
-            Bazy.dodajDoPokoju(hashLog,hashTok,nazwaPokoju,hashDod) 
+            Bazy.dodajDoPokoju(hashLog,hashTok,nazwaPokoju,hashDod)
+            Bazy.dodajKluczPokoju(login,hashTok,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],hashDod)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym dodawanego użytkownika
             return True, True, True
 
 
@@ -48,4 +49,5 @@ def usunZPokoju(login: str, token: str, nazwaPokoju: str, usuwanaOsoba: str) -> 
         hashUs: str = hash.sha3_512(usuwanaOsoba.encode()).hexdigest()
         
         Bazy.usunZPokoju(hashLog,hashTok,nazwaPokoju,hashUs)   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
+        Bazy.usunKluczeDlaUzytkownika(hashLog,hashTok,nazwaPokoju,hashUs)   #usunięcie kluczy serwera zaszyfrowanych kluczem publicznym usuniętego użytkownika
         return True, True

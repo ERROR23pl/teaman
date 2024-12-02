@@ -306,7 +306,7 @@ def czyWpisIstnieje(nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,in
 
 def dodajWpisDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
-    print("Dodanie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nDo kalendarzu pokoju: "+nazwaPokoju+"\nWpisu o nazwie "+wpis[0]+"\nI dacie: "+str(wpis[1][0])+"."+str(wpis[1][1])+"."+str(wpis[1][2])+"\n")
+    print("Dodanie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nDo kalendarza pokoju: "+nazwaPokoju+"\nWpisu o nazwie "+wpis[0]+"\nI dacie: "+str(wpis[1][0])+"."+str(wpis[1][1])+"."+str(wpis[1][2])+"\n")
     #TODO wywołanie prepared statement do wstawienia nowego wpisu do kalendarza pokoju
     dataAktywnosci(login,token)
     return None
@@ -314,7 +314,7 @@ def dodajWpisDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing
 
 def usunWpisZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
-    print("Usunięcie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ kalendarzu pokoju: "+nazwaPokoju+"\nWpisu o nazwie "+wpis[0]+"\nI dacie: "+str(wpis[1][0])+"."+str(wpis[1][1])+"."+str(wpis[1][2])+"\n")
+    print("Usunięcie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ kalendarza pokoju: "+nazwaPokoju+"\nWpisu o nazwie "+wpis[0]+"\nI dacie: "+str(wpis[1][0])+"."+str(wpis[1][1])+"."+str(wpis[1][2])+"\n")
     #TODO wywołanie prepared statement do usunięcia wpisu z kalendarza pokoju
     dataAktywnosci(login,token)
     return None
@@ -330,7 +330,7 @@ def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typi
 
 def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nKalendarzu pokoju: "+nazwaPokoju+"\n")
+    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nKalendarza pokoju: "+nazwaPokoju+"\n")
     #TODO wywołanie prepared statement do pobrania wpisów z kalendarza pokoju
     lista: typing.List[str] = ["Spotkanie 1.","1, 3, 2025","Spotkanie 2.","12, 4, 2025","Inne wydarzenie","1, 1, 2026"] #mock, tu będzie przekształcenie rezultatu operacji powyżej
     
@@ -340,7 +340,7 @@ def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.List[st
 
 def czyPlikIstnieje(nazwaPokoju: str, nazwaPliku: str) -> bool:
     #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    
+    print("Sprawdzenie istnienia w pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\n")
     #TODO wywołanie prepared statement do sprawdzenia obecności pliku o podanej nazwie w pokoju "SELECT COUNT * FROM Pliki WHERE IDPokoju="..." AND NazwaPliku="...""
     wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
@@ -349,7 +349,7 @@ def czyPlikIstnieje(nazwaPokoju: str, nazwaPliku: str) -> bool:
 
 def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    
+    print("Dodanie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nDo pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\nI treści: "+zawartoscPliku.decode()+"\n")
     #TODO wywołanie prepared statement do dodania nowego pliku dla pokoju
     
     dataAktywnosci(login,token)
@@ -358,7 +358,7 @@ def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawarto
 
 def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    
+    print("Usunięcie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\n")
     #TODO wywołanie prepared statement do usunięcia pliku z pokoju
     
     dataAktywnosci(login,token)
@@ -367,7 +367,7 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> None:
 
 def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> bytes:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    
+    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\n")
     #TODO wywołanie prepared statement do pobrania pliku o wskazanej nazwie
     wynik: bytes = None #mock; tu będzie odebranie rezultatu
     
@@ -377,7 +377,7 @@ def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> by
 
 def listaPlikow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    
+    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\Listy plików pokoju: "+nazwaPokoju+"\n")
     #TODO wywołanie prepared statement do pobrania listy nazw i autorów plików
     wynik: typing.List[str] = [""] #mock; tu będzie odebranie rezultatu
     
