@@ -15,7 +15,8 @@ def stworzPlikZOdpowiedzia(sukcesOperacji: bool, dane: typing.List[str]):
         slownik['blad'] = dane[0]
     
     else:
-        slownik['dane'] = dane
+        for i in range(len(dane)):
+            slownik['dana'+str(i+1)] = dane[i]
     
     with open("odpowiedz.json",'w') as plikZOdp:
         json.dump(slownik,plikZOdp)
