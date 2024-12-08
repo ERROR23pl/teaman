@@ -1,4 +1,5 @@
 import typing
+import json
 
 def analizaPliku(otrzymanyPlik) -> typing.List:
     #TODO tutaj w przyszłości będzie analiza informacji otrzymanych od klienta w żądaniu i zamiana w informacje dla serwera
@@ -7,6 +8,16 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
 
 
 def stworzPlikZOdpowiedzia(sukcesOperacji: bool, dane: typing.List[str]):
-    #TODO tutaj w przyszłości będzie tworzony na podstawie wprowadzonych danych plik odpowiedzi do klienta
+    slownik: dict = {}
+    slownik['sukces'] = sukcesOperacji
     
-    return None
+    if(not sukcesOperacji):
+        slownik['blad'] = dane[0]
+    
+    else:
+        slownik['dane'] = dane
+    
+    with open("odpowiedz.json",'w') as plikZOdp:
+        json.dump(slownik,plikZOdp)
+    
+    return plikZOdp
