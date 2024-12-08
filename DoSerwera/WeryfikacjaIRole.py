@@ -12,10 +12,10 @@ def zweryfikuj(login: str, token: str, nickWeryfikowanego: str, nowaRola: str, n
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
     
-    if(nowaRola=="Właściciel zespołu" or nowaRola=="Niezweryfikowany"):
+    if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
         return False, ["Nie można ustawić roli "+nowaRola]
     
     if(Bazy.iloscUzytkownikow(nickPubliczny=nickWeryfikowanego)!=1):
@@ -41,7 +41,7 @@ def listaNiezweryfikowanych(login: str, token: str) -> typing.Tuple[bool,typing.
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
     
     lista = Bazy.listaNiezweryfikowanych(hashLog,hashTok)
@@ -57,10 +57,10 @@ def ustawRole(login: str, token: str, nick: str, nowaRola: str) -> typing.Tuple[
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
     
-    if(nowaRola=="Właściciel zespołu" or nowaRola=="Niezweryfikowany"):
+    if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
         return False, ["Nie można ustawić roli "+nowaRola]
     
     if(Bazy.iloscUzytkownikow(nickPubliczny=nick)!=1):

@@ -16,7 +16,7 @@ def obslugaTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

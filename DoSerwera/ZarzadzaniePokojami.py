@@ -14,7 +14,7 @@ def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,t
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
         
     czyPokojJuzJest: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -48,7 +48,7 @@ def usunPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typ
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

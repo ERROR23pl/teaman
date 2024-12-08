@@ -16,7 +16,7 @@ def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tup
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -48,7 +48,7 @@ def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -76,7 +76,7 @@ def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typi
     if(wynik!=1):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

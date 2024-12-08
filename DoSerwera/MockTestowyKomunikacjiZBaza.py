@@ -42,7 +42,7 @@ def rolaUzytkownika(login: str, token: str) -> str:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     print("Sprawdzanie roli użytkownika dla:\nlogin = "+login+"\ntoken = "+token+"\n")
     #TODO wywołanie prepared statement do odebrania roli użytkownika "SELECT Rola FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
-    rola: str = "rolaTest"  #mock; tu będzie zamina rezultatu w string
+    rola: str = "Właściciel"  #mock; tu będzie zamina rezultatu w string
     return rola
 
 
