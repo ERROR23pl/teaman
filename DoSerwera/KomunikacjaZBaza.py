@@ -17,10 +17,6 @@ def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = 
         #TODO wywołanie prepared statement do testu poprawności sesji"SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
         ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
     
-    elif(haslo=="" and token!="" and rola!="" and nickPubliczny==""):
-        #TODO wywołanie prepared statement do testu poprawności sesji oraz uprawnień "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+" AND Rola="+rola+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
-    
     elif(login=="" and haslo=="" and token=="" and rola=="" and nickPubliczny!=""):
         #TODO wywołanie prepared statement do sprawdzenia czy taki nick już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE NickPubliczny="+nickPubliczny+";"
         ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int

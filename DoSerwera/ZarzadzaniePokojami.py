@@ -5,19 +5,22 @@ import ManagerKluczy as Klucze
 import MockTestowyKomunikacjiZBaza as Bazy
 
 
-def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy nazwa była unikalna dla projektu]
+def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False
+        return False, ["Niepoprawne dane"]
+    
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+        return False, ["Brak uprawnień"]
         
     czyPokojJuzJest: bool = Bazy.czyJestPokoj(nazwaPokoju)
     
     if(czyPokojJuzJest):
-        return True, False
+        return False, ["Pokój już istnieje"]
     
     else:
         Bazy.stworzPokoj(hashLog,hashTok,nazwaPokoju)
@@ -32,36 +35,39 @@ def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, 
         
         Bazy.dodajDoPokoju(hashLog,hashTok,nazwaPokoju,hashLog)        #dodaj siebie (właściciela) do pokoju
         Bazy.dodajKluczPokoju(login,hashTok,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],login)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym właściciela
-        return True, True
+        return True, [""]
 
 
 
-def usunPokoj(login: str, token: str, nazwaPokoju: str) -> bool: #[czy były uprawnienia]
-    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
-    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
-    
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
-    
-    if(wynik!=1):
-        return False
-        
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
-    
-    if(czyPokojIstnieje):                               #jeśli nie istniał, to usuwanie uznane za udane
-        Bazy.usunPokoj(hashLog,hashTok,nazwaPokoju)
-        
-    return True
-
-
-
-def listaPokojow(login: str, token: str) -> typing.Tuple[bool, typing.List[str]]: #[czy poprawne dane, [lista pokojów, do których się należy, postaci: nazwa, klucz pubiczny pokoju zaszyfrowany naszym kluczem publicznym, klucz rywatny pokoju zaszyfrowany naszym kluczem publicznym]]
+def usunPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, [""]
+        return False, ["Niepoprawne dane"]
+    
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+        return False, ["Brak uprawnień"]
+        
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    
+    if(czyPokojIstnieje):                               #jeśli nie istniał, to usuwanie uznane za udane
+        Bazy.usunPokoj(hashLog,hashTok,nazwaPokoju)
+        
+    return True, [""]
+
+
+
+def listaPokojow(login: str, token: str) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [lista pokojów, do których się należy, postaci: nazwa, klucz pubiczny pokoju zaszyfrowany naszym kluczem publicznym, klucz rywatny pokoju zaszyfrowany naszym kluczem publicznym]]
+    hashLog: str = hash.sha3_512(login.encode()).hexdigest()
+    hashTok: str = hash.sha3_512(token.encode()).hexdigest()
+    
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
+    
+    if(wynik!=1):
+        return False, ["Niepoprawne dane"]
     
     else:
         lista: typing.List[str] = Bazy.pokojeCzlonkowskie(hashLog,hashTok)

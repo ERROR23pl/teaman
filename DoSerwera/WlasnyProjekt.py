@@ -6,7 +6,7 @@ import ManagerKluczy as Klucze
 import MockTestowyKomunikacjiZBaza as Bazy
 
 
-def stworzProjekt(nazwaProjektu: str, login: str, haslo: str, nick: str, kluczPub: str) -> str: #token sesji
+def stworzProjekt(nazwaProjektu: str, login: str, haslo: str, nick: str, kluczPub: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [token sesji]]
     #login i hasło już zahashowane
     
     Bazy.stworzBaze(nazwaProjektu)
@@ -25,63 +25,73 @@ def stworzProjekt(nazwaProjektu: str, login: str, haslo: str, nick: str, kluczPu
     Bazy.dodajDoPokoju(login,hashTok,nazwaProjektu,login)        #dodaj siebie (właściciela) do pokoju głównego
     Bazy.dodajKluczPokoju(login,hashTok,nazwaProjektu,kluczePokoju[0],kluczePokoju[1],login)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym właściciela
         
-    return token
+    return True, [token]
 
 
 
 
-def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tuple[bool, bool]: #[czy są uprawnienia, czy się udało]
+def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     #kod zaproszeniowy już zahashowany
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False
+        return False, ["Niepoprawne dane"]
+    
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+        return False, ["Brak uprawnień"]
         
     czyKodJuzJest: bool = Bazy.czyJestKod(kodZaproszeniowy)
     
     if(czyKodJuzJest):
-        return True, False
+        return False,["Wyślij nowy kod"]
     
     else:
         Bazy.wstawKod(hashLog,hashTok,kodZaproszeniowy)
-        return True, True
+        return True, [""]
 
 
 
 
-def usunProjekt(nazwaProjektu: str, login: str, token: str) -> bool: #czy się udało
+def usunProjekt(nazwaProjektu: str, login: str, token: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False
+        return False, ["Niepoprawne dane"]
+    
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+        return False, ["Brak uprawnień"]
         
     else:
         Bazy.rozlaczZBaza()
         Bazy.usunBaze(nazwaProjektu)
-        return True
+        return True, [""]
 
 
  
 
-def pobierzKluczPublicznyUzytkownika(login: str, token: str, nickUzytkownika: str) -> typing.Tuple[bool,bool,str]: #[czy były uprawnienia, czy użytkownik istnieje, klucz]
+def pobierzKluczPublicznyUzytkownika(login: str, token: str, nickUzytkownika: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [klucz]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok, rola="Właściciel zespołu")
+    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False, ""
+        return False, ["Niepoprawne dane"]
+    
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+        return False, ["Brak uprawnień"]
     
     wynik = Bazy.iloscUzytkownikow(nickPubliczny=nickUzytkownika)
     
     if(wynik!=1):
-        return True, False, ""
+        return False, ["Drugi użytkownik nie istnieje"]
     
     else:
-        return True, True, Bazy.kluczUzytkownika(hashLog,hashTok,nickUzytkownika)
+        klucz: str = Bazy.kluczUzytkownika(hashLog,hashTok,nickUzytkownika)
+        return True, [klucz]
