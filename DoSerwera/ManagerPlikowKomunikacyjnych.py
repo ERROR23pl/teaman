@@ -2,9 +2,11 @@ import typing
 import json
 
 def analizaPliku(otrzymanyPlik) -> typing.List:
-    #TODO tutaj w przyszłości będzie analiza informacji otrzymanych od klienta w żądaniu i zamiana w informacje dla serwera
+    with open(otrzymanyPlik) as plik:
+        dane : dict = json.load(plik)
     
-    return ["operacja","nazwa serwera","dane"]
+    wartosci: typing.List = dane.values()
+    return wartosci
 
 
 def stworzPlikZOdpowiedzia(sukcesOperacji: bool, dane: typing.List[str]):

@@ -15,6 +15,7 @@ import ZarzadzanieChatami as Chaty
 import ZarzadzanieKalendarzem as Kalendarz
 import UdostepnianiePlikow as udPlikow
 import WeryfikacjaIRole as Wer
+import WydobywanieTaskow as WydobTaskow
 import typing
 import hashlib as hash
 
@@ -24,8 +25,8 @@ import hashlib as hash
 def ObsluzZapytanie(plikKomunikacyjny):
     try:
         zapytanie: typing.List = Pliki.analizaPliku(plikKomunikacyjny)
-        operacja: str = zapytanie[0]
-        nazwaProjektu: str = zapytanie[1]
+        operacja: str = str(zapytanie[0])
+        nazwaProjektu: str = str(zapytanie[1])
         
         if(not Nazwy.przetestujNazwe(nazwaProjektu)):
             return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa projektu
@@ -39,8 +40,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            haslo: str = zapytanie[3]
+            login: str = str(zapytanie[2])
+            haslo: str = str(zapytanie[3])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -59,10 +60,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            kodZapr: str = zapytanie[2]
-            login: str = zapytanie[3]
-            haslo: str = zapytanie[4]
-            nick: str = zapytanie[5]
+            login: str = str(zapytanie[2])
+            haslo: str = str(zapytanie[3])
+            haslo: str = str(zapytanie[4])
+            nick: str = str(zapytanie[5])
             
             if((not Kody.przetestujKod(kodZapr))  or (not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -82,10 +83,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             if(czyProjektIstnieje):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt istnieje"])   #nie można stworzyć projektu, bo już istnieje
             
-            login: str = zapytanie[2]
-            haslo: str = zapytanie[3]
-            nick: str = zapytanie[4]
-            kluczPub: str = zapytanie[5]
+            login: str = str(zapytanie[2])
+            haslo: str = str(zapytanie[3])
+            nick: str = str(zapytanie[4])
+            kluczPub: str = str(zapytanie[5])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick)) or(not Klucze.testPoprawnosciKlucza(kluczPub))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -107,9 +108,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            kodZapr: str = zapytanie[4]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            kodZapr: str = str(zapytanie[4])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -131,8 +132,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -150,9 +151,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -174,9 +175,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
             
             if(nazwaProjektu==nazwaPokoju):
                 return Pliki.stworzPlikZOdpowiedzia(False, dane=["Nie można usunąć pokoju głównego"])
@@ -201,11 +202,11 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            dodawanyUzytkownik: str = zapytanie[5]
-            kluczePokojuZaszyfrowaneKluczemDodawanego: typing.Tuple[str,str] = [zapytanie[6],zapytanie[7]]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            dodawanyUzytkownik: str = str(zapytanie[5])
+            kluczePokojuZaszyfrowaneKluczemDodawanego: typing.Tuple[str,str] = [str(zapytanie[6]),str(zapytanie[7])]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -230,10 +231,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            usuwanyUzytkownik: str = zapytanie[5]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            usuwanyUzytkownik: str = str(zapytanie[5])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -258,8 +259,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -280,12 +281,15 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            dodawaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[5]
-            usuwaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[6]
-            modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[7]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            
+            taski: typing.List[typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]] = wydobTaskow.taski(zapytanie[5:])
+            
+            dodawaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = taski[0]
+            usuwaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = taski[1]
+            modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = taski[2]
             
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
@@ -344,9 +348,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]        
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -369,10 +373,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            idTaska: int = zapytanie[5]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            idTaska: int = int(zapytanie[5])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -399,10 +403,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            idTaska: int = zapytanie[5]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            idTaska: int = int(zapytanie[5])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -428,9 +432,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]        
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -452,10 +456,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]  
-            ostatniaPosiadana: typing.Tuple[str,int] = [zapytanie[5],zapytanie[6]]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            ostatniaPosiadana: typing.Tuple[str,int] = [str(zapytanie[5]),int(zapytanie[6])]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -480,11 +484,11 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]  
-            ostatniaPosiadana: typing.Tuple[str,int] = [zapytanie[5],zapytanie[6]]
-            wiadomosc: typing.Tuple[str,int] = [zapytanie[7],zapytanie[8]]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            ostatniaPosiadana: typing.Tuple[str,int] = [str(zapytanie[5]),int(zapytanie[6])]
+            wiadomosc: typing.Tuple[str,int] = [str(zapytanie[7]),int(zapytanie[8])]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -510,9 +514,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]        
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])   
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -534,10 +538,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[5],zapytanie[6]]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),[int(zapytanie[6]),int(zapytanie[7]),int(zapytanie[8])]]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -560,10 +564,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[5],zapytanie[6]]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),[int(zapytanie[6]),int(zapytanie[7]),int(zapytanie[8])]]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -586,11 +590,11 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[5],zapytanie[6]]
-            noweDane: typing.Tuple[str,typing.Tuple[int,int,int]] = [zapytanie[7],zapytanie[8]]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),[int(zapytanie[6]),int(zapytanie[7]),int(zapytanie[8])]]
+            noweDane: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[9]),[int(zapytanie[10]),int(zapytanie[11]),int(zapytanie[12])]]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -615,11 +619,11 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            nazwaPliku: str = zapytanie[5]
-            zawartoscPliku: bytes = zapytanie[6]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            nazwaPliku: str = str(zapytanie[5])
+            zawartoscPliku: bytes = (str(zapytanie[6])).encode()
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -644,10 +648,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            nazwaPliku: str = zapytanie[5]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            nazwaPliku: str = str(zapytanie[5])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -672,10 +676,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
-            nazwaPliku: str = zapytanie[5]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
+            nazwaPliku: str = str(zapytanie[5])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -700,9 +704,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nazwaPokoju: str = zapytanie[4]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nazwaPokoju: str = str(zapytanie[4])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -724,9 +728,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            kluczPub: str = zapytanie[4]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            kluczPub: str = str(zapytanie[4])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -748,9 +752,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nickUzytkownika: str = zapytanie[4]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nickUzytkownika: str = str(zapytanie[4])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token)) or (not Nazwy.przetestujNazwe(nickUzytkownika))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -769,8 +773,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -790,10 +794,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nickUzytkownika: str = zapytanie[4]
-            nowaRola: str = zapytanie[5]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nickUzytkownika: str = str(zapytanie[4])
+            nowaRola: str = str(zapytanie[5])
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -818,11 +822,11 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = zapytanie[2]
-            token: str = zapytanie[3]
-            nickUzytkownika: str = zapytanie[4]
-            nowaRola: str = zapytanie[5]
-            kluczePokojuGl: typing.Tuple[str,str] = [zapytanie[6], zapytanie[7]]
+            login: str = str(zapytanie[2])
+            token: str = str(zapytanie[3])
+            nickUzytkownika: str = str(zapytanie[4])
+            nowaRola: str = str(zapytanie[5])
+            kluczePokojuGl: typing.Tuple[str,str] = [str(zapytanie[6]), str(zapytanie[7])]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -838,8 +842,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
-        
-        #tu w przyszłości dalsze operacje
+
         
         else:              #nieznana operacja
             return Pliki.stworzPlikZOdpowiedzia(False,["Nieznana operacja"])
