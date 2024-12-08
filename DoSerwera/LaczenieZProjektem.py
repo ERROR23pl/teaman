@@ -6,14 +6,14 @@ import MockTestowyKomunikacjiZBaza as Bazy
 
 
 
-def probaLogowania(login: str, haslo: str) -> typing.Tuple[bool,str,str]: #[poprawność danych, token sesji, rola]
+def probaLogowania(login: str, haslo: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [token sesji, rola]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashHas: str = hash.sha3_512(haslo.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, haslo=hashHas)
     
     if(wynik!=1):
-        return False, "", ""
+        return False, ["Niepoprawne dane"]
     
     else:
         token: str = Kody.wygenerujKod()
@@ -21,23 +21,23 @@ def probaLogowania(login: str, haslo: str) -> typing.Tuple[bool,str,str]: #[popr
         Bazy.ustawToken(hashLog,hashHas,hashTok)
         rola: str = Bazy.rolaUzytkownika(hashLog,hashTok)
         
-        return True, token, rola
+        return True, [token, rola]
 
 
 
-def probaRejestracji(nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, hashHas: str, nick: str) -> typing.Tuple[bool,bool,str]: #[poprawność kodu, sukces rejestracji, token sesji]
+def probaRejestracji(nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, hashHas: str, nick: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [token sesji]]
     #login i hasło już zahashowane
     hashKod: str = hash.sha3_512(kodZaproszeniowy.encode()).hexdigest()
     
     czyKodIstnieje: bool = Bazy.czyJestKod(hashKod)
     
     if(not czyKodIstnieje):
-        return False, False, ""
+        return False, ["Niepoprawny kod"]
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog) + Bazy.iloscUzytkownikow(nickPubliczny=nick)
     
     if(wynik!=0):
-        return True, False, ""
+        return False, ["Dane już zajęte"]
     
     else:
         token: str = Kody.wygenerujKod()
@@ -45,24 +45,24 @@ def probaRejestracji(nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, ha
         Bazy.wstawUzytkownika(hashLog,hashHas,hashTok,"Niezweryfikowany",nick)
         Bazy.usunKod(hashKod)
         
-        return True, True, token
+        return True, [token]
 
 
 
-def probaUstawieniaKluczaPublicznego(login: str, token: str, kluczPub: str) -> typing.Tuple[bool, bool]:        #[poprawność danych, czy udało się ustawić klucz (był unikalny)]
+def probaUstawieniaKluczaPublicznego(login: str, token: str, kluczPub: str) -> typing.Tuple[bool,typing.List[str]]:        #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False
+        return False, ["Niepoprawne dane"]
     
     czyTakiKluczIstnieje: bool = Bazy.czyKluczIstnieje(kluczPub)
     
     if(czyTakiKluczIstnieje):
-        return True, False
+        return False, ["Wyślij nowy klucz"]
     
     else:
         Bazy.ustawKlucz(hashLog,hashTok,kluczPub)
-        return True, True
+        return True, [""]

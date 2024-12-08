@@ -6,7 +6,7 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
     return ["operacja","nazwa serwera","dane"]
 
 
-def stworzPlikZOdpowiedzia(poprawnyProjekt: bool = False, poprawnoscDanych: bool = False, sukcesOperacji: bool = False, dane: typing.List = [""]):
+def stworzPlikZOdpowiedzia(sukcesOperacji: bool, dane: typing.List[str]):
     #TODO tutaj w przyszłości będzie tworzony na podstawie wprowadzonych danych plik odpowiedzi do klienta
     
     return None

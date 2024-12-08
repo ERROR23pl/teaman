@@ -4,114 +4,115 @@ import typing
 import MockTestowyKomunikacjiZBaza as Bazy
 
 
-def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane, czy pokój istniał i się do niego należy, czy plik o takiej nazwie już nie istniał w pokoju]
+def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False, False
+        return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
     
     if(not czyPokojIstnieje):
-        return True, False, False
+        return False, ["Pokój nie istnieje"]
     
     else:
         czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
-            return True, False, False
+            return False, ["Użytkownik nie należy do pokoju"]
         
         else:
             czyMozna: bool = not (Bazy.czyPlikIstnieje(nazwaPokoju,nazwaPliku))
             if(czyMozna):
                 Bazy.dodajPlik(login,token,nazwaPokoju,nazwaPliku,zawartoscPliku)
-            return True, True, czyMozna
+                return True, [""]
+            return False, ["Plik już istnieje"]
 
 
 
-def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typing.Tuple[bool, bool, bool]: #[czy poprawne dane, czy pokój istniał i się do niego należy, czy miało się uprawnienia do usunięcia tego danego pliku (lub plik nie istniał, więc usunięcie udane z założenia)]
+def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False, False
+        return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
     
     if(not czyPokojIstnieje):
-        return True, False, False
+        return False, ["Pokój nie istnieje"]
     
     else:
         czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
-            return True, False, False
+            return False, ["Użytkownik nie należy do pokoju"]
         
         else:
             czyPlikJest: bool = Bazy.czPlikIstnieje(nazwaPokoju,nazwaPliku)
             if (not czyPlikJest):
-                return True, True, True         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
+                return True, [""]         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
 
-            if (Bazy.iloscUzytkownikow(login=hashLog,token=hashTok,rola="Właściciel zespołu")==1 or Bazy.autorPliku(nazwaPokoju,nazwaPliku,dana="login")==hashLog):  #TODO
+            if (Bazy.iloscUzytkownikow(login=hashLog,token=hashTok,rola="Właściciel zespołu")==1 or Bazy.autorPliku(nazwaPokoju,nazwaPliku,dana="login")==hashLog):
                 Bazy.usunPlik(login,token,nazwaPokoju,nazwaPliku)
-                return True, True, True
+                return True, [""]
             
-            return True, True, False
+            return False, ["Brak uprawnień"]
 
 
 
-def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typing.Tuple[bool, bool, bool, str]: #[czy poprawne dane, czy pokój istniał i się do niego należy, czy plik o takiej nazwie istniał, decode zawartości pliku]
+def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [decode zawartości pliku]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False, False, ""
+        return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
     
     if(not czyPokojIstnieje):
-        return True, False, False, ""
+        return False, ["Pokój nie istnieje"]
     
     else:
         czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
-            return True, False, False, ""
+            return False, ["Użytkownik nie należy do pokoju"]
         
         else:
             czyPlikJest: bool = Bazy.czPlikIstnieje(nazwaPokoju,nazwaPliku)
             if (not czyPlikJest):
-                return True, True, False, ""
+                return False, ["Plik nie istnieje"]
             
             zawartosc: bytes = Bazy.pobierzPlik(login,token,nazwaPokoju,nazwaPliku)
             strZawartosci: str = zawartosc.decode()
-            return True, True, True, strZawartosci
+            return True, [strZawartosci]
 
 
 
-def pobierzListePlikow(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, bool, typing.List[str]]: #[czy poprawne dane, czy pokój istniał i się do niego należy, lista plików (nazwa, nick autora) w pokoju w formie listy stringów]
+def pobierzListePlikow(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, lista plików (nazwa, nick autora) w pokoju w formie listy stringów]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
     wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
     
     if(wynik!=1):
-        return False, False, [""]
+        return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
     
     if(not czyPokojIstnieje):
-        return True, False, [""]
+        return False, ["Pokój nie istnieje"]
     
     else:
         czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
-            return True, False, [""]
+            return False, ["Użytkownik nie należy do pokoju"]
         
         else:
             lista: typing.List[str] = Bazy.listaPlikow(login,token,nazwaPokoju)
-            return True, True, lista
+            return True, lista
