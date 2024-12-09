@@ -252,7 +252,7 @@ else:
     
     elif(nr==27):
         #Test pobierania listy plików z pokoju
-        slownik['operacja'] = "pobranie pliku"
+        slownik['operacja'] = "pobranie listy plikow"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"
@@ -260,7 +260,7 @@ else:
 
     elif(nr==28):
         #Test ustawiania klucza użytkownika
-        slownik['operacja'] = "pobranie pliku"
+        slownik['operacja'] = "ustawianie klucza"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"
@@ -268,7 +268,7 @@ else:
     
     elif(nr==29):
         #Test pobierania klucza publicznego użytkownika
-        slownik['operacja'] = "pobranie pliku"
+        slownik['operacja'] = "pobieranie klucza uzytkownika"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"
@@ -276,14 +276,14 @@ else:
     
     elif(nr==30):
         #Test pobierania listy niezweryfikowanych użytkowników
-        slownik['operacja'] = "pobranie pliku"
+        slownik['operacja'] = "lista niezweryfikowanych"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"
 
     elif(nr==31):
         #Test ustawiania użytkownikowi nowej roli
-        slownik['operacja'] = "pobranie pliku"
+        slownik['operacja'] = "zmiana roli"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"
@@ -292,7 +292,7 @@ else:
     
     elif(nr==32):
         #Test weryfikacji użytkownika
-        slownik['operacja'] = "pobranie pliku"
+        slownik['operacja'] = "weryfikacja"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"

@@ -6,19 +6,24 @@ def iloscUzytkownikow(login: str = "", haslo: str = "", token: str = "", rola: s
     ilosc: int
     print("Sprawdzanie ilości użytkowników dla:")
     
-    if(haslo=="" and token=="" and rola=="" and nickPubliczny==""):
+    if(login!="" and haslo=="" and token=="" and rola=="" and nickPubliczny==""):
         print("Login = "+login+"\n")
         #TODO wywołanie prepared statement do sprawdzenia czy taki login już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
-    elif(haslo!="" and token=="" and rola=="" and nickPubliczny==""):
+    elif(login!="" and haslo!="" and token=="" and rola=="" and nickPubliczny==""):
         print("Login = "+login+"\nhasło = "+haslo+"\n")
         #TODO wywołanie prepared statement do próby logowania "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Haslo="+haslo+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
-    elif(haslo=="" and token!="" and rola=="" and nickPubliczny==""):
+    elif(login!="" and haslo=="" and token!="" and rola=="" and nickPubliczny==""):
         print("Login = "+login+"\ntoken = "+token+"\n")
         #TODO wywołanie prepared statement do testu poprawności sesji"SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
+        ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
+    
+    elif(login!="" and haslo=="" and token!="" and rola!="" and nickPubliczny==""):
+        print("Login = "+login+"\ntoken = "+token+"\nrola = "+rola+"\n")
+        #TODO wywołanie prepared statement do testu poprawności sesji oraz uprawnień "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+" AND Rola="+rola+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
     elif(login=="" and haslo=="" and token=="" and rola=="" and nickPubliczny!=""):
@@ -335,16 +340,16 @@ def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.List[st
 
 def czyPlikIstnieje(nazwaPokoju: str, nazwaPliku: str) -> bool:
     #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    print("Sprawdzenie istnienia w pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\n")
+    print("Sprawdzenie istnienia w pokoju: "+nazwaPokoju+"\nPliku o nazwie "+nazwaPliku+"\n")
     #TODO wywołanie prepared statement do sprawdzenia obecności pliku o podanej nazwie w pokoju "SELECT COUNT * FROM Pliki WHERE IDPokoju="..." AND NazwaPliku="...""
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
+    wynik: bool = True #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
     return wynik
 
 
 def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    print("Dodanie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nDo pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\nI treści: "+zawartoscPliku.decode()+"\n")
+    print("Dodanie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nDo pokoju: "+nazwaPokoju+"\nPliku o nazwie "+nazwaPliku+"\nI treści: "+zawartoscPliku.decode()+"\n")
     #TODO wywołanie prepared statement do dodania nowego pliku dla pokoju
     
     dataAktywnosci(login,token)
@@ -353,7 +358,7 @@ def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawarto
 
 def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    print("Usunięcie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\n")
+    print("Usunięcie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ pokoju: "+nazwaPokoju+"\nPliku o nazwie "+nazwaPliku+"\n")
     #TODO wywołanie prepared statement do usunięcia pliku z pokoju
     
     dataAktywnosci(login,token)
@@ -362,9 +367,9 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> None:
 
 def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> bytes:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ pokoju: "+nazwaPokoju+"\Pliku o nazwie "+nazwaPliku+"\n")
+    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nZ pokoju: "+nazwaPokoju+"\nPliku o nazwie "+nazwaPliku+"\n")
     #TODO wywołanie prepared statement do pobrania pliku o wskazanej nazwie
-    wynik: bytes = None #mock; tu będzie odebranie rezultatu
+    wynik: bytes = ("Bardzo bardzo istotna zawartość\ntego pliku").encode() #mock; tu będzie odebranie rezultatu
     
     dataAktywnosci(login,token)
     return wynik
@@ -464,7 +469,7 @@ def loginUzytkownika(nick: str) -> str:
     #nick przetestowany pod względem bezpieczeństwa
     print("Pobranie loginu użytkownika o nicku: "+nick+"\n")
     #TODO wywołanie prepared statement do odebrania loginu użytkownika "SELECT Login FROM Uzytkownicy WHERE NickPubliczny="+nick+";"
-    wynik: str = "nickUwU" #mock; tu będzie odebranie wyniku
+    wynik: str = "loginUwU" #mock; tu będzie odebranie wyniku
     
     return wynik
 

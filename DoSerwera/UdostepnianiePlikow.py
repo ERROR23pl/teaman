@@ -52,7 +52,7 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typin
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyPlikJest: bool = Bazy.czPlikIstnieje(nazwaPokoju,nazwaPliku)
+            czyPlikJest: bool = Bazy.czyPlikIstnieje(nazwaPokoju,nazwaPliku)
             if (not czyPlikJest):
                 return True, [""]         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
 
@@ -84,7 +84,7 @@ def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> ty
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyPlikJest: bool = Bazy.czPlikIstnieje(nazwaPokoju,nazwaPliku)
+            czyPlikJest: bool = Bazy.czyPlikIstnieje(nazwaPokoju,nazwaPliku)
             if (not czyPlikJest):
                 return False, ["Plik nie istnieje"]
             
