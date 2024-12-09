@@ -1,6 +1,5 @@
 import typing
 import json
-import WydobywanieTaskow as Taski
 
 def analizaPliku(otrzymanyPlik) -> typing.List:
     dekoder = json.JSONDecoder()
@@ -18,14 +17,11 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
         
         for wpis in dane:
             if("DodawanyTask" in str(wpis)):
-                task = Taski.task(dane[wpis])
-                dodawaneTaski.append(task)
+                dodawaneTaski.append(dane[wpis])
             elif("UsuwanyTask" in str(wpis)):
-                task = Taski.task(dane[wpis])
-                usuwaneTaski.append(task)
+                usuwaneTaski.append(dane[wpis])
             elif("ModyfikowanyTask" in str(wpis)):
-                task = Taski.task(dane[wpis])
-                zmienianeTaski.append(task)
+                zmienianeTaski.append(dane[wpis])
             else:
                 wartosci.append(dane[wpis])
         

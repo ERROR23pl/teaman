@@ -114,3 +114,4 @@ else:
     dekoder = json.JSONDecoder()
     dane: dict = dekoder.decode(wynik)
     print(dane)
+    
