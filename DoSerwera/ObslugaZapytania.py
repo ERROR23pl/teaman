@@ -1,5 +1,4 @@
-#import ManagerPlikowKomunikacyjnych as Pliki
-import MockTestowyObslugiPlikowKomunikacyjnych as Pliki
+import ManagerPlikowKomunikacyjnych as Pliki
 import ManagerHasel as Hasla
 import ManagerKodow as Kody
 import ManagerNazw as Nazwy
@@ -59,8 +58,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            haslo: str = str(zapytanie[3])
+            kodZapr: str = str(zapytanie[2])
+            login: str = str(zapytanie[3])
             haslo: str = str(zapytanie[4])
             nick: str = str(zapytanie[5])
             
@@ -538,7 +537,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             login: str = str(zapytanie[2])
             token: str = str(zapytanie[3])
             nazwaPokoju: str = str(zapytanie[4])
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),[int(zapytanie[6]),int(zapytanie[7]),int(zapytanie[8])]]
+            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),zapytanie[6]]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -564,7 +563,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             login: str = str(zapytanie[2])
             token: str = str(zapytanie[3])
             nazwaPokoju: str = str(zapytanie[4])
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),[int(zapytanie[6]),int(zapytanie[7]),int(zapytanie[8])]]
+            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),zapytanie[6]]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
@@ -590,8 +589,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
             login: str = str(zapytanie[2])
             token: str = str(zapytanie[3])
             nazwaPokoju: str = str(zapytanie[4])
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),[int(zapytanie[6]),int(zapytanie[7]),int(zapytanie[8])]]
-            noweDane: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[9]),[int(zapytanie[10]),int(zapytanie[11]),int(zapytanie[12])]]
+            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),zapytanie[6]]
+            noweDane: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[7]),zapytanie[8]]
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane

@@ -6,7 +6,9 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
     dane : dict = dekoder.decode(otrzymanyPlik)
     
     if(str(dane['operacja'])!="modyfikacja taskow"):
-        wartosci: typing.List = dane.values()
+        wartosci: typing.List = []
+        for wpis in dane:
+            wartosci.append(dane[wpis])
         return wartosci
     
     else:
@@ -25,7 +27,10 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
             else:
                 wartosci.append(dane[wpis])
         
-        return wartosci+dodawaneTaski+usuwaneTaski+zmienianeTaski
+        wartosci.append(dodawaneTaski)
+        wartosci.append(usuwaneTaski)
+        wartosci.append(zmienianeTaski)
+        return wartosci
             
 
 
