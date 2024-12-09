@@ -15,7 +15,6 @@ import ZarzadzanieChatami as Chaty
 import ZarzadzanieKalendarzem as Kalendarz
 import UdostepnianiePlikow as udPlikow
 import WeryfikacjaIRole as Wer
-import WydobywanieTaskow as WydobTaskow
 import typing
 import hashlib as hash
 
@@ -285,11 +284,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             token: str = str(zapytanie[3])
             nazwaPokoju: str = str(zapytanie[4])
             
-            taski: typing.List[typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]] = wydobTaskow.taski(zapytanie[5:])
-            
-            dodawaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = taski[0]
-            usuwaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = taski[1]
-            modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = taski[2]
+            dodawaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[5]
+            usuwaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[6]
+            modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[7]
             
             
             if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
