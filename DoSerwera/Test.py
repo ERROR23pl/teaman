@@ -222,6 +222,84 @@ else:
         slownik['dana6'] = "Wpis711"
         slownik['dana7'] = [7,11,2025]
     
+    elif(nr==24):
+        #Test dodawania pliku
+        slownik['operacja'] = "dodawanie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "Pokoj123456788"
+        slownik['dana4'] = "Plik711.uwu"
+        slownik['dana5'] = "Zdecydowanie bardzo ważna zawartość pliku\nUwU"
+    
+    elif(nr==25):
+        #Test usuwania pliku
+        slownik['operacja'] = "usuwanie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "Pokoj123456788"
+        slownik['dana4'] = "Plik711.uwu"
+    
+    elif(nr==26):
+        #Test pobierania pliku
+        slownik['operacja'] = "pobranie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "Pokoj123456788"
+        slownik['dana4'] = "Plik711.uwu"
+    
+    elif(nr==27):
+        #Test pobierania listy plików z pokoju
+        slownik['operacja'] = "pobranie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "Pokoj123456788"
+
+    elif(nr==28):
+        #Test ustawiania klucza użytkownika
+        slownik['operacja'] = "pobranie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "klucz1234567890"
+    
+    elif(nr==29):
+        #Test pobierania klucza publicznego użytkownika
+        slownik['operacja'] = "pobranie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "NickInnegoUzytkownika12711"
+    
+    elif(nr==30):
+        #Test pobierania listy niezweryfikowanych użytkowników
+        slownik['operacja'] = "pobranie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+
+    elif(nr==31):
+        #Test ustawiania użytkownikowi nowej roli
+        slownik['operacja'] = "pobranie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "NickInnegoUzytkownika12711"
+        slownik['dana4'] = "NowaRola123456788"
+    
+    elif(nr==32):
+        #Test weryfikacji użytkownika
+        slownik['operacja'] = "pobranie pliku"
+        slownik['projekt'] = "Projekt12345"
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana3'] = "NickInnegoUzytkownika12711"
+        slownik['dana4'] = "NowaRola123456788"
+        slownik['dana5'] = "ZdecydowanieZaszyfrowanyKluczPubliczny"
+        slownik['dana6'] = "ZdecydowanieZaszyfrowanyKluczPrywatny"
     
     
     else:
