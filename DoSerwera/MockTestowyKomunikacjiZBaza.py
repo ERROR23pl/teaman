@@ -21,11 +21,6 @@ def iloscUzytkownikow(login: str = "", haslo: str = "", token: str = "", rola: s
         #TODO wywołanie prepared statement do testu poprawności sesji"SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
         ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
     
-    elif(haslo=="" and token!="" and rola!="" and nickPubliczny==""):
-        print("Login = "+login+"\ntoken = "+token+"\nrola = "+rola+"\n")
-        #TODO wywołanie prepared statement do testu poprawności sesji oraz uprawnień "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+" AND Rola="+rola+";"
-        ilosc = 1 #mock; tu będzie zmiana wyniku w liczbę int
-    
     elif(login=="" and haslo=="" and token=="" and rola=="" and nickPubliczny!=""):
         print("Nick = "+nickPubliczny+"\n")
         #TODO wywołanie prepared statement do sprawdzenia czy taki nick już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE NickPubliczny="+nickPubliczny+";"
@@ -377,9 +372,116 @@ def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> by
 
 def listaPlikow(login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
-    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\Listy plików pokoju: "+nazwaPokoju+"\n")
+    print("Pobranie przez użytkownika:\nlogin = "+login+"\ntoken = "+token+"\nListy plików pokoju: "+nazwaPokoju+"\n")
     #TODO wywołanie prepared statement do pobrania listy nazw i autorów plików
     wynik: typing.List[str] = [""] #mock; tu będzie odebranie rezultatu
     
     dataAktywnosci(login,token)
     return wynik
+
+
+def autorPliku(nazwaPokoju: str, nazwaPliku: str, dana: str = "nick") -> str:
+    #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
+    if(dana=="nick"):
+        print("Pobranie nicku autora pliku: "+nazwaPliku+"\nZ pokoju: "+nazwaPokoju+"\n")
+        #TODO wywołanie prepared statement do pobrania nicku publicznego autora pliku
+        wynik="nick1234" #mock; tu będzie odebranie rezultatu
+    elif(dana=="login"):
+        print("Pobranie loginu autora pliku: "+nazwaPliku+"\nZ pokoju: "+nazwaPokoju+"\n")
+        #TODO wywołanie prepared statement do pobrania zahashowanego loginu autora pliku
+        wynik="login1234" #mock; tu będzie odebranie rezultatu
+    else:
+        print("Nieznana dana autora pliku")
+        wynik=""
+        
+    return wynik
+
+
+def czyKluczIstnieje(kluczPub: str) -> bool:
+    #klucz przetestowany pod względem bezpieczeństwa
+    print("Sprawdzenie istnienia klucza: "+kluczPub+"\n")
+    #TODO wywołanie prepared statement do sprawdzenia czy podany klucz już istnieje
+    wynik: bool = False #mock; tu będzie odebranie rezultatu i zmiana w prawda-fałsz
+    
+    return wynik
+
+
+def ustawKlucz(login: str, token: str, kluczPub: str) -> None:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; klucz przetestowany pod względem bezpieczeństwa
+    print("Ustawienie użytkownikowi:\nlogin = "+login+"\ntoken = "+token+"\nKlucza publicznego: "+kluczPub+"\n")
+    #TODO wywołanie prepared statement do ustawienia klucza publicznego dla danego użytkownika
+    
+    return None
+
+
+def dodajKluczPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i klucze przetestowane pod względem bezpieczeństwa
+    print("Dodanie przez admina:\nlogin = "+loginAdmina+"\ntoken = "+tokenAdmina+"\Kluczy: "+kluczPubPokoju+"\n"+kluczPrivPokoju+"\nPokoju: "+nazwaPokoju+"\nDla użytkownika: "+loginPosiadaczaKlucza+"\n")
+    #TODO wywołanie prepared statement do wstawienia kluczy (IDPokoju, kluczPub, kluczPriv, IDUzytkownika)
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return None
+
+
+def czyKluczPokojuJuzIstnieje(kluczePubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str) -> bool:
+    #login zahashowany oraz przetestowany pod względem bezpieczeństwa; klucze przetestowane pod względem bezpieczeństwa
+    print("Sprawdzenie istnienia kluczy:\n"+kluczePubPokoju+"\n"+kluczPrivPokoju+"\nDla właściciela projektu: "+loginWlasciciela+"\n")
+    #TODO wywołanie prepared statement do testu istnienia pary kluczy (kluczPub, kluczPriv, IDUzytkownika)
+    wynik: bool = False #mock; tu będzie zamiana rezultatu w prawda-fałsz
+    
+    return wynik
+
+
+def czyZweryfikowany(login: str) -> bool:
+    #login zahashowany oraz przetestowany pod względem bezpieczeństwa
+    print("Sprawdzenie stanu weryfikacji użytkownika:\nlogin = "+login+"\n")
+    #TODO wywołanie prepared statement do odebrania roli użytkownika "SELECT Rola FROM Uzytkownicy WHERE Login="+login+";"
+    rola: str = ""  #mock; tu będzie zamina rezultatu w string
+    
+    return (not (rola=="Niezweryfikowany"))
+
+
+def usunKluczeDlaUzytkownika(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, loginPosiadaczaKlucza: str):
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
+    print("Usunięcie przez admina:\nlogin = "+loginAdmina+"\ntoken = "+tokenAdmina+"\nKlucza użytkownika: "+loginPosiadaczaKlucza+"\nDo pokoju: "+nazwaPokoju+"\n")
+    #TODO wywołanie prepared statement do usunięcia kluczy (IDPokoju, IDUzytkownika)
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return None
+
+
+def kluczUzytkownika(loginAdmina: str, tokenAdmina: str, nickPosiadaczaKlucza: str) -> str:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa
+    print("Pobranie przez admina:\nlogin = "+loginAdmina+"\ntoken = "+tokenAdmina+"\nKlucza publicznego użytkownika: "+nickPosiadaczaKlucza+"\n")
+    #TODO wywołanie prepared statement do odebrania klucza użytkownika "SELECT KluczPub FROM Uzytkownicy WHERE NickPubliczny="+nickPosiadaczaKlucza+";"
+    wynik: str = "klucz12345666666" #mock; tu będzie odebranie wyniku
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return wynik
+
+
+def loginUzytkownika(nick: str) -> str:
+    #nick przetestowany pod względem bezpieczeństwa
+    print("Pobranie loginu użytkownika o nicku: "+nick+"\n")
+    #TODO wywołanie prepared statement do odebrania loginu użytkownika "SELECT Login FROM Uzytkownicy WHERE NickPubliczny="+nick+";"
+    wynik: str = "nickUwU" #mock; tu będzie odebranie wyniku
+    
+    return wynik
+
+
+def ustawRole(loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str) -> None:
+    #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; rola przetestowana pod względem bezpieczeństwa
+    print("Ustawienie przez admina:\nlogin = "+loginAdmina+"\ntoken = "+tokenAdmina+"\nRoli: "+nowaRola+"\nUżytkownikowi o loginie: "+loginZmienianego+"\n")
+    #TODO wywołanie prepared statement do zmiany roli użytkownika
+    dataAktywnosci(loginAdmina,tokenAdmina)
+    
+    return None
+
+def listaNiezweryfikowanych(login: str, token: str) -> typing.List[str]:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
+    print("Pobranie przez admina:\nlogin = "+login+"\ntoken = "+token+"\nListy niezweryfikowanych użytkowników\n")
+    #TODO wywołanie prepared statement do odebrania listy niezweryfikowanych użytkowików "SELECT NickPubliczny FROM Uzytkownicy WHERE Rola=\"Niezweryfikowany\";"
+    lista: typing.List[str] = ["nickNiezw1","NickNiezw2","NickNiezw3"] #mock; tu będzie odebranie wyniku i zmiana go w listę stringów
+    dataAktywnosci(login,token)
+    
+    return lista
