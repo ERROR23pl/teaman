@@ -1,5 +1,6 @@
 import ObslugaZapytania as OZ
 import sys
+import json
 
 if(len(sys.argv)<2):
     print("Nie podano numeru testu!\n")
@@ -108,4 +109,8 @@ else:
     
     else:
         wynik = "Niepoprawny numer testu\n\n"
+
     print(wynik)
+    dekoder = json.JSONDecoder()
+    dane: dict = dekoder.decode(wynik)
+    print(dane)

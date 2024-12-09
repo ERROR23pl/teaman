@@ -19,7 +19,5 @@ def stworzPlikZOdpowiedzia(sukcesOperacji: bool, dane: typing.List[str]):
         for i in range(len(dane)):
             slownik['dana'+str(i+1)] = dane[i]
     
-    with open("odpowiedz.json",'w',encoding="utf-8") as plikZOdp:
-        json.dump(slownik,plikZOdp)
-    
-    return plikZOdp
+    koder = json.JSONEncoder(ensure_ascii=False)
+    return koder.encode(slownik)

@@ -3,8 +3,8 @@ import json
 import WydobywanieTaskow as Taski
 
 def analizaPliku(otrzymanyPlik) -> typing.List:
-    with open(otrzymanyPlik,'r',encoding="utf-8") as plik:
-        dane : dict = json.load(plik)
+    dekoder = json.JSONDecoder()
+    dane : dict = dekoder.decode(otrzymanyPlik)
     
     if(str(dane['operacja'])!="modyfikacja taskow"):
         wartosci: typing.List = dane.values()
@@ -17,17 +17,17 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
         zmienianeTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = []
         
         for wpis in dane:
-            if("DodawanyTask" in str(wpis.key)):
-                task = Taski.task(wpis.value)
+            if("DodawanyTask" in str(wpis)):
+                task = Taski.task(dane[wpis])
                 dodawaneTaski.append(task)
-            elif("UsuwanyTask" in str(wpis.key)):
-                task = Taski.task(wpis.value)
+            elif("UsuwanyTask" in str(wpis)):
+                task = Taski.task(dane[wpis])
                 usuwaneTaski.append(task)
-            elif("ModyfikowanyTask" in str(wpis.key)):
-                task = Taski.task(wpis.value)
+            elif("ModyfikowanyTask" in str(wpis)):
+                task = Taski.task(dane[wpis])
                 zmienianeTaski.append(task)
             else:
-                wartosci.append(wpis.value)
+                wartosci.append(dane[wpis])
         
         return wartosci+dodawaneTaski+usuwaneTaski+zmienianeTaski
             
@@ -44,7 +44,5 @@ def stworzPlikZOdpowiedzia(sukcesOperacji: bool, dane: typing.List[str]):
         for i in range(len(dane)):
             slownik['dana'+str(i+1)] = dane[i]
     
-    with open("odpowiedz.json",'w',encoding="utf-8") as plikZOdp:
-        json.dump(slownik,plikZOdp)
-    
-    return plikZOdp
+    koder = json.JSONEncoder(ensure_ascii=False)
+    return koder.encode(slownik)

@@ -1,7 +1,7 @@
 import typing
 
 
-def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = "", nickPubliczny: str = "") -> int:
+def iloscUzytkownikow(login: str = "", haslo: str = "", token: str = "", rola: str = "", nickPubliczny: str = "") -> int:
     #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     ilosc: int
     print("Sprawdzanie ilości użytkowników dla:")
