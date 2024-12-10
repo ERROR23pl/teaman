@@ -12,6 +12,7 @@ DB_CREATION_QUERY_PATH = "db_creation_query.sql"
 # todo: Czy metody to modyfikowania bazy powinny automatycznie commitować zmiany?
 # todo: error/none handling
 # ! todo: w wielu metodach zapomniałem zrobić self.commit() ups, trzeba będzie to naprawić
+# todo: ok serio login powinien być kluczem głównym i chuj
 
 
 class SQLLiteDB():
@@ -57,6 +58,15 @@ class SQLLiteDB():
         self.connection.close()
 
 
+    # helper functions
+    def user_nick_to_login():
+        ...
+
+    def user_login_to_id():
+        ...
+    
+    def user_nick_to_id():
+        ...
 
     # Prepared statements dla Ryszarda
     def istnieje_kod_zpr(self, kod_zapr: str) -> bool:
@@ -78,7 +88,6 @@ class SQLLiteDB():
             (login, token)
         )
 
-    # ? Czy to nie serwer powinien tworzyć i zwrócić użytkownikowi token?
     def ustaw_token(self, login: str, haslo: str, token: str) -> None:
         self.cursor.execute(
             "UPDATE Uzytownicy SET Token = ? WHERE login = ? AND haslo = ?",
@@ -151,8 +160,107 @@ class SQLLiteDB():
 
         self.commit()
 
+    def czy_uzytkownik_w_pokoju(self, nazwaPokoju: str, login: str) -> bool:
+        id_uzytkownika = None # wykonać kwerendę
+        id_pokoju = None # wykonać kwerendę
+
+        self.cursor.execute(
+            "SELECT * FROM CzlonkowiePokoju WHERE uzytkownik = ? AND pokoj = ?",
+            (id_uzytkownika, id_pokoju,)
+        )
+
+        return self.cursor.fetchone() is not None
+
+    def pokoje_czlonkowskie(self, login: str, token: str) -> List[str]:
+        ...
+
+    def dodaj_taski(login: str, token: str, nazwaPokoju: str, listaTaskow) -> None:
+        ...
+
+    def usun_taski(self, login: str, token: str, nazwaPokoju: str, listaTaskow):
+        ...
+
+    def zaktualizuj_wlasnosci_taskow(self, login: str, token: str, nazwaPokoju: str, listaTaskow):
+        ...
+
+    def ukoncz_task(self, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
+        ...
+
+    def odznacz_task(self, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
+        ...
+
+    def lista_taskow(self, login: str, token: str, nazwaPokoju: str):
+        ...
+
+    def pobierz_chat(self, login: str, token: str, nazwaPokoju: str):
+        ...
+
+    def aktualizacja_chatu(self, login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int):
+        ...
+
+    def dodaj_wiadomosc(self, login: str, token: str, nazwaPokoju: str, wiadomosc: str, data: int):
+        ...
+
+    def wpis_istnieje(self, nazwaPokoju: str, wpis):
+        ...
+
+    def kalendarz_dodaj_wpis(self, login: str, token: str, nazwaPokoju: str, wpis):
+        ...
+    
+    def kalendarz_usun_wpis(self, login: str, token: str, nazwaPokoju: str, wpis):
+        ...
+
+    def kalendarz_modyfikuj_wpis(self, login: str, token: str, nazwaPokoju: str, wpis, noweDane):
+        ...
+
+    def pobierz_kalendarz(self, login: str, token: str, nazwaPokoju: str):
+        ...
+
+    def plik_istnieje(self, nazwaPokoju: str, nazwaPliku: str) -> bool:
+        ...
+
+    def dodaj_plik(self, login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes):
+        ...
+
+    def usun_plik(self, login: str, token: str, nazwaPokoju: str, nazwaPliku: str):
+        ...
+
+    def pobierz_plik(self, login: str, token: str, nazwaPokoju: str, nazwaPliku: str):
+        ...
+
+    def autor_pliku(self, nazwaPokoju: str, nazwaPliku: str, dana: str):
+        ...
+
+    def klucz_istnieje(self, kluczPub: str):
+        ...
+
+    def ustaw_klucz(self, login: str, token: str, kluczPub: str):
+        ...
+
+    def dodaj_klucz_do_pokoju(self, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
+        ...
+
+    # todo: nie potrzebna jest taka funkcja, wystarczy skorzystać z powyższej i ona zwróci czy istnieje?
+    def czy_klucz_pokoju_istnieje(self, kluczePubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str):
+        ...
+
+    def czy_zweryfikowany(login: str) -> bool:
+        ...
+
+    def usun_klucze_dla_uzytkownika(self, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, loginPosiadaczaKlucza: str):
+        ...
+
+    def klucz_uzytkownika(self, loginAdmina: str, tokenAdmina: str, nickPosiadaczaKlucza: str) -> str:
+        ...
+
+    def loginUzytkownika(nick: str) -> str:
+        ...
+
+    def ustaw_role(self, loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str):
+        ...
+
+    def lista_niezweryfikowanych(login: str, token: str):
+        ...
 
 if __name__ == "__main__":
     db = SQLLiteDB("teaman_database.db")
-    # print(type(date.today()))
-    db.dodaj_kod_zaproszniowy("DUPA")

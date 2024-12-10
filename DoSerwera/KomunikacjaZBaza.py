@@ -151,7 +151,6 @@ def usunZPokoju(loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, usuwanyLog
     dataAktywnosci(loginAdmina,tokenAdmina)
     return None
 
-# todo: zaimplementować w bazie danych
 def czyUzytkownikJestWPokoju(nazwaPokoju: str, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
