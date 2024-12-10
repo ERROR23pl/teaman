@@ -7,10 +7,9 @@ CREATE TABLE Role (
 );
 
 CREATE TABLE Uzytkownicy (
-    id INTEGER PRIMARY KEY,
+    nazwa VARCHAR(255) PRIMARY KEY,
     login VARCHAR(64) NOT NULL, -- sha256 produces a 64 character long hash
     haslo VARCHAR(64) NOT NULL, -- sha256 produces a 64 character long hash
-    nazwa_publiczna VARCHAR(255) UNIQUE NOT NULL,
     token VARCHAR(255),
     rola VARCHAR(255) NOT NULL,
     last_update DATE,
@@ -34,10 +33,10 @@ CREATE TABLE Pokoje (
 
 CREATE TABLE CzlonkowiePokojow (
     id INTEGER PRIMARY KEY,
-    uzytkownik INTEGER NOT NULL,
+    uzytkownik VARCHAR(255) NOT NULL,
     pokoj INTEGER NOT NULL,
 
-    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(id),
+    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa),
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id)
 );
 
@@ -46,9 +45,9 @@ CREATE TABLE Wiadomosci (
     pokoj INTEGER NOT NULL,
     tresc TEXT NOT NULL,
     data_wyslania DATE NOT NULL,
-    autor INTEGER NOT NULL,
+    autor VARCHAR(255) NOT NULL,
 
-    CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(id),
+    CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(nazwa),
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id)
 );
 
@@ -85,10 +84,10 @@ CREATE TABLE KolejnoscTaskow (
 CREATE TABLE KluczeDoPokojow (
     id INTEGER PRIMARY KEY,
     pokoj INTEGER NOT NULL,
-    uzytkownik INTEGER NOT NULL,
+    uzytkownik VARCHAR(255) NOT NULL,
     klucz_publiczny VARCHAR(64), -- todo: ustalić jak długi jest szyfr
     klucz_prywatny VARCHAR(64),
 
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id),
-    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(id)
+    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa)
 );

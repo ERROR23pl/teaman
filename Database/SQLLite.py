@@ -5,17 +5,17 @@ from datetime import date
 import os
 
 from Database import Database
+from Models import *
 
 # ! todo: change this in the final project!!!
 DB_CREATION_QUERY_PATH = "db_creation_query.sql"
-
 # todo: Czy metody to modyfikowania bazy powinny automatycznie commitować zmiany?
 # todo: error/none handling
 # ! todo: w wielu metodach zapomniałem zrobić self.commit() ups, trzeba będzie to naprawić
 # todo: ok serio login powinien być kluczem głównym i chuj
+# todo: upewnić się, że metody zwracają informację czy kwerenda była poprawna. W końcu jaką mam pewność, że Ryszard poprawnie sprawdzi czy Pokój istnieje?
 
-
-class SQLLiteDB():
+class SQLLiteDB:
     # todo: metoda do implementacji
     @classmethod
     def baza_istnieje(cls, path):
@@ -47,6 +47,10 @@ class SQLLiteDB():
 
     def commit(self) -> None:
         self.connection.commit()
+
+    def exec_and_commit(self, query: str, *args: List[Any]):
+        self.execute(query, *args)
+        self.commit()
     
     def rollback(self) -> None:
         self.connection.rollback()
@@ -68,46 +72,84 @@ class SQLLiteDB():
     def user_nick_to_id():
         ...
 
-    # Prepared statements dla Ryszarda
-    def istnieje_kod_zpr(self, kod_zapr: str) -> bool:
-        self.cursor.execute("SELECT * FROM KodyZaproszeniowe WHERE kod = ?", (kod_zapr,))
+
+
+    # --------------- kody zaproszeniowe ---------------
+    # todo: test 
+    def istnieje_kod_zpr(self, kod_zapr: KodZaproszeniowy) -> bool:
+        self.execute(
+            "SELECT * FROM KodyZaproszeniowe WHERE kod = ?",
+            kod_zapr.value
+        )
         return self.cursor.fetchone() is not None
 
-    # todo: Kod zaproszeniowy nie jest w żaden sposób validowany
-    def dodaj_kod_zaproszniowy(self, kod_zapr: str):
-        self.cursor.execute("INSERT INTO KodyZaproszeniowe VALUES (?, CURRENT_DATE)", (kod_zapr,))
-        self.connection.commit()
-
-    def usun_kod_zaproszeniowy(self, kod_zapr: str):
-        self.cursor.execute("DELETE FROM KodyZaproszeniowe WHERE kod = ?", (kod_zapr,))
-        self.connection.commit()
-
-    def ustaw_date_aktywnosci_teraz(self, login: str, token: str):
-        self.cursor.execute(
-            "UPDATE Uzytownicy SET last_update = CURRENT_DATE WHERE login = ? AND token = ?",
-            (login, token)
+    # todo: test
+    def dodaj_kod_zaproszniowy(self, kod_zapr: KodZaproszeniowy):
+        self.exec_and_commit(
+            "INSERT INTO KodyZaproszeniowe VALUES (?, CURRENT_DATE)",
+            kod_zapr.value
         )
 
-    def ustaw_token(self, login: str, haslo: str, token: str) -> None:
-        self.cursor.execute(
-            "UPDATE Uzytownicy SET Token = ? WHERE login = ? AND haslo = ?",
-            (token, login, haslo)
+    # todo: test
+    def usun_kod_zaproszeniowy(self, kod_zapr: KodZaproszeniowy):
+        self.exec_and_commit(
+            "DELETE FROM KodyZaproszeniowe WHERE kod = ?",
+            kod_zapr.value
         )
 
-    def wstaw_uzytkownika(self, login: str, haslo: str, token: str, rola: str, nick_publiczny: str):
-        self.cursor.execute(
-            "INSERT INTO Uzytownicy(login, haslo, nazwa_publiczna, token, rola) VALUES (?, ?, ?, ?, ?)",
-            (login, haslo, token, rola, nick_publiczny)
+
+
+    # --------------- Użytkownicy ---------------
+    # ? todo: czy to nie admin powinien dodawać użytkowników?
+    def wstaw_uzytkownika(self, login: Login, haslo: Haslo, token: Token, rola: Rola, nick: Nick):
+        self.exec_and_commit(
+            "INSERT INTO Uzytownicy(nazwa, login, haslo, token, rola) VALUES (?, ?, ?, ?, ?)",
+            login.value,
+            haslo.value,
+            token.value,
+            rola.value,
+            nick.value
         )
 
         self.ustaw_date_aktywnosci_teraz(login, token)
+    
+    def ustaw_date_aktywnosci_teraz(self, login: Login, token: Token):
+        self.exec_and_commit(
+            "UPDATE Uzytownicy SET last_update = CURRENT_DATE WHERE login = ? AND token = ?",
+            login.value,
+            token.value
+        )
+
+    def ustaw_token(self, login: str, haslo: str, token: str) -> None:
+        self.exec_and_commit(
+            "UPDATE Uzytownicy SET Token = ? WHERE login = ? AND haslo = ?",
+            token.value,
+            login.value,
+            haslo.value
+        )
+
+    
         
 
     # todo: zaimplementować
     def czyszczenie_polnocne(self):
+        self.exec_and_commit(
+            "DELETE FROM KodyZaproszeniowe WHERE (julianday(CURRENT_DATE) - julianday(data_dodania)) > 1"
+        )
+
+    def loginUzytkownika(nick: str) -> str:
+        ...
+
+    def ustaw_role(self, loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str):
+        ...
+
+    def lista_niezweryfikowanych(login: str, token: str):
         ...
     
-    def jest_pokoj(self, nazwa_pokoju: str) -> bool:
+
+
+    # --------------- Pokoje ---------------
+    def istnieje_pokoj(self, nazwa_pokoju: str) -> bool:
         self.cursor.execute(
             "SELECT * FROM Pokoj WHERE nazwa = ?",
             (nazwa_pokoju,)
@@ -115,7 +157,7 @@ class SQLLiteDB():
         
         return self.cursor.fetchone() is not None
 
-    # todo: upewnić się, że metody zwracają informację czy kwerenda była poprawna. W końcu jaką mam pewność, że Ryszard poprawnie sprawdzi czy Pokój istnieje?
+    
     def stworz_pokoj(self, login: str, token: str, nazwa_pokoju: str):
         # ! todo: autentykacja admina
         self.cursor.execute(
@@ -174,6 +216,9 @@ class SQLLiteDB():
     def pokoje_czlonkowskie(self, login: str, token: str) -> List[str]:
         ...
 
+
+
+    # --------------- Taski ---------------
     def dodaj_taski(login: str, token: str, nazwaPokoju: str, listaTaskow) -> None:
         ...
 
@@ -192,6 +237,8 @@ class SQLLiteDB():
     def lista_taskow(self, login: str, token: str, nazwaPokoju: str):
         ...
 
+
+    # --------------- Chaty ---------------
     def pobierz_chat(self, login: str, token: str, nazwaPokoju: str):
         ...
 
@@ -201,6 +248,9 @@ class SQLLiteDB():
     def dodaj_wiadomosc(self, login: str, token: str, nazwaPokoju: str, wiadomosc: str, data: int):
         ...
 
+
+
+    # --------------- Kalendarze ---------------
     def wpis_istnieje(self, nazwaPokoju: str, wpis):
         ...
 
@@ -216,6 +266,8 @@ class SQLLiteDB():
     def pobierz_kalendarz(self, login: str, token: str, nazwaPokoju: str):
         ...
 
+
+    # --------------- Pliki ---------------
     def plik_istnieje(self, nazwaPokoju: str, nazwaPliku: str) -> bool:
         ...
 
@@ -231,6 +283,9 @@ class SQLLiteDB():
     def autor_pliku(self, nazwaPokoju: str, nazwaPliku: str, dana: str):
         ...
 
+
+
+    # --------------- Klucze ---------------
     def klucz_istnieje(self, kluczPub: str):
         ...
 
@@ -253,14 +308,7 @@ class SQLLiteDB():
     def klucz_uzytkownika(self, loginAdmina: str, tokenAdmina: str, nickPosiadaczaKlucza: str) -> str:
         ...
 
-    def loginUzytkownika(nick: str) -> str:
-        ...
-
-    def ustaw_role(self, loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str):
-        ...
-
-    def lista_niezweryfikowanych(login: str, token: str):
-        ...
+    
 
 if __name__ == "__main__":
     db = SQLLiteDB("teaman_database.db")

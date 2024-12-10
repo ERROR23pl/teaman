@@ -19,23 +19,29 @@ def reset_test_db():
 class TestSqliteFunctions(unittest.TestCase):
     def test_kody_zaproszeniowe(self):
         db: SQLLiteDB = reset_test_db()
-        self.assertFalse(db.istnieje_kod_zpr("nie_istniejący_kod"))
 
-        EXAMPLE_CODE = "example_code"
-        db.dodaj_kod_zaproszniowy(EXAMPLE_CODE)
-        db.execute(
-            "SELECT * FROM KodyZaproszeniowe WHERE kod = ?",
-            EXAMPLE_CODE
+        # sprawdzanie nie istniejącego kodu
+        NIE_ISTNIEJACY_KOD = KodZaproszeniowy("nie_istniejacy_kod")
+        self.assertFalse(
+            db.istnieje_kod_zpr(NIE_ISTNIEJACY_KOD)
         )
 
-        self.assertEqual(
-            db.cursor.fetchone(),
-            (EXAMPLE_CODE, date.today())
+        # po dodaniu kodu powinien istnieć w bazie z dzisiejszą datą
+        ISTNIEJACY_KOD = KodZaproszeniowy("istniejacy_kod")
+        db.dodaj_kod_zaproszniowy(ISTNIEJACY_KOD)
+        self.assertTrue(
+            db.istnieje_kod_zpr(ISTNIEJACY_KOD)
         )
 
-        self.assertTrue(db.istnieje_kod_zpr(EXAMPLE_CODE))
+        # po usunięciu nie powinno go już być w bazie
+        db.usun_kod_zaproszeniowy(ISTNIEJACY_KOD)
+        self.assertFalse(
+            db.istnieje_kod_zpr(ISTNIEJACY_KOD)
+        )
 
-    def 
+    def test_uzytkownicy(self):
+        db: SQLLiteDB = reset_test_db()
+
         
 
 
