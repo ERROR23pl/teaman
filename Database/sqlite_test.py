@@ -41,6 +41,8 @@ class TestSqliteFunctions(unittest.TestCase):
 
     def test_uzytkownicy(self):
         db: SQLLiteDB = reset_test_db()
+        
+        db.authenticate_admin(Login("admin_login"), Token("admin_token"))
 
         
 

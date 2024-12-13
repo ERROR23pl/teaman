@@ -27,49 +27,48 @@ CREATE TABLE KodyZaproszeniowe (
 );
 
 CREATE TABLE Pokoje (
-    id INTEGER PRIMARY KEY,
-    nazwa VARCHAR(255) NOT NULL UNIQUE
+    nazwa VARCHAR(255) PRIMARY KEY
 );
 
 CREATE TABLE CzlonkowiePokojow (
     id INTEGER PRIMARY KEY,
     uzytkownik VARCHAR(255) NOT NULL,
-    pokoj INTEGER NOT NULL,
+    pokoj VARCHAR(255) NOT NULL,
 
     CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa),
-    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id)
+    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
 CREATE TABLE Wiadomosci (
     id INTEGER PRIMARY KEY,
-    pokoj INTEGER NOT NULL,
+    pokoj VARCHAR(255) NOT NULL,
     tresc TEXT NOT NULL,
     data_wyslania DATE NOT NULL,
     autor VARCHAR(255) NOT NULL,
 
     CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(nazwa),
-    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id)
+    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
 CREATE TABLE Wydarzenia (
     id INTEGER PRIMARY KEY,
-    pokoj INTEGER NOT NULL,
+    pokoj VARCHAR(255) NOT NULL,
     nazwa_wydarzenia VARCHAR(255) NOT NULL,
     data_wydarzenia DATE NOT NULL,
 
-    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id)
+    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
 CREATE TABLE Taski (
     id INTEGER PRIMARY KEY,
     zrobiony BOOLEAN NOT NULL,
-    pokoj INTEGER NOT NULL,
+    pokoj VARCHAR(255) NOT NULL,
     deadline DATE, -- task bez deadline'a może mieć deadline == null
     
     canvas_x REAL,
     canvas_y REAL,
 
-    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id)
+    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
 CREATE TABLE KolejnoscTaskow (
@@ -83,11 +82,15 @@ CREATE TABLE KolejnoscTaskow (
 
 CREATE TABLE KluczeDoPokojow (
     id INTEGER PRIMARY KEY,
-    pokoj INTEGER NOT NULL,
+    pokoj VARCHAR(255) NOT NULL,
     uzytkownik VARCHAR(255) NOT NULL,
     klucz_publiczny VARCHAR(64), -- todo: ustalić jak długi jest szyfr
     klucz_prywatny VARCHAR(64),
 
-    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(id),
+    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa),
     CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa)
 );
+
+
+INSERT INTO Role VALUES ("admin");
+INSERT INTO Uzytkownicy VALUES ("admin", "admin_login", "admin_haslo", "admin_token", "admin", NULL, NULL); -- todo: delete this line, when python script creates a first admin.

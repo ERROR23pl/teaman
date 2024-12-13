@@ -9,6 +9,14 @@ class TodoError(BaseException):
     def __init__(self, *args):
         super().__init__(*args)
 
+class DatabaseError(BaseException):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+class AuthenticationError(DatabaseError):
+    def __init__(self, *args):
+        super().__init__(*args)
+
 class KodZaproszeniowy:
     def __init__(self, kod: str):
         # todo: validuj kod

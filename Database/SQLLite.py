@@ -14,6 +14,7 @@ DB_CREATION_QUERY_PATH = "db_creation_query.sql"
 # ! todo: w wielu metodach zapomniałem zrobić self.commit() ups, trzeba będzie to naprawić
 # todo: ok serio login powinien być kluczem głównym i chuj
 # todo: upewnić się, że metody zwracają informację czy kwerenda była poprawna. W końcu jaką mam pewność, że Ryszard poprawnie sprawdzi czy Pokój istnieje?
+# todo: dodać pierwszego admina
 
 class SQLLiteDB:
     # todo: metoda do implementacji
@@ -40,6 +41,8 @@ class SQLLiteDB:
             for statement in query.read().split(";"):
                 self.execute(statement)
 
+        # ! todo: create first admin with a proper login and password!
+
         self.commit()
 
     def execute(self, query: str, *args: List[Any]) -> Cursor:
@@ -63,14 +66,30 @@ class SQLLiteDB:
 
 
     # helper functions
-    def user_nick_to_login():
-        ...
+    def nick_to_login(self, nick: Nick):
+        self.execute(
+            "SELECT login FROM Uzytkownicy WHERE nazwa = ?",
+            nick.value
+        )
 
-    def user_login_to_id():
-        ...
+        return self.cursor.fetchone[0]
     
-    def user_nick_to_id():
-        ...
+    def login_to_nick(self, login: Login):
+        self.execute(
+            "SELECT nazwa FROM Uzytkownicy WHERE login = ?",
+            login.value
+        )
+
+        return self.cursor.fetchone[0]
+
+    def authenticate_admin(self, login_admin: Login, token_admin: Token) -> bool:
+        self.execute(
+            "SELECT rola FROM Uzytkownicy WHERE login = ? AND token = ?",
+            login_admin.value,
+            token_admin.value
+        )
+
+        return self.cursor.fetchone()[0] == "admin"
 
 
 
@@ -120,7 +139,7 @@ class SQLLiteDB:
             token.value
         )
 
-    def ustaw_token(self, login: str, haslo: str, token: str) -> None:
+    def ustaw_token(self, login: Login, haslo: Haslo, token: Token) -> None:
         self.exec_and_commit(
             "UPDATE Uzytownicy SET Token = ? WHERE login = ? AND haslo = ?",
             token.value,
@@ -131,16 +150,16 @@ class SQLLiteDB:
     
         
 
-    # todo: zaimplementować
     def czyszczenie_polnocne(self):
         self.exec_and_commit(
             "DELETE FROM KodyZaproszeniowe WHERE (julianday(CURRENT_DATE) - julianday(data_dodania)) > 1"
         )
 
-    def loginUzytkownika(nick: str) -> str:
-        ...
+        self.exec_and_commit(
+            "UPDATE Uzytkownicy SET token = NULL WHERE (julianday(CURRENT_DATE) - julianday(last_update)) > 1"
+        )
 
-    def ustaw_role(self, loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str):
+    def ustaw_role(self, login_admin: str, token_admin: str, login_zmienianego: str, nowa_rola: str):
         ...
 
     def lista_niezweryfikowanych(login: str, token: str):
@@ -150,65 +169,76 @@ class SQLLiteDB:
 
     # --------------- Pokoje ---------------
     def istnieje_pokoj(self, nazwa_pokoju: str) -> bool:
-        self.cursor.execute(
+        self.execute(
             "SELECT * FROM Pokoj WHERE nazwa = ?",
-            (nazwa_pokoju,)
+            nazwa_pokoju
         )
         
         return self.cursor.fetchone() is not None
 
     
-    def stworz_pokoj(self, login: str, token: str, nazwa_pokoju: str):
-        # ! todo: autentykacja admina
-        self.cursor.execute(
-            "INSERT INTO Pokoje (nazwa) VALUES (?)",
-            (nazwa_pokoju,)
+    def stworz_pokoj(self, login_admin: Login, token_admin: Token, nazwa_pokoju: str):
+        if not self.authenticate_admin(login_admin, token_admin):
+            raise AuthenticationError("Failed to authenticate Admin!")
+        
+        
+        self.exec_and_commit(
+            "INSERT INTO Pokoje VALUES (?)",
+            nazwa_pokoju
         )
 
-        # todo: update daty admina
+        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
-    def usun_pokoj(self, login: str, token: str, nazwa_pokoju: str):
-        # ! todo: autentykacja admina
-        self.cursor.execute(
+
+    def usun_pokoj(self, login_admin: Login, token_admin: Token, nazwa_pokoju: str):
+        if not self.authenticate_admin(login_admin, token_admin):
+            raise AuthenticationError("Failed to authenticate Admin!")
+        
+        self.exec_and_commit(
             "DELETE FROM Pokoje WHERE nazwa = ?",
-            (nazwa_pokoju,)
+            nazwa_pokoju
         )
 
-        # todo: update daty admina
+        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
-    def dodaj_do_pokoju(self, loginAdmina: str, tokenAdmina: str, nazwa_pokoju: str, dodawany_login: str) -> None:
-        id_uzytkownika = None # wykonać kwerendę
-        id_pokoju = None # wykonać kwerendę
+
+    def dodaj_do_pokoju(self, login_admin: Login, token_admin: Token, nazwa_pokoju: str, dodawany_login: Login):
+        if not self.authenticate_admin(login_admin, token_admin):
+            raise AuthenticationError("Failed to authenticate Admin!")
         
-        self.cursor.execute(
+        nick_uzytkownika = self.login_to_nick(dodawany_login)
+                
+        self.exec_and_commit(
             "INSERT INTO CzlonkowiePokojow(uzytkownik, pokoj) VALUES (?, ?)",
-            (id_uzytkownika, id_pokoju,)
+            nick_uzytkownika,
+            nazwa_pokoju,
         )
 
-        # todo: update daty admina
+        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
-        self.commit()
 
-    def usun_z_pokoju(self, loginAdmina: str, tokenAdmina: str, nazwa_pokoju: str, usuwanyLogin: str) -> None:
-        id_uzytkownika = None # wykonać kwerendę
-        id_pokoju = None # wykonać kwerendę
+    def usun_z_pokoju(self, login_admin: str, token_admin: str, nazwa_pokoju: str, usuwany_login: str):
+        if not self.authenticate_admin(login_admin, token_admin):
+            raise AuthenticationError("Failed to authenticate Admin!")
         
-        self.cursor.execute(
+        nick_uzytkownika = self.login_to_nick(usuwany_login)
+        
+        self.exec_and_commit(
             "DELETE FROM CzlonkowiePokojow WHERE uzytkownik = ? AND pokoj = ?",
-            (id_uzytkownika, id_pokoju,)
+            nick_uzytkownika,
+            nazwa_pokoju
         )
 
-        # todo: update daty admina
+        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
-        self.commit()
 
-    def czy_uzytkownik_w_pokoju(self, nazwaPokoju: str, login: str) -> bool:
-        id_uzytkownika = None # wykonać kwerendę
-        id_pokoju = None # wykonać kwerendę
+    def czy_uzytkownik_w_pokoju(self, nazwa_pokoju: str, login: str) -> bool:
+        nick_uzytkownika = self.login_to_nick(login)
 
-        self.cursor.execute(
+        self.execute(
             "SELECT * FROM CzlonkowiePokoju WHERE uzytkownik = ? AND pokoj = ?",
-            (id_uzytkownika, id_pokoju,)
+            nick_uzytkownika,
+            nazwa_pokoju
         )
 
         return self.cursor.fetchone() is not None
