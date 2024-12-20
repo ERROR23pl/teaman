@@ -2,6 +2,8 @@
 -- * some of these varchars may have to change to TEXT datatype
 -- * if varchar is used, maybe try to make some kind of wrapper around the string to make sure no bugs can crawl up
 
+-- todo: add AUTOINCREMENT to every id
+
 CREATE TABLE Role (
     nazwa VARCHAR(255) PRIMARY KEY
 );
@@ -49,6 +51,7 @@ CREATE TABLE Wiadomosci (
     CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(nazwa),
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
+
 
 CREATE TABLE Wydarzenia (
     id INTEGER PRIMARY KEY,

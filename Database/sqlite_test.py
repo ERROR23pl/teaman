@@ -43,6 +43,17 @@ class TestSqliteFunctions(unittest.TestCase):
         db: SQLLiteDB = reset_test_db()
         
         db.authenticate_admin(Login("admin_login"), Token("admin_token"))
+    
+    def test_daty(self):
+        db: SQLLiteDB = reset_test_db()
+        db.exec_and_commit(
+            "INSERT INTO KodyZaproszeniowe VALUES (\"test\", \"2024-12-20\")"
+        )
+        db.execute(
+            "SELECT data_dodania FROM KodyZaproszeniowe"
+        )
+        
+        print(repr(db.cursor.fetchall()[0][0]))
 
         
 

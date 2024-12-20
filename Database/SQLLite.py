@@ -243,13 +243,21 @@ class SQLLiteDB:
 
         return self.cursor.fetchone() is not None
 
-    def pokoje_czlonkowskie(self, login: str, token: str) -> List[str]:
-        ...
+    def pokoje_czlonkowskie(self, login: Login, token: Token) -> List[str]:
+        # todo: authenticate
+        nick = self.login_to_nick(login)
+        
+        self.execute(
+            "SELECT pokoj, klucz_publiczny, klucz_prywatny FROM KluczeDoPokojow WHERE uzytkownik = ?",
+            nick
+        )
+
+        return self.cursor.fetchall()
 
 
 
     # --------------- Taski ---------------
-    def dodaj_taski(login: str, token: str, nazwaPokoju: str, listaTaskow) -> None:
+    def dodaj_taski(login: str, token: str, nazwaPokoju: str, listaTaskow):
         ...
 
     def usun_taski(self, login: str, token: str, nazwaPokoju: str, listaTaskow):
@@ -269,8 +277,18 @@ class SQLLiteDB:
 
 
     # --------------- Chaty ---------------
-    def pobierz_chat(self, login: str, token: str, nazwaPokoju: str):
-        ...
+
+    # * w oryginale chciałeś list[str] ale wydaje mi się że ptotrzebujesz więcej info niż tylko same treści (na przykład data wysłania) więc zwracam cały rezultat query
+    def pobierz_chat(self, login: str, token: str, nazwa_pokoju: str, offset: int = 0, liczba_wiadomosci: int = 100):
+        self.execute(
+            "SELECT * FROM Wiadomosci WHERE pokoj = ? ORDER BY data_wyslania DESC LIMIT ?, ?",
+            nazwa_pokoju,
+            offset,
+            liczba_wiadomosci
+        )
+
+        return self.cursor.fetchall()
+        
 
     def aktualizacja_chatu(self, login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int):
         ...
