@@ -7,9 +7,6 @@ import os
 from Database import Database
 from Models import *
 
-d = date.fromisoformat("2024-12-19")
-str(d)
-
 # ! todo: change this in the final project!!!
 DB_CREATION_QUERY_PATH = "db_creation_query.sql"
 # todo: Czy metody to modyfikowania bazy powinny automatycznie commitować zmiany?
@@ -18,6 +15,7 @@ DB_CREATION_QUERY_PATH = "db_creation_query.sql"
 # todo: ok serio login powinien być kluczem głównym i chuj
 # todo: upewnić się, że metody zwracają informację czy kwerenda była poprawna. W końcu jaką mam pewność, że Ryszard poprawnie sprawdzi czy Pokój istnieje?
 # todo: dodać pierwszego admina
+# ! todo: allow Admin and others to change password
 
 class SQLLiteDB:
     # todo: metoda do implementacji
@@ -43,8 +41,6 @@ class SQLLiteDB:
         with open(DB_CREATION_QUERY_PATH, "r", encoding="utf-8") as query:
             for statement in query.read().split(";"):
                 self.execute(statement)
-
-        # ! todo: create first admin with a proper login and password!
 
         self.commit()
 
@@ -94,6 +90,14 @@ class SQLLiteDB:
 
         return self.cursor.fetchone()[0] == "admin"
 
+    def log_in(self, login: Login, haslo: Haslo) -> bool:
+        self.execute(
+            "SELECT * FROM Uzytkownicy WHERE login = ? AND haslo = ?",
+            login.value,
+            haslo.value
+        )
+
+        return self.cursor.fetchone() is not None
 
 
     # --------------- kody zaproszeniowe ---------------
@@ -260,17 +264,38 @@ class SQLLiteDB:
 
 
     # --------------- Taski ---------------
-    def dodaj_taski(login: str, token: str, nazwaPokoju: str, listaTaskow):
-        ...
+    def dodaj_taski(login: str, token: str, nazwaPokoju: str, listaTaskow: list[Task]):
+        for task in listaTaskow:
+            ...
 
-    def usun_taski(self, login: str, token: str, nazwaPokoju: str, listaTaskow):
-        ...
+    def usun_taski(self, login: str, token: str, nazwaPokoju: str, listaTaskow: Task):
+        for task in listaTaskow:
+            ...
 
-    def zaktualizuj_wlasnosci_taskow(self, login: str, token: str, nazwaPokoju: str, listaTaskow):
-        ...
+    def zaktualizuj_wlasnosci_taskow(self, login: str, token: str, nazwaPokoju: str, listaTaskow: Task):
+        for task in listaTaskow:
+            ...
 
+    # ? Czy bool tut
     def ukoncz_task(self, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
-        ...
+        self.execute(
+            "SELECT * FROM Taski WHERE id = ?",
+            idTaska
+        )
+
+        task_exists = self.cursor.fetchone() is not None
+
+        task_isnt_blocked = True # todo: change this into a prepared statement 
+
+        if task_exists and task_isnt_blocked:
+            self.exec_and_commit(
+                "UPDATE Taski SET zrobiony = 'TRUE' WHERE id = ?",
+                idTaska
+            )
+
+        return task_isnt_blocked # todo: change to raise 2 different errors
+
+        
 
     def odznacz_task(self, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
         ...

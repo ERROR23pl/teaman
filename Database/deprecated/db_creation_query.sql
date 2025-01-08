@@ -4,22 +4,21 @@
 
 -- todo: add AUTOINCREMENT to every id
 
-
--- to może być publiczne, przecież to nie są nasze informacje
 CREATE TABLE Role (
     nazwa VARCHAR(255) PRIMARY KEY
 );
 
 CREATE TABLE Uzytkownicy (
-    nazwa VARCHAR(128), -- nazwa_publiczna, nie musi być hashowana, chyba? -- todo: zastanowić się nad tym
-    login VARCHAR(128), --! HASH
-    haslo VARCHAR(128), --! HASH
-    token VARCHAR(128),
+    nazwa VARCHAR(255) PRIMARY KEY,
+    login VARCHAR(64) NOT NULL, -- sha256 produces a 64 character long hash
+    haslo VARCHAR(64) NOT NULL, -- sha256 produces a 64 character long hash
+    token VARCHAR(255),
     rola VARCHAR(255) NOT NULL,
     last_update DATE,
 
+    -- todo: jak długie jest szyfrowanie?
     -- ! klucz publiczny jest null tylko i wyłącznie pomiędzy stworzeniem użytkowanika a zaakceptowaniem klucza przez serwer (unique)
-    klucz_publiczny VARCHAR(64) UNIQUE, -- todo: jak długi jest klucz publiczny?
+    klucz_publiczny VARCHAR(64) UNIQUE,
 
     CONSTRAINT rola FOREIGN KEY (rola) REFERENCES Role(nazwa)
 );
@@ -35,7 +34,7 @@ CREATE TABLE Pokoje (
 
 CREATE TABLE CzlonkowiePokojow (
     id INTEGER PRIMARY KEY,
-    uzytkownik VARCHAR(128) NOT NULL,
+    uzytkownik VARCHAR(255) NOT NULL,
     pokoj VARCHAR(255) NOT NULL,
 
     CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa),
@@ -45,9 +44,9 @@ CREATE TABLE CzlonkowiePokojow (
 CREATE TABLE Wiadomosci (
     id INTEGER PRIMARY KEY,
     pokoj VARCHAR(255) NOT NULL,
-    tresc TEXT NOT NULL, --! ENCODED
-    data_wyslania TIME NOT NULL,
-    autor VARCHAR(128) NOT NULL,
+    tresc TEXT NOT NULL,
+    data_wyslania DATE NOT NULL, -- to powinien być TIME, nie data
+    autor VARCHAR(255) NOT NULL,
 
     CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(nazwa),
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
@@ -65,7 +64,6 @@ CREATE TABLE Wydarzenia (
 
 CREATE TABLE Taski (
     id INTEGER PRIMARY KEY,
-    tekst TEXT, --! ENCODED
     zrobiony BOOLEAN NOT NULL,
     pokoj VARCHAR(255) NOT NULL,
     deadline DATE, -- task bez deadline'a może mieć deadline == null
@@ -88,9 +86,9 @@ CREATE TABLE KolejnoscTaskow (
 CREATE TABLE KluczeDoPokojow (
     id INTEGER PRIMARY KEY,
     pokoj VARCHAR(255) NOT NULL,
-    uzytkownik VARCHAR(128) NOT NULL,
-    klucz_publiczny VARCHAR(128), --! KEY
-    klucz_prywatny VARCHAR(64), --! KEY
+    uzytkownik VARCHAR(255) NOT NULL,
+    klucz_publiczny VARCHAR(64), -- todo: ustalić jak długi jest szyfr
+    klucz_prywatny VARCHAR(64),
 
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa),
     CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa)

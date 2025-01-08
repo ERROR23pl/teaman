@@ -1,3 +1,6 @@
+from datetime import datetime
+from typing import Tuple
+
 ALLOW_UNIMPLEMENTED_METHODS = True
 
 
@@ -27,6 +30,7 @@ class KodZaproszeniowy:
     def value(self):
         return self.__kod
 
+# już hashowane
 class Login:
     def __init__(self, login: str):
         # todo: validuj albo generuj login (nie wiem które)
@@ -37,6 +41,7 @@ class Login:
     def value(self):
         return self.__login
 
+# już hashowane
 class Haslo:
     def __init__(self, haslo: str):
         # todo: validuj albo generuj haslo (nie wiem które)
@@ -77,4 +82,12 @@ class Rola:
     def value(self):
         return self.__rola
     
-
+class Task:
+    def __init__(self):
+        self.id: int = None
+        self.tekst: str = None # ! Encoded!
+        self.zrobiony: bool = None
+        self.pokoj: str = None
+        self.deadline: datetime = None
+        
+        self.canvas: Tuple[float, float] = None
