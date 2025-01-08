@@ -1,0 +1,70 @@
+Table Uzytkownicy {
+  id integer
+  login string
+  haslo string
+  nazwa_publiczna string [unique]
+  token string // może byćn ull
+  rola stting // todo: to trzeba będzie rozwalic na dodatkową tablekę ponieważ wiele użytkowników może mieć różne role w różnych projektach
+  last_update date // co to w ogóle jest?
+}
+
+Table Role {
+  nazwa string [primary key]
+}
+// role: niezatwierdzony (nie może zrobić absolutnie nic)
+
+
+Table KodyZaproszeniowe {
+  kod string // co to jest?
+  data_dodania date
+}
+
+
+Table Pokoje {
+  id integer [primary key]
+  nazwa string
+}
+
+Table CzlonkowiePokojow {
+  id integer [primary key]
+  uzytkownik integer
+  pokoj integer
+}
+Ref: CzlonkowiePokojow.uzytkownik > Uzytkownicy.id
+Ref: CzlonkowiePokojow.pokoj > Pokoje.nazwa
+
+Ref: Uzytkownicy.rola > Role.nazwa
+
+Table Taski {
+  id integer
+  zrobiony bool
+  pokoj integer
+  deadline date
+}
+Ref: Taski.pokoj > Pokoje.id
+
+Table KolejnoscTaskow {
+  id integer
+  task integer
+  task_wymagany integer
+}
+Ref: KolejnoscTaskow.task > Taski.id
+Ref: KolejnoscTaskow.task_wymagany > Taski.id
+
+Table Wydarzenia {
+  id integer
+  pokoj integer
+  nazwa_wydarzenia string
+  data_wydarzenia date
+}
+Ref: Wydarzenia.pokoj > Pokoje.id // 1-1
+
+Table Wiadomosci {
+  id integer
+  pokoj integer
+  tresc string
+  data_wyslania date
+  autor integer
+}
+Ref: Wiadomosci.pokoj > Pokoje.id
+Ref: Wiadomosci.autor > Uzytkownicy.id 
