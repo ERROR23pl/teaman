@@ -1,11 +1,14 @@
 import sqlite3
 from sqlite3 import Cursor
 from typing import List, Any
-from datetime import date
+from datetime import date, datetime
 import os
 
 from Database import Database
 from Models import *
+
+d = date.fromisoformat("2024-12-19")
+str(d)
 
 # ! todo: change this in the final project!!!
 DB_CREATION_QUERY_PATH = "db_creation_query.sql"
@@ -289,8 +292,10 @@ class SQLLiteDB:
 
         return self.cursor.fetchall()
         
-
-    def aktualizacja_chatu(self, login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int):
+    # * wszystkie daty będą przechowywane w obiekcie date z modułu datetime
+    # * stworzenie daty ze stringa: date.fromisoformat("YYYY-MM-DD")
+    # * wszystkie time będą w obiekcie datetime
+    def aktualizacja_chatu(self, login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: Nick, dataOstatnioPosiadanej: date):
         ...
 
     def dodaj_wiadomosc(self, login: str, token: str, nazwaPokoju: str, wiadomosc: str, data: int):

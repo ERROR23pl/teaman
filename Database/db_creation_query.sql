@@ -45,7 +45,7 @@ CREATE TABLE Wiadomosci (
     id INTEGER PRIMARY KEY,
     pokoj VARCHAR(255) NOT NULL,
     tresc TEXT NOT NULL,
-    data_wyslania DATE NOT NULL,
+    data_wyslania DATE NOT NULL, -- to powinien być TIME, nie data
     autor VARCHAR(255) NOT NULL,
 
     CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(nazwa),

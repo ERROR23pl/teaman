@@ -53,9 +53,6 @@ class TestSqliteFunctions(unittest.TestCase):
             "SELECT data_dodania FROM KodyZaproszeniowe"
         )
         
-        print(repr(db.cursor.fetchall()[0][0]))
-
-        
 
 
 if __name__ == "__main__":

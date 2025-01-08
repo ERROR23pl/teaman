@@ -108,7 +108,6 @@ def rozlaczZBaza() -> None:
     #TODO wywołanie prepared statement do rozłączenia z aktualnie połączoną bazą
     return None
 
-# todo: zaimplementować w bazie danych
 def czyszczeniePolnocowe() -> None:
     #TODO wywołanie prepared statement do usunięcia z tabeli Kody starych kodów zaproszeniowych o datach o dwa dni starszych od obecnej
     #TODO wywołanie prepared statement do usunięcia z tabeli Uzytkownicy starych tokenów dla użytkowników o datach ostatniej aktywności o dwa dni starszych od obecnej
@@ -165,7 +164,7 @@ def pokojeCzlonkowskie(login: str, token: str) -> typing.List[str]:
     
     #TODO wywołanie prepared statement do pobrania listy pokojów, do których należy użytkownik WRAZ Z ICH KLUCZAMI KLUCZAMI PUBLICZNYMI I PRYWATNYMI ZASZYFROWANYMI JEGO PUBLICZNYM
     wynik: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana w listę stringów
-    dataAktywnosci(login,token)
+    dataAktywnosci(login, token)
     
     return wynik
 
