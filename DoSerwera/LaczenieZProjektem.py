@@ -10,9 +10,7 @@ def probaLogowania(login: str, haslo: str) -> typing.Tuple[bool,typing.List[str]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashHas: str = hash.sha3_512(haslo.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, haslo=hashHas)
-    
-    if(wynik!=1):
+    if(not Bazy.probaLogowania(hashLog,hashHas)):
         return False, ["Niepoprawne dane"]
     
     else:
@@ -33,10 +31,8 @@ def probaRejestracji(nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, ha
     
     if(not czyKodIstnieje):
         return False, ["Niepoprawny kod"]
-    
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog) + Bazy.iloscUzytkownikow(nickPubliczny=nick)
-    
-    if(wynik!=0):
+        
+    if(Bazy.czyLoginIstnieje(hashLog) or Bazy.czyNickIstnieje(nick)):
         return False, ["Dane już zajęte"]
     
     else:
@@ -52,10 +48,8 @@ def probaRejestracji(nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, ha
 def probaUstawieniaKluczaPublicznego(login: str, token: str, kluczPub: str) -> typing.Tuple[bool,typing.List[str]]:        #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
-    
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+        
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     czyTakiKluczIstnieje: bool = Bazy.czyKluczIstnieje(kluczPub)

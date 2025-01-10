@@ -1,19 +1,16 @@
 import hashlib as hash
 import typing
+import Obiekty as o
 #import KomunikacjaZBaza as Bazy
 import MockTestowyKomunikacjiZBaza as Bazy
 
 
-#budowa wpisu: typing.Tuple[str,typing.Tuple[int,int,int]] -> [nazwa/opis, [data: dzień,miesiąc,rok]]
 
-
-def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -39,13 +36,11 @@ def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tup
 
 
 
-def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -67,13 +62,11 @@ def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple
 
 
 
-def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]], noweDane: typing.Tuple[str,typing.Tuple[int,int,int]]) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -106,9 +99,7 @@ def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[b
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

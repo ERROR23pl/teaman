@@ -7,9 +7,7 @@ def zweryfikuj(login: str, token: str, nickWeryfikowanego: str, nowaRola: str, n
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -18,7 +16,7 @@ def zweryfikuj(login: str, token: str, nickWeryfikowanego: str, nowaRola: str, n
     if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
         return False, ["Nie można ustawić roli "+nowaRola]
     
-    if(Bazy.iloscUzytkownikow(nickPubliczny=nickWeryfikowanego)!=1):
+    if(not Bazy.czyNickIstnieje(nickWeryfikowanego)):
         return False, ["Drugi użytkownik nie istnieje"]
     
     loginWeryfikowanego: str = Bazy.loginUzytkownika(nickWeryfikowanego)
@@ -36,9 +34,7 @@ def listaNiezweryfikowanych(login: str, token: str) -> typing.Tuple[bool,typing.
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -52,9 +48,7 @@ def ustawRole(login: str, token: str, nick: str, nowaRola: str) -> typing.Tuple[
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -63,7 +57,7 @@ def ustawRole(login: str, token: str, nick: str, nowaRola: str) -> typing.Tuple[
     if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
         return False, ["Nie można ustawić roli "+nowaRola]
     
-    if(Bazy.iloscUzytkownikow(nickPubliczny=nick)!=1):
+    if(not Bazy.czyNickIstnieje(nick)):
         return False, ["Drugi użytkownik nie istnieje"]
     
     loginEdytowanego: str = Bazy.loginUzytkownika(nick)

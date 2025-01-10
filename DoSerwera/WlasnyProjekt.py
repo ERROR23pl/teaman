@@ -35,9 +35,7 @@ def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tu
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -59,9 +57,7 @@ def usunProjekt(nazwaProjektu: str, login: str, token: str) -> typing.Tuple[bool
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -79,19 +75,16 @@ def pobierzKluczPublicznyUzytkownika(login: str, token: str, nickUzytkownika: st
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
         return False, ["Brak uprawnień"]
     
-    wynik = Bazy.iloscUzytkownikow(nickPubliczny=nickUzytkownika)
-    
-    if(wynik!=1):
+    if(not Bazy.czyNickIstnieje(nickUzytkownika)):
         return False, ["Drugi użytkownik nie istnieje"]
     
     else:
-        klucz: str = Bazy.kluczUzytkownika(hashLog,hashTok,nickUzytkownika)
+        loginUzytkownika: str = Bazy.loginUzytkownika(nickUzytkownika)
+        klucz: str = Bazy.kluczUzytkownika(hashLog,hashTok,loginUzytkownika)
         return True, [klucz]

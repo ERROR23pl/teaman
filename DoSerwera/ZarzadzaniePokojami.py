@@ -9,9 +9,7 @@ def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,t
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -24,7 +22,7 @@ def stworzPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,t
     
     else:
         Bazy.stworzPokoj(hashLog,hashTok,nazwaPokoju)
-        kluczPubAdmina: str = Bazy.pobierzKluczUzytkownika(login,token)
+        kluczPubAdmina: str = Bazy.kluczUzytkownika(login,token,login)
         czyTakiKluczPokojuJuzIstnieje: bool = True
         
         while(czyTakiKluczPokojuJuzIstnieje):
@@ -43,9 +41,7 @@ def usunPokoj(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typ
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -64,9 +60,7 @@ def listaPokojow(login: str, token: str) -> typing.Tuple[bool, typing.List[str]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     else:

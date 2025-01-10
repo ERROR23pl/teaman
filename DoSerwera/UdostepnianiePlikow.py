@@ -8,9 +8,7 @@ def dodajPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawarto
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -36,9 +34,7 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typin
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -56,7 +52,7 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typin
             if (not czyPlikJest):
                 return True, [""]         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
 
-            if (Bazy.iloscUzytkownikow(login=hashLog,token=hashTok,rola="Właściciel zespołu")==1 or Bazy.autorPliku(nazwaPokoju,nazwaPliku,dana="login")==hashLog):
+            if (Bazy.rolaUzytkownika(login=hashLog,token=hashTok)=="Właściciel zespołu" or Bazy.autorPliku(nazwaPokoju,nazwaPliku,dana="login")==hashLog):
                 Bazy.usunPlik(login,token,nazwaPokoju,nazwaPliku)
                 return True, [""]
             
@@ -68,9 +64,7 @@ def pobierzPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> ty
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -98,9 +92,7 @@ def pobierzListePlikow(login: str, token: str, nazwaPokoju: str) -> typing.Tuple
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

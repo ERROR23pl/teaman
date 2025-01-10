@@ -1,30 +1,39 @@
 import typing
+import Obiekty as o
 
 # todo: zaimplementować w bazie danych
-def iloscUzytkownikow(login: str, haslo: str = "", token: str = "", rola: str = "", nickPubliczny: str = "") -> int:
-    #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa
-    ilosc: int
+
+def czyLoginIstnieje(login: str) -> bool:
+    #login zahashowany oraz przetestowany pod względem bezpieczeństwa
+    #TODO wywołanie prepared statement do sprawdzenia czy taki login już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+";"
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
-    if(haslo=="" and token=="" and rola=="" and nickPubliczny==""):
-        #TODO wywołanie prepared statement do sprawdzenia czy taki login już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
+    return wynik
+
+
+def probaLogowania(login: str, haslo: str) -> bool:
+    #login i hasło zahashowane oraz przetestowane pod względem bezpieczeństwa
+    #TODO wywołanie prepared statement do próby logowania "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Haslo="+haslo+";"
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
-    elif(haslo!="" and token=="" and rola=="" and nickPubliczny==""):
-        #TODO wywołanie prepared statement do próby logowania "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Haslo="+haslo+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
+    return wynik
+
+
+def autoryzacjaTokenem(login: str, token: str) -> bool:
+    #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
+    #TODO wywołanie prepared statement do próby autoryzacji sesji "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
-    elif(haslo=="" and token!="" and rola=="" and nickPubliczny==""):
-        #TODO wywołanie prepared statement do testu poprawności sesji"SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
+    return wynik
+
+
+def czyNickIstnieje(nickPubliczny: str) -> bool:
+    #nick przetstowany pod względem bezpieczeństwa
+    #TODO wywołanie prepared statement do sprawdzenia czy taki nick już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE NickPubliczny="+nickPubliczny+";"
+    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
-    elif(login=="" and haslo=="" and token=="" and rola=="" and nickPubliczny!=""):
-        #TODO wywołanie prepared statement do sprawdzenia czy taki nick już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE NickPubliczny="+nickPubliczny+";"
-        ilosc = 0 #mock; tu będzie zmiana wyniku w liczbę int
-    
-    else:           #nieznana opcja
-        ilosc = -1  #wynik zawsze niespełniający warunków
-    
-    return ilosc
+    return wynik
+
 
 # todo: zaimplementować w bazie danych
 def rolaUzytkownika(login: str, token: str) -> str:
@@ -169,7 +178,7 @@ def pokojeCzlonkowskie(login: str, token: str) -> typing.List[str]:
     return wynik
 
 # todo: zaimplementować w bazie danych
-def dodajTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
+def dodajTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do wstawienia nowych tasków do pokoju (bez informacji o taskach incydentnych); jeśli jakiś istnieje, usuń go i zastąp nowym - TRANSKACYJNIE
@@ -177,7 +186,7 @@ def dodajTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.Lis
     return None
 
 # todo: zaimplementować w bazie danych
-def usunTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
+def usunTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do usunięcia tasków z pokoju; jeśli jakiś nie istnieje, nic nie rób; po każdym usunięciu, usuń triggerem wszystkie zależności od niego - TRANSKACYJNIE
@@ -185,7 +194,7 @@ def usunTaski(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List
     return None
 
 # todo: zaimplementować w bazie danych
-def zauktualizujWlasnosciTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]) -> None:
+def zauktualizujWlasnosciTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
     #TODO wywołanie prepared statement do zaktualizowania tasków (nazwy, dat, incydencji, koordynatów) z pokoju; jeśli jakiś nie istnieje (lub incydentny nie istnieje), nic nie rób - TRANSKACYJNIE
@@ -256,7 +265,7 @@ def dodajWiadomosc(login: str, token: str, nazwaPokoju: str, wiadomosc: str, dat
     return None
 
 # todo: zaimplementować w bazie danych
-def czyWpisIstnieje(nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> bool:
+def czyWpisIstnieje(nazwaPokoju: str, wpis: o.WpisKalendarza) -> bool:
     #nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
     #TODO wywołanie prepared statement do sprawdzenia obecności wpisu w kalendarzu pokoju "SELECT COUNT * FROM Kalendarze WHERE IDPokoju="..." AND Tresc="..." AND Data="...
@@ -265,7 +274,7 @@ def czyWpisIstnieje(nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,in
     return wynik
 
 # todo: zaimplementować w bazie danych
-def dodajWpisDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
+def dodajWpisDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
     #TODO wywołanie prepared statement do wstawienia nowego wpisu do kalendarza pokoju
@@ -273,7 +282,7 @@ def dodajWpisDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing
     return None
 
 # todo: zaimplementować w bazie danych
-def usunWpisZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
+def usunWpisZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
     #TODO wywołanie prepared statement do usunięcia wpisu z kalendarza pokoju
@@ -281,7 +290,7 @@ def usunWpisZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.T
     return None
 
 # todo: zaimplementować w bazie danych
-def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: typing.Tuple[str,typing.Tuple[int,int,int]], noweDane: typing.Tuple[str,typing.Tuple[int,int,int]]) -> None:
+def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treści wpisów z zabezpieczonymi cudzysłowami
     
     #TODO wywołanie prepared statement do modyfikacji wpisu z kalendarza pokoju
@@ -413,10 +422,10 @@ def usunKluczeDlaUzytkownika(loginAdmina: str, tokenAdmina: str, nazwaPokoju: st
     return None
 
 # todo: zaimplementować w bazie danych
-def kluczUzytkownika(loginAdmina: str, tokenAdmina: str, nickPosiadaczaKlucza: str) -> str:
+def kluczUzytkownika(loginAdmina: str, tokenAdmina: str, loginPosiadaczaKlucza: str) -> str:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do odebrania klucza użytkownika "SELECT KluczPub FROM Uzytkownicy WHERE NickPubliczny="+nickPosiadaczaKlucza+";"
+    #TODO wywołanie prepared statement do odebrania klucza użytkownika "SELECT KluczPub FROM Uzytkownicy WHERE Login="+loginPosiadaczaKlucza+";"
     wynik: str = "" #mock; tu będzie odebranie wyniku
     dataAktywnosci(loginAdmina,tokenAdmina)
     

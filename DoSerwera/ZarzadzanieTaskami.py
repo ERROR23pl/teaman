@@ -1,5 +1,6 @@
 import hashlib as hash
 import typing
+import Obiekty as o
 #import KomunikacjaZBaza as Bazy
 import MockTestowyKomunikacjiZBaza as Bazy
 
@@ -7,13 +8,11 @@ import MockTestowyKomunikacjiZBaza as Bazy
 #budowa taska: typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]] -> [id, nazwa, [data wymaganego końca: dzień,miesiąc,rok], [koordynaty wizualne: x,y], [lista id tasków, od których zależny]]
 
 
-def obslugaTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]]]) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
+def obslugaTaskow(login: str, token: str, nazwaPokoju: str, dodawaneTaski: typing.List[o.Task], usuwaneTaski: typing.List[o.Task], zmienianeTaski: typing.List[o.Task]) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -26,9 +25,9 @@ def obslugaTaskow(login: str, token: str, nazwaPokoju: str, listaTaskow: typing.
     
     else:
         #listaTaskow=[taski dodane, taski usunięte, taski zmodyfikowane]
-        Bazy.dodajTaski(login,token,nazwaPokoju,listaTaskow[0])                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
-        Bazy.usunTaski(login,token,nazwaPokoju,listaTaskow[1])
-        Bazy.zauktualizujWlasnosciTaskow(login,token,nazwaPokoju,listaTaskow[0]+listaTaskow[2])       #operacje niemożliwe są pomijane
+        Bazy.dodajTaski(login,token,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
+        Bazy.usunTaski(login,token,nazwaPokoju,usuwaneTaski)
+        Bazy.zauktualizujWlasnosciTaskow(login,token,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane
         
         return True, [""]
 
@@ -38,9 +37,7 @@ def oznaczJakoWykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -68,9 +65,7 @@ def oznaczJakoNiewykonany(login: str, token: str, nazwaPokoju: str, idTaska: int
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -98,9 +93,7 @@ def pobierzTaski(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

@@ -8,9 +8,7 @@ def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str, 
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -22,8 +20,7 @@ def dodajDoPokoju(login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str, 
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyUzytkownikWProjekcie: bool = (Bazy.iloscUzytkownikow(nickPubliczny=dodawanaOsoba))
-        if(not czyUzytkownikWProjekcie):
+        if(not Bazy.czyNickIstnieje(dodawanaOsoba)):
             return False, ["Drugi użytkownik nie istnieje"]
         
         loginDodawanego: str = Bazy.loginUzytkownika(dodawanaOsoba) #hash loginu dodawanego użytkownika
@@ -45,9 +42,7 @@ def usunZPokoju(login: str, token: str, nazwaPokoju: str, usuwanaOsoba: str) -> 
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    wynik: int = Bazy.iloscUzytkownikow(login=hashLog, token=hashTok)
-    
-    if(wynik!=1):
+    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
     if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
@@ -59,8 +54,7 @@ def usunZPokoju(login: str, token: str, nazwaPokoju: str, usuwanaOsoba: str) -> 
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyUzytkownikWProjekcie: bool = (Bazy.iloscUzytkownikow(nickPubliczny=usuwanaOsoba))
-        if(not czyUzytkownikWProjekcie):
+        if(not Bazy.czyNickIstnieje(usuwanaOsoba)):
             return True, [""]               #usuwany użytkownik nie jest w projekcie - usunięcie z pokoju uważane za udane
         
         loginUsuwanego: str = Bazy.loginUzytkownika(usuwanaOsoba) #hash loginu usuwanego użytkownika

@@ -1,8 +1,4 @@
 import ManagerPlikowKomunikacyjnych as Pliki
-import ManagerHasel as Hasla
-import ManagerKodow as Kody
-import ManagerNazw as Nazwy
-import ManagerKluczy as Klucze
 import LaczenieZProjektem as LogIRej
 import WlasnyProjekt as WlProj
 #import KomunikacjaZBaza as Bazy
@@ -14,6 +10,7 @@ import ZarzadzanieChatami as Chaty
 import ZarzadzanieKalendarzem as Kalendarz
 import UdostepnianiePlikow as udPlikow
 import WeryfikacjaIRole as Wer
+import Obiekty as o
 import typing
 import hashlib as hash
 
@@ -24,247 +21,254 @@ def ObsluzZapytanie(plikKomunikacyjny):
     try:
         zapytanie: typing.List = Pliki.analizaPliku(plikKomunikacyjny)
         operacja: str = str(zapytanie[0])
-        nazwaProjektu: str = str(zapytanie[1])
         
-        if(not Nazwy.przetestujNazwe(nazwaProjektu)):
+        try:
+            nazwaProjektu: o.nazwa = o.nazwa(str(zapytanie[1]))
+            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu.wart)
+        except:
             return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa projektu
         
         
         if(operacja=="logowanie"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            haslo: str = str(zapytanie[3])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                haslo: o.haslo = o.haslo(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaLogowania(login,haslo)
+            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaLogowania(login.wart,haslo.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
 
         
         elif(operacja=="rejestracja"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            kodZapr: str = str(zapytanie[2])
-            login: str = str(zapytanie[3])
-            haslo: str = str(zapytanie[4])
-            nick: str = str(zapytanie[5])
+            try:
+                kodZapr: o.kod = o.kod(str(zapytanie[2]))
+                login: o.nazwa = o.nazwa(str(zapytanie[3]))
+                haslo: o.haslo = o.haslo(str(zapytanie[4]))
+                nick: o.nazwa = o.nazwa(str(zapytanie[5]))
             
-            if((not Kody.przetestujKod(kodZapr))  or (not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(login==hash.sha3_512(nick.encode()).hexdigest()):
+            if(login==hash.sha3_512(nick.wart.encode()).hexdigest()):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick taki jak login"])   #niepoprawne dane - nazwa publiczna nie może być taka jak login
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaRejestracji(nazwaProjektu,kodZapr,login,haslo,nick)
+            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaRejestracji(nazwaProjektu.wart,kodZapr.wart,login.wart,haslo.wart,nick.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
 
         
         elif(operacja=="tworzenie projektu"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt istnieje"])   #nie można stworzyć projektu, bo już istnieje
             
-            login: str = str(zapytanie[2])
-            haslo: str = str(zapytanie[3])
-            nick: str = str(zapytanie[4])
-            kluczPub: str = str(zapytanie[5])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                haslo: o.haslo = o.haslo(str(zapytanie[3]))
+                nick: o.nazwa = o.nazwa(str(zapytanie[4]))
+                kluczPub: o.klucz = o.klucz(str(zapytanie[5]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Hasla.poprawnoscHasla(haslo)) or (not Nazwy.przetestujNazwe(nick)) or(not Klucze.testPoprawnosciKlucza(kluczPub))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(login==hash.sha3_512(nick.encode()).hexdigest()):
+            if(login.wart==hash.sha3_512(nick.wart.encode()).hexdigest()):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick taki jak login"])   #niepoprawne dane - nazwa publiczna nie może być taka jak login
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.stworzProjekt(nazwaProjektu,login,haslo,nick,kluczPub)
+            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.stworzProjekt(nazwaProjektu.wart,login.wart,haslo.wart,nick.wart,kluczPub.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
 
         
         elif(operacja=="zapraszanie"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            kodZapr: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if((not Kody.przetestujKod(kodZapr))):
+            try:
+                kodZapr: o.kod = o.kod(str(zapytanie[4]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Wyślij nowy kod"])   #niepoprawny kod - prośba o nowy
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.dodajZaproszenie(login,token,kodZapr)
+            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.dodajZaproszenie(login.wart,token.wart,kodZapr.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="usuwanie projektu"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.usunProjekt(nazwaProjektu,login,token)
+            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.usunProjekt(nazwaProjektu.wart,login.wart,token.wart)
             
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="tworzenie pokoju"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if((not Nazwy.przetestujNazwe(nazwaPokoju))):
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Pokoje.stworzPokoj(login,token,nazwaPokoju)
+            rezultat: typing.Tuple[bool,typing.List[str]] = Pokoje.stworzPokoj(login.wart,token.wart,nazwaPokoju.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="usuwanie pokoju"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if(nazwaProjektu==nazwaPokoju):
-                return Pliki.stworzPlikZOdpowiedzia(False, dane=["Nie można usunąć pokoju głównego"])
-            
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if((not Nazwy.przetestujNazwe(nazwaPokoju))):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Pokoje.usunPokoj(login,token,nazwaPokoju)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            if(nazwaProjektu.wart==nazwaPokoju.wart):
+                return Pliki.stworzPlikZOdpowiedzia(False, dane=["Nie można usunąć pokoju głównego"])
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Pokoje.usunPokoj(login.wart,token.wart,nazwaPokoju.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="dodawanie do pokoju"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            dodawanyUzytkownik: str = str(zapytanie[5])
-            kluczePokojuZaszyfrowaneKluczemDodawanego: typing.Tuple[str,str] = [str(zapytanie[6]),str(zapytanie[7])]
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if(not Nazwy.przetestujNazwe(dodawanyUzytkownik)):
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            try:
+                dodawanyUzytkownik: o.nazwa = o.nazwa(str(zapytanie[5]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick dodawanego użytkownika
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = CzlPokojow.dodajDoPokoju(login,token,nazwaPokoju,dodawanyUzytkownik,kluczePokojuZaszyfrowaneKluczemDodawanego)
+            kluczePokojuZaszyfrowaneKluczemDodawanego: typing.Tuple[str,str] = [str(zapytanie[6]),str(zapytanie[7])]
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = CzlPokojow.dodajDoPokoju(login.wart,token.wart,nazwaPokoju.wart,dodawanyUzytkownik.wart,kluczePokojuZaszyfrowaneKluczemDodawanego)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="usuwanie z pokoju"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            usuwanyUzytkownik: str = str(zapytanie[5])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if(not Nazwy.przetestujNazwe(usuwanyUzytkownik)):
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            try:
+                usuwanyUzytkownik: o.nazwa = o.nazwa(str(zapytanie[5]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick usuwanego użytkownika
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = CzlPokojow.usunZPokoju(login,token,nazwaPokoju,usuwanyUzytkownik)
+            rezultat: typing.Tuple[bool,typing.List[str]] = CzlPokojow.usunZPokoju(login.wart,token.wart,nazwaPokoju.wart,usuwanyUzytkownik.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="lista pokojow"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
 
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Pokoje.listaPokojow(login,token)
+            rezultat: typing.Tuple[bool,typing.List[str]] = Pokoje.listaPokojow(login.wart,token.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
@@ -272,64 +276,33 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         
         elif(operacja=="modyfikacja taskow"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            dodawaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[5]
-            usuwaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[6]
-            modyfikowaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = zapytanie[7]
-            
-            
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            i: int = 0
-            while(i<len(dodawaneTaski)):
-                if(Nazwy.przetestujNazwe(dodawaneTaski[i][1])):
-                    i+=1
-                else:
-                    if(i<len(dodawaneTaski)):
-                        dodawaneTaski=dodawaneTaski[:i]+dodawaneTaski[i+1:]
-                    else:
-                        dodawaneTaski=dodawaneTaski[:i]
-
-            i=0
-            while(i<len(usuwaneTaski)):
-                if(Nazwy.przetestujNazwe(usuwaneTaski[i][1])):
-                    i+=1
-                else:
-                    if(i<len(usuwaneTaski)):
-                        usuwaneTaski=usuwaneTaski[:i]+usuwaneTaski[i+1:]
-                    else:
-                        usuwaneTaski=usuwaneTaski[:i]
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            i=0
-            while(i<len(modyfikowaneTaski)):
-                if(Nazwy.przetestujNazwe(modyfikowaneTaski[i][1])):
-                    i+=1
-                else:
-                    if(i<len(modyfikowaneTaski)):
-                        modyfikowaneTaski=modyfikowaneTaski[:i]+modyfikowaneTaski[i+1:]
-                    else:
-                        modyfikowaneTaski=modyfikowaneTaski[:i]
-                    
+            dodawaneTaski: typing.List[o.Task] = zapytanie[5]
+            usuwaneTaski: typing.List[o.Task] = zapytanie[6]
+            modyfikowaneTaski: typing.List[o.Task] = zapytanie[7]                    
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.obslugaTaskow(login,token,nazwaPokoju,[dodawaneTaski,usuwaneTaski,modyfikowaneTaski])
+            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.obslugaTaskow(login.wart,token.wart,nazwaPokoju.wart,dodawaneTaski,usuwaneTaski,modyfikowaneTaski)
             
             Bazy.rozlaczZBaza()
             if(rezultat[0]):
-                nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[1]
+                nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login.wart,token.wart,nazwaPokoju.wart))[1]
                 return Pliki.stworzPlikZOdpowiedzia(rezultat[0],nowaListaTaskow)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
@@ -337,24 +310,25 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         
         elif(operacja=="pobierz taski"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju    
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.pobierzTaski(login,token,nazwaPokoju)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju   
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.pobierzTaski(login.wart,token.wart,nazwaPokoju.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
@@ -362,29 +336,31 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         
         elif(operacja=="zaznacz task"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            idTaska: int = int(zapytanie[5])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju    
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.oznaczJakoWykonany(login,token,nazwaPokoju,idTaska)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            idTaska: int = int(zapytanie[5])   
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.oznaczJakoWykonany(login.wart,token.wart,nazwaPokoju.wart,idTaska)
             
             Bazy.rozlaczZBaza()
             if(rezultat[0]):
-                nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[1]
+                nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login.wart,token.wart,nazwaPokoju.wart))[1]
                 return Pliki.stworzPlikZOdpowiedzia(rezultat[0],nowaListaTaskow)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
@@ -392,448 +368,475 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         
         elif(operacja=="odznacz task"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            idTaska: int = int(zapytanie[5])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju    
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.oznaczJakoNiewykonany(login,token,nazwaPokoju,idTaska)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            idTaska: int = int(zapytanie[5])
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Taski.oznaczJakoNiewykonany(login.wart,token.wart,nazwaPokoju.wart,idTaska)
             
             Bazy.rozlaczZBaza()
             if(rezultat[0]):
-                nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login,token,nazwaPokoju))[1]
+                nowaListaTaskow: typing.List[str] = (Taski.pobierzTaski(login.wart,token.wart,nazwaPokoju.wart))[1]
                 return Pliki.stworzPlikZOdpowiedzia(rezultat[0],nowaListaTaskow)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="pobierz chat"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju    
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.pobierzChat(login,token,nazwaPokoju)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju 
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.pobierzChat(login.wart,token.wart,nazwaPokoju.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="zaktualizuj chat"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            ostatniaPosiadana: typing.Tuple[str,int] = [str(zapytanie[5]),int(zapytanie[6])]
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if(not Nazwy.przetestujNazwe(zapytanie[5])):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick autora ostatniej wiadomości   
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.zaktualizujChat(login,token,nazwaPokoju,ostatniaPosiadana)
+            try:
+                ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),True,autorWiadomosci=str(zapytanie[5]))
             
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick autora ostatniej wiadomości
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.zaktualizujChat(login.wart,token.wart,nazwaPokoju.wart,ostatniaPosiadana)
+                
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
+
         
         
         elif(operacja=="wyslij wiadomosc"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            ostatniaPosiadana: typing.Tuple[str,int] = [str(zapytanie[5]),int(zapytanie[6])]
-            wiadomosc: typing.Tuple[str,int] = [str(zapytanie[7]),int(zapytanie[8])]
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if(not Nazwy.przetestujNazwe(zapytanie[5])):
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            try:
+                ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),True,autorWiadomosci=str(zapytanie[5]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick autora ostatniej wiadomości  
             
-            wiadomosc[0]=Nazwy.zabezpieczCudzyslowy(wiadomosc[0])
-            rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.wyslijWiadomosc(login,token,nazwaPokoju,ostatniaPosiadana,wiadomosc)
+            wiadomosc: o.Wiadomosc = o.Wiadomosc(int(zapytanie[8]),False,trescWiadomosci=str(zapytanie[7]))
+            rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.wyslijWiadomosc(login.wart,token.wart,nazwaPokoju.wart,ostatniaPosiadana,wiadomosc)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="pobierz kalendarz"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])   
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju    
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.pobierzKalendarz(login,token,nazwaPokoju)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.pobierzKalendarz(login.wart,token.wart,nazwaPokoju.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="dodawanie wpisu kalendarza"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),zapytanie[6]]
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
-            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.dodajDoKalendarza(login,token,nazwaPokoju,wpis)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.dodajDoKalendarza(login.wart,token.wart,nazwaPokoju.wart,wpis)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="usuwanie wpisu kalendarza"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),zapytanie[6]]
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
-            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.usunZKalendarza(login,token,nazwaPokoju,wpis)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.usunZKalendarza(login.wart,token.wart,nazwaPokoju.wart,wpis)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="modyfikacja wpisu kalendarza"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            wpis: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[5]),zapytanie[6]]
-            noweDane: typing.Tuple[str,typing.Tuple[int,int,int]] = [str(zapytanie[7]),zapytanie[8]]
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            wpis[0]=Nazwy.zabezpieczCudzyslowy(wpis[0])
-            noweDane[0]=Nazwy.zabezpieczCudzyslowy(noweDane[0])
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.modyfikujWpisKalendarza(login,token,nazwaPokoju,wpis,noweDane)
+            wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
+            noweDane: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[7]),zapytanie[8])
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.modyfikujWpisKalendarza(login.wart,token.wart,nazwaPokoju.wart,wpis,noweDane)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="dodawanie pliku"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            nazwaPliku: str = str(zapytanie[5])
-            zawartoscPliku: bytes = (str(zapytanie[6])).encode()
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if(not Nazwy.przetestujNazwePliku(nazwaPliku)):
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            try:
+                nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
+                zawartoscPliku: bytes = (str(zapytanie[6])).encode()
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pliku nie spełnia założeń"])   #niepoprawna nazwa pliku
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.dodajPlik(login,token,nazwaPokoju,nazwaPliku,zawartoscPliku)
+            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.dodajPlik(login.wart,token.wart,nazwaPokoju.wart,nazwaPliku.wart,zawartoscPliku)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="usuwanie pliku"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            nazwaPliku: str = str(zapytanie[5])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if(not Nazwy.przetestujNazwePliku(nazwaPliku)):
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            try:
+                nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pliku nie spełnia założeń"])   #niepoprawna nazwa plikuu
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.usunPlik(login,token,nazwaPokoju,nazwaPliku)
+            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.usunPlik(login.wart,token.wart,nazwaPokoju.wart,nazwaPliku.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="pobranie pliku"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
-            nazwaPliku: str = str(zapytanie[5])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if(not Nazwy.przetestujNazwePliku(nazwaPliku)):
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            try:
+                nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pliku nie spełnia założeń"])   #niepoprawna nazwa pliku
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.pobierzPlik(login,token,nazwaPokoju,nazwaPliku)
+            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.pobierzPlik(login.wart,token.wart,nazwaPokoju.wart,nazwaPliku.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="pobranie listy plikow"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nazwaPokoju: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nazwaPokoju)):
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            try:
+                nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.pobierzListePlikow(login,token,nazwaPokoju)
+            except:
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.pobierzListePlikow(login.wart,token.wart,nazwaPokoju.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="ustawianie klucza"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            kluczPub: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if((not Klucze.testPoprawnosciKlucza(kluczPub))):
+            try:
+                kluczPub: o.klucz = o.klucz(str(zapytanie[4]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Wyślij nowy klucz"])   #niepoprawny klucz - prośba o nowy
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaUstawieniaKluczaPublicznego(login,token,kluczPub)
+            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaUstawieniaKluczaPublicznego(login.wart,token.wart,kluczPub.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="pobieranie klucza uzytkownika"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nickUzytkownika: str = str(zapytanie[4])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
+                nickUzytkownika: o.nazwa = o.nazwa(str(zapytanie[4]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token)) or (not Nazwy.przetestujNazwe(nickUzytkownika))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.pobierzKluczPublicznyUzytkownika(login,token,nickUzytkownika)
+            rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.pobierzKluczPublicznyUzytkownika(login.wart,token.wart,nickUzytkownika.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="lista niezweryfikowanych"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
 
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Wer.listaNiezweryfikowanych(login,token)
+            rezultat: typing.Tuple[bool,typing.List[str]] = Wer.listaNiezweryfikowanych(login.wart,token.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="zmiana roli"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nickUzytkownika: str = str(zapytanie[4])
-            nowaRola: str = str(zapytanie[5])
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nickUzytkownika)):
+            try:
+                nickUzytkownika: o.nazwa = o.nazwa(str(zapytanie[4]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick celu
             
-            if(not Hasla.poprawnoscHasla(nowaRola)):
+            try:
+                nowaRola: o.nazwa = o.nazwa(str(zapytanie[5]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nowa rola nie spełnia założeń"])   #niepoprawna rola
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Wer.ustawRole(login,token,nickUzytkownika,nowaRola)
+            rezultat: typing.Tuple[bool,typing.List[str]] = Wer.ustawRole(login.wart,token.wart,nickUzytkownika.wart,nowaRola.wart)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
         
         elif(operacja=="weryfikacja"):
-            czyProjektIstnieje: bool = Bazy.czyBazaIstnieje(nazwaProjektu)
-            
             if(czyProjektIstnieje):
-                Bazy.polaczZBaza(nazwaProjektu)
+                Bazy.polaczZBaza(nazwaProjektu.wart)
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
-            login: str = str(zapytanie[2])
-            token: str = str(zapytanie[3])
-            nickUzytkownika: str = str(zapytanie[4])
-            nowaRola: str = str(zapytanie[5])
-            kluczePokojuGl: typing.Tuple[str,str] = [str(zapytanie[6]), str(zapytanie[7])]
+            try:
+                login: o.nazwa = o.nazwa(str(zapytanie[2]))
+                token: o.kod = o.kod(str(zapytanie[3]))
             
-            if((not Nazwy.przetestujNazwe(login)) or (not Kody.przetestujKod(token))):
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(not Nazwy.przetestujNazwe(nickUzytkownika)):
+            try:
+                nickUzytkownika: o.nazwa = o.nazwa(str(zapytanie[4]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick celu
             
-            if(not Hasla.poprawnoscHasla(nowaRola)):
+            try:
+                nowaRola: o.nazwa = o.nazwa(str(zapytanie[5]))
+            
+            except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nowa rola nie spełnia założeń"])   #niepoprawna rola
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Wer.zweryfikuj(login,token,nickUzytkownika,nowaRola,nazwaProjektu,kluczePokojuGl)
+            kluczePokojuGl: typing.Tuple[str,str] = [str(zapytanie[6]), str(zapytanie[7])]
+            
+            rezultat: typing.Tuple[bool,typing.List[str]] = Wer.zweryfikuj(login.wart,token.wart,nickUzytkownika.wart,nowaRola.wart,nazwaProjektu.wart,kluczePokojuGl)
             
             Bazy.rozlaczZBaza()
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])

@@ -1,5 +1,6 @@
 import typing
 import json
+import Obiekty as o
 
 def analizaPliku(otrzymanyPlik) -> typing.List:
     dekoder = json.JSONDecoder()
@@ -13,17 +14,29 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
     
     else:
         wartosci: typing.List = []
-        dodawaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = []
-        usuwaneTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = []
-        zmienianeTaski: typing.List[typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]]] = []
+        dodawaneTaski: typing.List[o.Task] = []
+        usuwaneTaski: typing.List[o.Task] = []
+        zmienianeTaski: typing.List[o.Task] = []
         
         for wpis in dane:
             if("DodawanyTask" in str(wpis)):
-                dodawaneTaski.append(dane[wpis])
+                try:
+                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4])
+                    dodawaneTaski.append(nowyTask)
+                except:
+                    None
             elif("UsuwanyTask" in str(wpis)):
-                usuwaneTaski.append(dane[wpis])
+                try:
+                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4])
+                    usuwaneTaski.append(nowyTask)
+                except:
+                    None
             elif("ModyfikowanyTask" in str(wpis)):
-                zmienianeTaski.append(dane[wpis])
+                try:
+                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4])
+                    zmienianeTaski.append(nowyTask)
+                except:
+                    None
             else:
                 wartosci.append(dane[wpis])
         

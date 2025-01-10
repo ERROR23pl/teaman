@@ -21,4 +21,4 @@ def czyBrakZabronionychZnakow(haslo: str) -> bool:
 
 
 def poprawnoscHasla(haslo: str) -> bool:                    #test poprawności hasła (pod względem bezpieczeństwa bazy danych)
-    return (czyBrakZabronionychZnakow(haslo) and (not czyMaCosSpoza(haslo)))
+    return (czyBrakZabronionychZnakow(haslo) and (not czyMaCosSpoza(haslo)) and len(haslo)>=10)
