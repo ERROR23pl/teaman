@@ -14,7 +14,7 @@ def zweryfikuj(login: str, token: str, nickWeryfikowanego: str, nowaRola: str, n
         return False, ["Brak uprawnień"]
     
     if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
-        return False, ["Nie można ustawić roli "+nowaRola]
+        return False, ["Nie można ustawić takiej roli"]
     
     if(not Bazy.czyNickIstnieje(nickWeryfikowanego)):
         return False, ["Drugi użytkownik nie istnieje"]
@@ -55,7 +55,7 @@ def ustawRole(login: str, token: str, nick: str, nowaRola: str) -> typing.Tuple[
         return False, ["Brak uprawnień"]
     
     if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
-        return False, ["Nie można ustawić roli "+nowaRola]
+        return False, ["Nie można ustawić takiej roli"]
     
     if(not Bazy.czyNickIstnieje(nick)):
         return False, ["Drugi użytkownik nie istnieje"]
@@ -63,6 +63,9 @@ def ustawRole(login: str, token: str, nick: str, nowaRola: str) -> typing.Tuple[
     loginEdytowanego: str = Bazy.loginUzytkownika(nick)
     if(not Bazy.czyZweryfikowany(loginEdytowanego)):
         return False, ["Drugi użytkownik niezweryfikowany"]
+    
+    if(loginEdytowanego==hashLog):
+        return False,["Nie można zmienić roli właściciela"]
     
     else:
         Bazy.ustawRole(hashLog,hashTok,loginEdytowanego,nowaRola)

@@ -5,7 +5,7 @@ import ManagerKodow as Kody
 import ManagerKluczy as Klucze
 
 class Task:
-    def __init__(self, idTaska: int, nazwaTaska: int, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):
+    def __init__(self, idTaska: int, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):
         if(Nazwy.przetestujNazwe(nazwaTaska)):
             self.id: int = idTaska
             self.nazwa: str = nazwaTaska

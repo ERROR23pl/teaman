@@ -5,9 +5,6 @@ import Obiekty as o
 import MockTestowyKomunikacjiZBaza as Bazy
 
 
-#budowa taska: typing.Tuple[int,str,typing.Tuple[int,int,int],typing.Tuple[float,float],typing.List[int]] -> [id, nazwa, [data wymaganego końca: dzień,miesiąc,rok], [koordynaty wizualne: x,y], [lista id tasków, od których zależny]]
-
-
 def obslugaTaskow(login: str, token: str, nazwaPokoju: str, dodawaneTaski: typing.List[o.Task], usuwaneTaski: typing.List[o.Task], zmienianeTaski: typing.List[o.Task]) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
@@ -24,7 +21,6 @@ def obslugaTaskow(login: str, token: str, nazwaPokoju: str, dodawaneTaski: typin
         return False, ["Pokój nie istnieje"]
     
     else:
-        #listaTaskow=[taski dodane, taski usunięte, taski zmodyfikowane]
         Bazy.dodajTaski(login,token,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
         Bazy.usunTaski(login,token,nazwaPokoju,usuwaneTaski)
         Bazy.zauktualizujWlasnosciTaskow(login,token,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane

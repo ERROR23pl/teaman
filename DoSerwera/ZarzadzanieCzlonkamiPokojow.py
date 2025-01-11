@@ -58,6 +58,8 @@ def usunZPokoju(login: str, token: str, nazwaPokoju: str, usuwanaOsoba: str) -> 
             return True, [""]               #usuwany użytkownik nie jest w projekcie - usunięcie z pokoju uważane za udane
         
         loginUsuwanego: str = Bazy.loginUzytkownika(usuwanaOsoba) #hash loginu usuwanego użytkownika
+        if(loginUsuwanego==hashLog):
+            return False, ["Nie można usunąć właściciela projektu z pokoju"]
         
         Bazy.usunZPokoju(hashLog,hashTok,nazwaPokoju,loginUsuwanego)   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
         Bazy.usunKluczeDlaUzytkownika(hashLog,hashTok,nazwaPokoju,loginUsuwanego)   #usunięcie kluczy serwera zaszyfrowanych kluczem publicznym usuniętego użytkownika
