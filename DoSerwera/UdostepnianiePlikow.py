@@ -52,7 +52,7 @@ def usunPlik(login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> typin
             if (not czyPlikJest):
                 return True, [""]         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
 
-            if (Bazy.rolaUzytkownika(login=hashLog,token=hashTok)=="Właściciel zespołu" or Bazy.autorPliku(nazwaPokoju,nazwaPliku,dana="login")==hashLog):
+            if (Bazy.rolaUzytkownika(login=hashLog,token=hashTok)=="Właściciel" or Bazy.autorPliku(nazwaPokoju,nazwaPliku,dana="login")==hashLog):
                 Bazy.usunPlik(login,token,nazwaPokoju,nazwaPliku)
                 return True, [""]
             

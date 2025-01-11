@@ -154,7 +154,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             rezultat: typing.Tuple[bool,typing.List[str]] = Pokoje.stworzPokoj(login.wart,token.wart,nazwaPokoju.wart)
             
@@ -179,7 +179,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             if(nazwaProjektu.wart==nazwaPokoju.wart):
                 return Pliki.stworzPlikZOdpowiedzia(False, dane=["Nie można usunąć pokoju głównego"])
@@ -207,7 +207,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             try:
                 dodawanyUzytkownik: o.nazwa = o.nazwa(str(zapytanie[5]))
@@ -240,7 +240,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             try:
                 usuwanyUzytkownik: o.nazwa = o.nazwa(str(zapytanie[5]))
@@ -292,7 +292,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             dodawaneTaski: typing.List[o.Task] = zapytanie[5]
             usuwaneTaski: typing.List[o.Task] = zapytanie[6]
@@ -326,7 +326,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju   
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju   
             
             rezultat: typing.Tuple[bool,typing.List[str]] = Taski.pobierzTaski(login.wart,token.wart,nazwaPokoju.wart)
             
@@ -352,7 +352,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             idTaska: int = int(zapytanie[5])   
             
@@ -384,7 +384,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             idTaska: int = int(zapytanie[5])
             
@@ -415,7 +415,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju 
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju 
             
             rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.pobierzChat(login.wart,token.wart,nazwaPokoju.wart)
             
@@ -440,7 +440,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             try:
                 ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),True,autorWiadomosci=str(zapytanie[5]))
@@ -472,7 +472,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             try:
                 ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),True,autorWiadomosci=str(zapytanie[5]))
@@ -504,7 +504,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.pobierzKalendarz(login.wart,token.wart,nazwaPokoju.wart)
             
@@ -529,7 +529,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
             
@@ -556,7 +556,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
             
@@ -583,7 +583,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
             noweDane: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[7]),zapytanie[8])
@@ -611,7 +611,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             try:
                 nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
@@ -643,7 +643,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             try:
                 nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
@@ -674,7 +674,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             try:
                 nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
@@ -705,7 +705,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 nazwaPokoju: o.nazwa = o.nazwa(str(zapytanie[4]))
             
             except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa projektu nie spełnia założeń"])   #niepoprawna nazwa pokoju
+                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
             rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.pobierzListePlikow(login.wart,token.wart,nazwaPokoju.wart)
             

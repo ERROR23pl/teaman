@@ -78,7 +78,7 @@ def pobierzKluczPublicznyUzytkownika(login: str, token: str, nickUzytkownika: st
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel zespołu"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
         return False, ["Brak uprawnień"]
     
     if(not Bazy.czyNickIstnieje(nickUzytkownika)):
