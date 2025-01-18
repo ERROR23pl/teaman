@@ -1,53 +1,55 @@
 import hashlib as hash
 import typing
 import Obiekty as o
-#import KomunikacjaZBaza as Bazy
-import MockTestowyKomunikacjiZBaza as Bazy
+import KomunikacjaZBaza as Bazy
+import sys
+sys.path.insert(1, '../Database')
+import SQLLite as Baza
 
 
-def obslugaTaskow(login: str, token: str, nazwaPokoju: str, dodawaneTaski: typing.List[o.Task], usuwaneTaski: typing.List[o.Task], zmienianeTaski: typing.List[o.Task]) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
+def obslugaTaskow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, dodawaneTaski: typing.List[o.Task], usuwaneTaski: typing.List[o.Task], zmienianeTaski: typing.List[o.Task]) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        Bazy.dodajTaski(login,token,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
-        Bazy.usunTaski(login,token,nazwaPokoju,usuwaneTaski)
-        Bazy.zauktualizujWlasnosciTaskow(login,token,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane
+        Bazy.dodajTaski(baza,login,token,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
+        Bazy.usunTaski(baza,login,token,nazwaPokoju,usuwaneTaski)
+        Bazy.zauktualizujWlasnosciTaskow(baza,login,token,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane
         
         return True, [""]
 
 
 
-def oznaczJakoWykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
+def oznaczJakoWykonany(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, idTaska: int) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyMozna: bool = Bazy.ukonczTask(login,token,nazwaPokoju,idTaska)
+            czyMozna: bool = Bazy.ukonczTask(baza,login,token,nazwaPokoju,idTaska)
             
             if(czyMozna):
                 return True, [""]
@@ -57,25 +59,25 @@ def oznaczJakoWykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -
 
 
 
-def oznaczJakoNiewykonany(login: str, token: str, nazwaPokoju: str, idTaska: int) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
+def oznaczJakoNiewykonany(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, idTaska: int) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(login,token,nazwaPokoju,idTaska)
+            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(baza,login,token,nazwaPokoju,idTaska)
             
             if(czyMozna):
                 return True, [""]
@@ -85,23 +87,23 @@ def oznaczJakoNiewykonany(login: str, token: str, nazwaPokoju: str, idTaska: int
 
 
 
-def pobierzTaski(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, lista tasków pokoju w formie listy stringów]
+def pobierzTaski(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool, typing.List[str]]: #[sukces operacji, lista tasków pokoju w formie listy stringów]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.listaTaskow(login,token,nazwaPokoju)
+            lista: typing.List[str] = Bazy.listaTaskow(baza,login,token,nazwaPokoju)
             return True, lista

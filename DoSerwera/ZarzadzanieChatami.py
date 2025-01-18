@@ -1,75 +1,77 @@
 import hashlib as hash
 import typing
 import Obiekty as o
-#import KomunikacjaZBaza as Bazy
-import MockTestowyKomunikacjiZBaza as Bazy
+import KomunikacjaZBaza as Bazy
+import sys
+sys.path.insert(1, '../Database')
+import SQLLite as Baza
 
 
-def pobierzChat(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, 100 ostatnich wiadomości z chatu pokoju w formie listy stringów]
+def pobierzChat(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, 100 ostatnich wiadomości z chatu pokoju w formie listy stringów]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.pobierzChat(login,token,nazwaPokoju)
+            lista: typing.List[str] = Bazy.pobierzChat(baza,login,token,nazwaPokoju)
             return True, lista
         
 
 
-def zaktualizujChat(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: o.Wiadomosc) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
+def zaktualizujChat(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: o.Wiadomosc) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.aktualizacjaChatu(login,token,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
+            lista: typing.List[str] = Bazy.aktualizacjaChatu(baza,login,token,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
             return True, lista
 
 
 
-def wyslijWiadomosc(login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: o.Wiadomosc, nowaWiadomosc: o.Wiadomosc) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
+def wyslijWiadomosc(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, ostatniaPosiadana: o.Wiadomosc, nowaWiadomosc: o.Wiadomosc) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, wszystkie wiadomości od ostatnio posiadanej z chatu pokoju w formie listy stringów]
     #nowaWiadomosc = [treść,data] (wysyłający jest znany, bo login)
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            Bazy.dodajWiadomosc(login,token,nazwaPokoju,nowaWiadomosc.tresc,nowaWiadomosc.data)
-            lista: typing.List[str] = Bazy.aktualizacjaChatu(login,token,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
+            Bazy.dodajWiadomosc(baza,login,token,nazwaPokoju,nowaWiadomosc.tresc,nowaWiadomosc.data)
+            lista: typing.List[str] = Bazy.aktualizacjaChatu(baza,login,token,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
             return True, lista

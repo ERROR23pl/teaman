@@ -1,34 +1,36 @@
 import hashlib as hash
 import typing
 import Obiekty as o
-#import KomunikacjaZBaza as Bazy
-import MockTestowyKomunikacjiZBaza as Bazy
+import KomunikacjaZBaza as Bazy
+import sys
+sys.path.insert(1, '../Database')
+import SQLLite as Baza
 
 
 
-def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def dodajDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            if(not (Bazy.czyWpisIstnieje(nazwaPokoju,wpis))):
-                Bazy.dodajWpisDoKalendarza(login,token,nazwaPokoju,wpis)
+            if(not (Bazy.czyWpisIstnieje(baza,nazwaPokoju,wpis))):
+                Bazy.dodajWpisDoKalendarza(baza,login,token,nazwaPokoju,wpis)
                 return True, [""]
             
             else:
@@ -36,82 +38,82 @@ def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKale
 
 
 
-def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def usunZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            Bazy.usunWpisZKalendarza(login,token,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
+            Bazy.usunWpisZKalendarza(baza,login,token,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
             return True, [""]
 
 
 
-def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            if(not Bazy.czyWpisIstnieje(nazwaPokoju,wpis)):
+            if(not Bazy.czyWpisIstnieje(baza,nazwaPokoju,wpis)):
                 return False, ["Wpis nie istnieje"]
             
-            elif(Bazy.czyWpisIstnieje(nazwaPokoju,noweDane)):
+            elif(Bazy.czyWpisIstnieje(baza,nazwaPokoju,noweDane)):
                 return False, ["Nowy wpis już istnieje"]
             
             else:
-                Bazy.modyfikujWpisKalendarza(login,token,nazwaPokoju,wpis,noweDane)
+                Bazy.modyfikujWpisKalendarza(baza,login,token,nazwaPokoju,wpis,noweDane)
                 return True, [""]
 
 
 
-def pobierzKalendarz(login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, kalendarz pokoju w formie listy stringów]
+def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, kalendarz pokoju w formie listy stringów]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
-    if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
+    if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
         
-    czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
+    czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(not czyPokojIstnieje):
         return False, ["Pokój nie istnieje"]
     
     else:
-        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(nazwaPokoju,hashLog)
+        czyNalezyDoPokoju: bool = Bazy.czyUzytkownikJestWPokoju(baza,nazwaPokoju,hashLog)
         if(not czyNalezyDoPokoju):
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.pobierzKalendarz(login,token,nazwaPokoju)
+            lista: typing.List[str] = Bazy.pobierzKalendarz(baza,login,token,nazwaPokoju)
             return True, lista
