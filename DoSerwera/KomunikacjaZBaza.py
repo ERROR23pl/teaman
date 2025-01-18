@@ -8,33 +8,29 @@ import SQLLite as Baza
 
 def czyLoginIstnieje(baza: Baza.SQLLiteDB, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
-    #TODO wywołanie prepared statement do sprawdzenia czy taki login już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+";"
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+
+    wynik: bool = baza.czy_login_istnieje(login)
     return wynik
 
 
 def probaLogowania(baza: Baza.SQLLiteDB, login: str, haslo: str) -> bool:
     #login i hasło zahashowane oraz przetestowane pod względem bezpieczeństwa
-    #TODO wywołanie prepared statement do próby logowania "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Haslo="+haslo+";"
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
     
+    wynik: bool = baza.log_in(login,haslo)
     return wynik
 
 
 def autoryzacjaTokenem(baza: Baza.SQLLiteDB, login: str, token: str) -> bool:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
-    #TODO wywołanie prepared statement do próby autoryzacji sesji "SELECT COUNT * FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+
+    wynik: bool = baza.authenticate(login,token)
     return wynik
 
 
 def czyNickIstnieje(baza: Baza.SQLLiteDB, nickPubliczny: str) -> bool:
     #nick przetstowany pod względem bezpieczeństwa
-    #TODO wywołanie prepared statement do sprawdzenia czy taki nick już istnieje "SELECT COUNT * FROM Uzytkownicy WHERE NickPubliczny="+nickPubliczny+";"
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+
+    wynik: bool = baza.czy_nick_istnieje(nickPubliczny)
     return wynik
 
 
@@ -42,56 +38,47 @@ def czyNickIstnieje(baza: Baza.SQLLiteDB, nickPubliczny: str) -> bool:
 def rolaUzytkownika(baza: Baza.SQLLiteDB, login: str, token: str) -> str:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do odebrania roli użytkownika "SELECT Rola FROM Uzytkownicy WHERE Login="+login+" AND Token="+token+";"
-    rola: str = ""  #mock; tu będzie zamina rezultatu w string
+    rola: str = baza.rola_uzytkownika(login,token)
     return rola
 
 
 def czyJestKod(baza: Baza.SQLLiteDB, kodZapr: str) -> bool:
     #kod zahashowany i przetestowany pod względem bezpieczeństwa
     
-    # TODO Database.istnieje_kod_zpr(...)
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+    wynik: bool = baza.istnieje_kod_zpr(kodZapr)
     return wynik
 
 def dataAktywnosci(baza: Baza.SQLLiteDB, login: str, token: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
-    #TODO Database.ustaw_date_aktywnosci
+    
+    baza.ustaw_date_aktywnosci_teraz(login,token)
     return None
 
 def ustawToken(baza: Baza.SQLLiteDB, login: str, haslo: str, token: str) -> None:
     #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do wstawienia tokenu dla użytkownika "UPDATE Uzytownicy SET Token="+token+" WHERE Login="+login+" AND Haslo="haslo+";"
+    baza.ustaw_token(login,haslo,token)
     dataAktywnosci(baza,login,token)
     return None
 
 def usunKod(baza: Baza.SQLLiteDB, kodZapr: str) -> None:
     #kod zahashowany i przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do usunięcia użytego kodu zaproszeniowego "DELETE FROM Kody WHERE Kod="+kodZapr+";"
+    baza.usun_kod_zaproszeniowy(kodZapr)
     return None
 
 def wstawKod(baza: Baza.SQLLiteDB, login: str, token: str, kodZapr: str) -> None:
     #login, token i kod zahashowane i przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do wstawienia nowego kodu zaproszeniowego "INSERT INTO Kody(Kod, Data) VALUES ("+kodZapr+", CURRENT_DATE());"
+    baza.dodaj_kod_zaproszniowy(kodZapr)
     dataAktywnosci(baza,login,token)
     return None
 
 def wstawUzytkownika(baza: Baza.SQLLiteDB, login: str, haslo: str, token: str, rola: str, nickPubliczny: str) -> None:
     #login, haslo i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nick przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do wstawienia nowego użytkownika "INSERT INTO Uzytownicy(Login, Haslo, Token, Rola, NickPubliczny) VALUES ("+login+", "+haslo+", "+token+","+rola+","+nickPubliczny+");"
+    baza.wstaw_uzytkownika(login,haslo,token,rola,nickPubliczny)
     dataAktywnosci(baza,login,token)
-    return None
-
-# ! stworzenie bazy jest automatyczne, jeśli chcemy mieć wiele baz, stworzymy obiekt Projekt
-def stworzBaze(baza: Baza.SQLLiteDB, nazwaProj: str) -> None:
-    #nazwa projektu przetestowana pod względem bezpieczeństwa
-    
-    #TODO wywołanie prepared statement do stworzenia wszystkich tabel z daną nazwą projektu (bazy)
     return None
 
 # ? raczej nie będzie usuwania bazy bez usuwania całego projektu
@@ -104,82 +91,66 @@ def usunBaze(baza: Baza.SQLLiteDB, nazwaProj: str) -> None:
 def czyBazaIstnieje(nazwaProj: str) -> bool:
     #nazwa projektu przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia istnienia bazy
     wynik: bool = Baza.SQLLiteDB.baza_istnieje("./Bazy/"+nazwaProj)
     return wynik
 
-# * Baza będzie połączona poprzez samo stworzenie obiektu bazy na serwerze
-def polaczZBaza(baza: Baza.SQLLiteDB, nazwaProj: str) -> None:
-    #nazwa projektu przetestowana pod względem bezpieczeństwa
-    
-    #TODO wywołanie prepared statement do połączenia z podaną bazą "CONNECT "+nazwaProj+";"
-    return None
-
-def czyszczeniePolnocowe() -> None:
-    #TODO wywołanie prepared statement do usunięcia z tabeli Kody starych kodów zaproszeniowych o datach o dwa dni starszych od obecnej
-    #TODO wywołanie prepared statement do usunięcia z tabeli Uzytkownicy starych tokenów dla użytkowników o datach ostatniej aktywności o dwa dni starszych od obecnej
-    
+def czyszczeniePolnocowe(baza: Baza.SQLLiteDB) -> None:
+    baza.czyszczenie_polnocne
     return None
 
 def czyJestPokoj(baza: Baza.SQLLiteDB, nazwaPokoju: str) -> bool:
     #nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia czy taki pokój istnieje "SELECT COUNT * FROM Pokoje WHERE Pokoj="+nazwaPokoju+";"
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+    wynik: bool = baza.istnieje_pokoj(nazwaPokoju)
     return wynik
 
 def stworzPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> None:
     #login, token zahashowane i przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do wstawienia nowego pokoju "INSERT INTO Pokoje(Pokoj) VALUES ("+nazwaPokoju+");"      ID jest autoinkrementowane
+    baza.stworz_pokoj(nazwaPokoju)
     dataAktywnosci(baza,login,token)
     return None
 
 def usunPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> None:
     #login, token zahashowane i przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do usuwania pokoju "DELETE FROM Pokoje WHERE Pokoj="+nazwaPokoju+";"      triggery usuwające z innych tabel dane związane z usuniętym pokojem
+    baza.usun_pokoj(nazwaPokoju)
     dataAktywnosci(baza,login,token)
     return None
 
 def dodajDoPokoju(baza: Baza.SQLLiteDB, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, dodawanyLogin: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do wstawienia nowego użytkownika do projektu "INSERT INTO Nalezenie(IDPokoju,IDUzytkownika) VALUES"...
+    baza.dodaj_do_pokoju(nazwaPokoju,dodawanyLogin)
     dataAktywnosci(loginAdmina,tokenAdmina)
     return None
 
 def usunZPokoju(baza: Baza.SQLLiteDB, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, usuwanyLogin: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do usunięcia użytkownika z projektu "DELETE FROM Nalezenie WHERE IDUzytkownika="...
+    baza.usun_z_pokoju(nazwaPokoju,usuwanyLogin)
     dataAktywnosci(loginAdmina,tokenAdmina)
     return None
 
 def czyUzytkownikJestWPokoju(baza: Baza.SQLLiteDB, nazwaPokoju: str, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia obecności użytkownika w pokoju "SELECT COUNT * FROM Nalezenie WHERE IDUzytkownika="..." AND IDPokoju="...
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+    wynik: bool = baza.czy_uzytkownik_w_pokoju(nazwaPokoju,login)
     return wynik
 
 # todo: zaimplementować w bazie danych
 def pokojeCzlonkowskie(baza: Baza.SQLLiteDB, login: str, token: str) -> typing.List[str]:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do pobrania listy pokojów, do których należy użytkownik WRAZ Z ICH KLUCZAMI KLUCZAMI PUBLICZNYMI I PRYWATNYMI ZASZYFROWANYMI JEGO PUBLICZNYM
-    wynik: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana w listę stringów
+    wynik: typing.List[str] = baza.pokoje_czlonkowskie(login)
     dataAktywnosci(login, token)
-    
     return wynik
 
 # todo: zaimplementować w bazie danych
 def dodajTaski(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do wstawienia nowych tasków do pokoju (bez informacji o taskach incydentnych); jeśli jakiś istnieje, usuń go i zastąp nowym - TRANSKACYJNIE
+    baza.dodaj_taski(nazwaPokoju,listaTaskow)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -187,7 +158,7 @@ def dodajTaski(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, l
 def usunTaski(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do usunięcia tasków z pokoju; jeśli jakiś nie istnieje, nic nie rób; po każdym usunięciu, usuń triggerem wszystkie zależności od niego - TRANSKACYJNIE
+    baza.usun_taski(nazwaPokoju,listaTaskow)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -195,7 +166,7 @@ def usunTaski(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, li
 def zauktualizujWlasnosciTaskow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do zaktualizowania tasków (nazwy, dat, incydencji, koordynatów) z pokoju; jeśli jakiś nie istnieje (lub incydentny nie istnieje), nic nie rób - TRANSKACYJNIE
+    baza.zaktualizuj_wlasnosci_taskow(nazwaPokoju,listaTaskow)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -203,11 +174,7 @@ def zauktualizujWlasnosciTaskow(baza: Baza.SQLLiteDB, login: str, token: str, na
 def ukonczTask(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje zaznaczenia tego taska (wymagany, ale nieukończony)
-    czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
-    
-    if(czyMozna):
-        None #TODO wywołanie prepared statement do zaznaczenia taska o podanym ID jako ukończony
+    czyMozna: bool = baza.ukoncz_task(nazwaPokoju,idTaska)
     dataAktywnosci(baza,login,token)
     return czyMozna
 
@@ -215,11 +182,7 @@ def ukonczTask(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, i
 def odznaczTaskJakoNieukonczony(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia czy jakiś task nie blokuje odznaczenia tego taska (wymaga go i jest ukończony)
-    czyMozna: bool = False #mock, tu będzie rezultat otrzymany z operacji powyżej
-    
-    if(czyMozna):
-        None #TODO wywołanie prepared statement do odznaczenia taska o podanym ID jako nieukończony
+    czyMozna: bool = baza.odznacz_task(nazwaPokoju,idTaska)
     dataAktywnosci(baza,login,token)
     return czyMozna
 
@@ -227,9 +190,7 @@ def odznaczTaskJakoNieukonczony(baza: Baza.SQLLiteDB, login: str, token: str, na
 def listaTaskow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do pobrania danych tasków z pokoju
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
-    
+    lista: typing.List[str] = baza.lista_taskow(nazwaPokoju)
     dataAktywnosci(baza,login,token)
     return lista
 
@@ -237,9 +198,7 @@ def listaTaskow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) 
 def pobierzChat(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do pobrania 100 ostatnich wiadomości z chatu pokoju
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
-    
+    lista: typing.List[str] = baza.pobierz_chat(nazwaPokoju)
     dataAktywnosci(baza,login,token)
     return lista
 
@@ -247,9 +206,7 @@ def pobierzChat(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) 
 def aktualizacjaChatu(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i autor ostatniej wiadomości przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do pobrania wszystkich wiadomości z chatu pokoju od ostatnio posiadanej
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
-    
+    lista: typing.List[str] = baza.aktualizacja_chatu(nazwaPokoju,autorOstatnioPosiadanej,dataOstatnioPosiadanej)
     dataAktywnosci(baza,login,token)
     return lista
 
@@ -257,8 +214,7 @@ def aktualizacjaChatu(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju:
 def dodajWiadomosc(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wiadomosc: str, data: int) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wiadomości z zabezpieczonymi cudzysłowami
     
-    #TODO wywołanie prepared statement do dodania nowej wiadomości wiadomości do chatu pokoju
-    
+    baza.dodaj_wiadomosc(login,nazwaPokoju,wiadomosc,data)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -266,16 +222,14 @@ def dodajWiadomosc(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: st
 def czyWpisIstnieje(baza: Baza.SQLLiteDB, nazwaPokoju: str, wpis: o.WpisKalendarza) -> bool:
     #nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
-    #TODO wywołanie prepared statement do sprawdzenia obecności wpisu w kalendarzu pokoju "SELECT COUNT * FROM Kalendarze WHERE IDPokoju="..." AND Tresc="..." AND Data="...
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+    wynik: bool = baza.wpis_istnieje(nazwaPokoju,wpis)
     return wynik
 
 # todo: zaimplementować w bazie danych
 def dodajWpisDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
-    #TODO wywołanie prepared statement do wstawienia nowego wpisu do kalendarza pokoju
+    baza.kalendarz_dodaj_wpis(nazwaPokoju,wpis)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -283,7 +237,7 @@ def dodajWpisDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPok
 def usunWpisZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
-    #TODO wywołanie prepared statement do usunięcia wpisu z kalendarza pokoju
+    baza.kalendarz_usun_wpis(nazwaPokoju,wpis)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -291,7 +245,7 @@ def usunWpisZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoj
 def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treści wpisów z zabezpieczonymi cudzysłowami
     
-    #TODO wywołanie prepared statement do modyfikacji wpisu z kalendarza pokoju
+    baza.kalendarz_modyfikuj_wpis(nazwaPokoju,wpis,noweDane)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -299,9 +253,7 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaP
 def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do pobrania wpisów z kalendarza pokoju
-    lista: typing.List[str] = [""] #mock, tu będzie przekształcenie rezultatu operacji powyżej
-    
+    lista: typing.List[str] = baza.pobierz_kalendarz(nazwaPokoju)
     dataAktywnosci(baza,login,token)
     return lista
 
@@ -309,17 +261,14 @@ def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: 
 def czyPlikIstnieje(baza: Baza.SQLLiteDB, nazwaPokoju: str, nazwaPliku: str) -> bool:
     #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia obecności pliku o podanej nazwie w pokoju "SELECT COUNT * FROM Pliki WHERE IDPokoju="..." AND NazwaPliku="...""
-    wynik: bool = False #mock; tu będzie odebranie liczby i zmiana w prawda-fałsz
-    
+    wynik: bool = baza.plik_istnieje(nazwaPokoju,nazwaPliku)
     return wynik
 
 # todo: zaimplementować w bazie danych
 def dodajPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do dodania nowego pliku dla pokoju
-    
+    baza.dodaj_plik(login,nazwaPokoju,nazwaPliku,zawartoscPliku)
     dataAktywnosci(baza,login,token)
     return None
 
@@ -327,18 +276,15 @@ def dodajPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, na
 def usunPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do usunięcia pliku z pokoju
-    
+    baza.usun_plik(nazwaPokoju,nazwaPliku)
     dataAktywnosci(baza,login,token)
     return None
 
 # todo: zaimplementować w bazie danych
-def pobierzPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, nazwaPliku: str) -> bytes:
+def pobierzPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, nazwaPliku: str):
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do pobrania pliku o wskazanej nazwie
-    wynik: bytes = None #mock; tu będzie odebranie rezultatu
-    
+    wynik = baza.pobierz_plik(nazwaPokoju,nazwaPliku)
     dataAktywnosci(baza,login,token)
     return wynik
 
@@ -346,113 +292,89 @@ def pobierzPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, 
 def listaPlikow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do pobrania listy nazw i autorów plików
-    wynik: typing.List[str] = [""] #mock; tu będzie odebranie rezultatu
-    
+    wynik: typing.List[str] = baza.lista_plikow(nazwaPokoju)
     dataAktywnosci(baza,login,token)
     return wynik
 
 # todo: zaimplementować w bazie danych
 def autorPliku(baza: Baza.SQLLiteDB, nazwaPokoju: str, nazwaPliku: str, dana: str = "nick") -> str:
     #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
-    if(dana=="nick"):
-         #TODO wywołanie prepared statement do pobrania nicku publicznego autora pliku
-         wynik="" #mock; tu będzie odebranie rezultatu
-    elif(dana=="login"):
-         #TODO wywołanie prepared statement do pobrania zahashowanego loginu autora pliku
-         wynik="" #mock; tu będzie odebranie rezultatu
-    else:
-        wynik=""
-        
+    
+    wynik: str = baza.autor_pliku(nazwaPokoju,nazwaPliku,dana)    
     return wynik
 
 # todo: zaimplementować w bazie danych
 def czyKluczIstnieje(baza: Baza.SQLLiteDB, kluczPub: str) -> bool:
     #klucz przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do sprawdzenia czy podany klucz już istnieje
-    wynik: bool = False #mock; tu będzie odebranie rezultatu i zmiana w prawda-fałsz
-    
+    wynik: bool = baza.klucz_istnieje(kluczPub)
     return wynik
 
 # todo: zaimplementować w bazie danych
 def ustawKlucz(baza: Baza.SQLLiteDB, login: str, token: str, kluczPub: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; klucz przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do ustawienia klucza publicznego dla danego użytkownika
-    
+    baza.ustaw_klucz(login,kluczPub)
+    dataAktywnosci(login,token)
     return None
 
 # todo: zaimplementować w bazie danych
 def dodajKluczPokoju(baza: Baza.SQLLiteDB, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i klucze przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do wstawienia kluczy (IDPokoju, kluczPub, kluczPriv, IDUzytkownika)
+    baza.dodaj_klucz_do_pokoju(nazwaPokoju,kluczPubPokoju,kluczPrivPokoju,loginPosiadaczaKlucza)
     dataAktywnosci(loginAdmina,tokenAdmina)
-    
     return None
 
 # todo: zaimplementować w bazie danych
-def czyKluczPokojuJuzIstnieje(baza: Baza.SQLLiteDB, kluczePubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str) -> bool:
+def czyKluczPokojuJuzIstnieje(baza: Baza.SQLLiteDB, kluczPubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa; klucze przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do testu istnienia pary kluczy (kluczPub, kluczPriv, IDUzytkownika)
-    wynik: bool = False #mock; tu będzie zamiana rezultatu w prawda-fałsz
-    
+    wynik: bool = baza.czy_klucz_pokoju_istnieje(kluczPubPokoju,kluczPrivPokoju,loginWlasciciela)
     return wynik
 
 # todo: zaimplementować w bazie danych
 def czyZweryfikowany(baza: Baza.SQLLiteDB, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do odebrania roli użytkownika "SELECT Rola FROM Uzytkownicy WHERE Login="+login+";"
-    rola: str = ""  #mock; tu będzie zamina rezultatu w string
-    
-    return (not (rola=="Niezweryfikowany"))
+    wynik: bool = baza.czy_zweryfikowany(login)
+    return wynik
 
 # todo: zaimplementować w bazie danych
 def usunKluczeDlaUzytkownika(baza: Baza.SQLLiteDB, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, loginPosiadaczaKlucza: str):
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do usunięcia kluczy (IDPokoju, IDUzytkownika)
+    baza.usun_klucze_dla_uzytkownika(nazwaPokoju,loginPosiadaczaKlucza)
     dataAktywnosci(loginAdmina,tokenAdmina)
-    
     return None
 
 # todo: zaimplementować w bazie danych
 def kluczUzytkownika(baza: Baza.SQLLiteDB, loginAdmina: str, tokenAdmina: str, loginPosiadaczaKlucza: str) -> str:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do odebrania klucza użytkownika "SELECT KluczPub FROM Uzytkownicy WHERE Login="+loginPosiadaczaKlucza+";"
-    wynik: str = "" #mock; tu będzie odebranie wyniku
+    wynik: str = baza.klucz_uzytkownika(loginPosiadaczaKlucza)
     dataAktywnosci(loginAdmina,tokenAdmina)
-    
     return wynik
 
 # todo: zaimplementować w bazie danych
 def loginUzytkownika(baza: Baza.SQLLiteDB, nick: str) -> str:
     #nick przetestowany pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do odebrania loginu użytkownika "SELECT Login FROM Uzytkownicy WHERE NickPubliczny="+nick+";"
-    wynik: str = "" #mock; tu będzie odebranie wyniku
-    
+    wynik: str = baza.nick_to_login(nick)
     return wynik
 
 # todo: zaimplementować w bazie danych
 def ustawRole(baza: Baza.SQLLiteDB, loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; rola przetestowana pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do zmiany roli użytkownika
+    baza.ustaw_role(loginZmienianego,nowaRola)
     dataAktywnosci(loginAdmina,tokenAdmina)
-    
     return None
 
 # todo: zaimplementować w bazie danych
 def listaNiezweryfikowanych(baza: Baza.SQLLiteDB, login: str, token: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
-    #TODO wywołanie prepared statement do odebrania listy niezweryfikowanych użytkowików "SELECT NickPubliczny FROM Uzytkownicy WHERE Rola=\"Niezweryfikowany\";"
-    lista: typing.List[str] = [""] #mock; tu będzie odebranie wyniku i zmiana go w listę stringów
+    lista: typing.List[str] = baza.lista_niezweryfikowanych()
     dataAktywnosci(baza,login,token)
-    
     return lista

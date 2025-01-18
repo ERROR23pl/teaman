@@ -65,36 +65,61 @@ class SQLLiteDB:
 
 
     # helper functions
-    def nick_to_login(self, nick: Nick):
+    def nick_to_login(self, nick: str):
         self.execute(
             "SELECT login FROM Uzytkownicy WHERE nazwa = ?",
-            nick.value
+            nick
         )
 
         return self.cursor.fetchone[0]
     
-    def login_to_nick(self, login: Login):
+    def login_to_nick(self, login: str):
         self.execute(
             "SELECT nazwa FROM Uzytkownicy WHERE login = ?",
-            login.value
+            login
         )
 
         return self.cursor.fetchone[0]
-
-    def authenticate_admin(self, login_admin: Login, token_admin: Token) -> bool:
+    
+    def czy_login_istnieje(self, login:str) -> bool:
         self.execute(
-            "SELECT rola FROM Uzytkownicy WHERE login = ? AND token = ?",
-            login_admin.value,
-            token_admin.value
+            "SELECT * FROM Uzytkownicy WHERE login = ?",
+            login
         )
 
-        return self.cursor.fetchone()[0] == "admin"
+        return self.cursor.fetchone() is not None
+    
+    def czy_nick_istnieje(self, nick:str) -> bool:
+        self.execute(
+            "SELECT * FROM Uzytkownicy WHERE nazwa = ?",
+            nick
+        )
 
-    def log_in(self, login: Login, haslo: Haslo) -> bool:
+        return self.cursor.fetchone() is not None
+
+    def authenticate(self, login: str, token: str) -> bool:
+        self.execute(
+            "SELECT * FROM Uzytkownicy WHERE login = ? AND token = ?",
+            login,
+            token
+        )
+
+        return self.cursor.fetchone() is not None
+    
+    def rola_uzytkownika(self, login: str, token: str) -> str:
+        self.execute(
+            "SELECT rola FROM Uzytkownicy WHERE login = ? AND token = ?",
+            login,
+            token
+        )
+
+        return self.cursor.fetchone()[0]
+
+    def log_in(self, login: str, haslo: str) -> bool:
         self.execute(
             "SELECT * FROM Uzytkownicy WHERE login = ? AND haslo = ?",
-            login.value,
-            haslo.value
+            login,
+            haslo
         )
 
         return self.cursor.fetchone() is not None
@@ -102,56 +127,54 @@ class SQLLiteDB:
 
     # --------------- kody zaproszeniowe ---------------
     # todo: test 
-    def istnieje_kod_zpr(self, kod_zapr: KodZaproszeniowy) -> bool:
+    def istnieje_kod_zpr(self, kod_zapr: str) -> bool:
         self.execute(
             "SELECT * FROM KodyZaproszeniowe WHERE kod = ?",
-            kod_zapr.value
+            kod_zapr
         )
         return self.cursor.fetchone() is not None
 
     # todo: test
-    def dodaj_kod_zaproszniowy(self, kod_zapr: KodZaproszeniowy):
+    def dodaj_kod_zaproszniowy(self, kod_zapr: str):
         self.exec_and_commit(
             "INSERT INTO KodyZaproszeniowe VALUES (?, CURRENT_DATE)",
-            kod_zapr.value
+            kod_zapr
         )
 
     # todo: test
-    def usun_kod_zaproszeniowy(self, kod_zapr: KodZaproszeniowy):
+    def usun_kod_zaproszeniowy(self, kod_zapr: str):
         self.exec_and_commit(
             "DELETE FROM KodyZaproszeniowe WHERE kod = ?",
-            kod_zapr.value
+            kod_zapr
         )
 
 
 
     # --------------- Użytkownicy ---------------
     # ? todo: czy to nie admin powinien dodawać użytkowników?
-    def wstaw_uzytkownika(self, login: Login, haslo: Haslo, token: Token, rola: Rola, nick: Nick):
+    def wstaw_uzytkownika(self, login: str, haslo: str, token: str, rola: str, nick: str):
         self.exec_and_commit(
             "INSERT INTO Uzytownicy(nazwa, login, haslo, token, rola) VALUES (?, ?, ?, ?, ?)",
-            login.value,
-            haslo.value,
-            token.value,
-            rola.value,
-            nick.value
+            login,
+            haslo,
+            token,
+            rola,
+            nick
         )
-
-        self.ustaw_date_aktywnosci_teraz(login, token)
     
-    def ustaw_date_aktywnosci_teraz(self, login: Login, token: Token):
+    def ustaw_date_aktywnosci_teraz(self, login: str, token: str):
         self.exec_and_commit(
             "UPDATE Uzytownicy SET last_update = CURRENT_DATE WHERE login = ? AND token = ?",
-            login.value,
-            token.value
+            login,
+            token
         )
 
-    def ustaw_token(self, login: Login, haslo: Haslo, token: Token) -> None:
+    def ustaw_token(self, login: str, haslo: str, token: str) -> None:
         self.exec_and_commit(
             "UPDATE Uzytownicy SET Token = ? WHERE login = ? AND haslo = ?",
-            token.value,
-            login.value,
-            haslo.value
+            token,
+            login,
+            haslo
         )
 
     
@@ -166,10 +189,10 @@ class SQLLiteDB:
             "UPDATE Uzytkownicy SET token = NULL WHERE (julianday(CURRENT_DATE) - julianday(last_update)) > 1"
         )
 
-    def ustaw_role(self, login_admin: str, token_admin: str, login_zmienianego: str, nowa_rola: str):
+    def ustaw_role(self, login_zmienianego: str, nowa_rola: str):
         ...
 
-    def lista_niezweryfikowanych(login: str, token: str):
+    def lista_niezweryfikowanych(self):
         ...
     
 
@@ -184,35 +207,21 @@ class SQLLiteDB:
         return self.cursor.fetchone() is not None
 
     
-    def stworz_pokoj(self, login_admin: Login, token_admin: Token, nazwa_pokoju: str):
-        if not self.authenticate_admin(login_admin, token_admin):
-            raise AuthenticationError("Failed to authenticate Admin!")
-        
-        
+    def stworz_pokoj(self, nazwa_pokoju: str):
         self.exec_and_commit(
             "INSERT INTO Pokoje VALUES (?)",
             nazwa_pokoju
         )
 
-        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
-
-    def usun_pokoj(self, login_admin: Login, token_admin: Token, nazwa_pokoju: str):
-        if not self.authenticate_admin(login_admin, token_admin):
-            raise AuthenticationError("Failed to authenticate Admin!")
-        
+    def usun_pokoj(self, nazwa_pokoju: str):
         self.exec_and_commit(
             "DELETE FROM Pokoje WHERE nazwa = ?",
             nazwa_pokoju
         )
 
-        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
-
-    def dodaj_do_pokoju(self, login_admin: Login, token_admin: Token, nazwa_pokoju: str, dodawany_login: Login):
-        if not self.authenticate_admin(login_admin, token_admin):
-            raise AuthenticationError("Failed to authenticate Admin!")
-        
+    def dodaj_do_pokoju(self, nazwa_pokoju: str, dodawany_login: str):
         nick_uzytkownika = self.login_to_nick(dodawany_login)
                 
         self.exec_and_commit(
@@ -221,13 +230,9 @@ class SQLLiteDB:
             nazwa_pokoju,
         )
 
-        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
 
-    def usun_z_pokoju(self, login_admin: str, token_admin: str, nazwa_pokoju: str, usuwany_login: str):
-        if not self.authenticate_admin(login_admin, token_admin):
-            raise AuthenticationError("Failed to authenticate Admin!")
-        
+    def usun_z_pokoju(self, nazwa_pokoju: str, usuwany_login: str):
         nick_uzytkownika = self.login_to_nick(usuwany_login)
         
         self.exec_and_commit(
@@ -235,8 +240,6 @@ class SQLLiteDB:
             nick_uzytkownika,
             nazwa_pokoju
         )
-
-        self.ustaw_date_aktywnosci_teraz(login_admin, token_admin)
 
 
     def czy_uzytkownik_w_pokoju(self, nazwa_pokoju: str, login: str) -> bool:
@@ -250,7 +253,7 @@ class SQLLiteDB:
 
         return self.cursor.fetchone() is not None
 
-    def pokoje_czlonkowskie(self, login: Login, token: Token) -> List[str]:
+    def pokoje_czlonkowskie(self, login: str) -> List[str]:
         # todo: authenticate
         nick = self.login_to_nick(login)
         
@@ -264,20 +267,20 @@ class SQLLiteDB:
 
 
     # --------------- Taski ---------------
-    def dodaj_taski(login: str, token: str, nazwaPokoju: str, listaTaskow: list[Task]):
+    def dodaj_taski(nazwaPokoju: str, listaTaskow: list[Task]):
         for task in listaTaskow:
             ...
 
-    def usun_taski(self, login: str, token: str, nazwaPokoju: str, listaTaskow: Task):
+    def usun_taski(self, nazwaPokoju: str, listaTaskow: Task):
         for task in listaTaskow:
             ...
 
-    def zaktualizuj_wlasnosci_taskow(self, login: str, token: str, nazwaPokoju: str, listaTaskow: Task):
+    def zaktualizuj_wlasnosci_taskow(self, nazwaPokoju: str, listaTaskow: Task):
         for task in listaTaskow:
             ...
 
     # ? Czy bool tut
-    def ukoncz_task(self, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
+    def ukoncz_task(self, nazwaPokoju: str, idTaska: int) -> bool:
         self.execute(
             "SELECT * FROM Taski WHERE id = ?",
             idTaska
@@ -297,17 +300,17 @@ class SQLLiteDB:
 
         
 
-    def odznacz_task(self, login: str, token: str, nazwaPokoju: str, idTaska: int) -> bool:
+    def odznacz_task(self, nazwaPokoju: str, idTaska: int) -> bool:
         ...
 
-    def lista_taskow(self, login: str, token: str, nazwaPokoju: str):
+    def lista_taskow(self, nazwaPokoju: str):
         ...
 
 
     # --------------- Chaty ---------------
 
     # * w oryginale chciałeś list[str] ale wydaje mi się że ptotrzebujesz więcej info niż tylko same treści (na przykład data wysłania) więc zwracam cały rezultat query
-    def pobierz_chat(self, login: str, token: str, nazwa_pokoju: str, offset: int = 0, liczba_wiadomosci: int = 100):
+    def pobierz_chat(self, nazwa_pokoju: str, offset: int = 0, liczba_wiadomosci: int = 100):
         self.execute(
             "SELECT * FROM Wiadomosci WHERE pokoj = ? ORDER BY data_wyslania DESC LIMIT ?, ?",
             nazwa_pokoju,
@@ -320,10 +323,10 @@ class SQLLiteDB:
     # * wszystkie daty będą przechowywane w obiekcie date z modułu datetime
     # * stworzenie daty ze stringa: date.fromisoformat("YYYY-MM-DD")
     # * wszystkie time będą w obiekcie datetime
-    def aktualizacja_chatu(self, login: str, token: str, nazwaPokoju: str, autorOstatnioPosiadanej: Nick, dataOstatnioPosiadanej: date):
+    def aktualizacja_chatu(self, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: date):
         ...
 
-    def dodaj_wiadomosc(self, login: str, token: str, nazwaPokoju: str, wiadomosc: str, data: int):
+    def dodaj_wiadomosc(self, login: str, azwaPokoju: str, wiadomosc: str, data: int):
         ...
 
 
@@ -332,16 +335,16 @@ class SQLLiteDB:
     def wpis_istnieje(self, nazwaPokoju: str, wpis):
         ...
 
-    def kalendarz_dodaj_wpis(self, login: str, token: str, nazwaPokoju: str, wpis):
+    def kalendarz_dodaj_wpis(self, nazwaPokoju: str, wpis):
         ...
     
-    def kalendarz_usun_wpis(self, login: str, token: str, nazwaPokoju: str, wpis):
+    def kalendarz_usun_wpis(self, nazwaPokoju: str, wpis):
         ...
 
-    def kalendarz_modyfikuj_wpis(self, login: str, token: str, nazwaPokoju: str, wpis, noweDane):
+    def kalendarz_modyfikuj_wpis(self, nazwaPokoju: str, wpis, noweDane):
         ...
 
-    def pobierz_kalendarz(self, login: str, token: str, nazwaPokoju: str):
+    def pobierz_kalendarz(self, nazwaPokoju: str):
         ...
 
 
@@ -349,13 +352,16 @@ class SQLLiteDB:
     def plik_istnieje(self, nazwaPokoju: str, nazwaPliku: str) -> bool:
         ...
 
-    def dodaj_plik(self, login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes):
+    def dodaj_plik(self, login: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes):
         ...
 
-    def usun_plik(self, login: str, token: str, nazwaPokoju: str, nazwaPliku: str):
+    def usun_plik(self, nazwaPokoju: str, nazwaPliku: str):
         ...
 
-    def pobierz_plik(self, login: str, token: str, nazwaPokoju: str, nazwaPliku: str):
+    def pobierz_plik(self, nazwaPokoju: str, nazwaPliku: str):
+        ...
+    
+    def lista_plikow(self, nazwaPokoju: str):
         ...
 
     def autor_pliku(self, nazwaPokoju: str, nazwaPliku: str, dana: str):
@@ -367,23 +373,23 @@ class SQLLiteDB:
     def klucz_istnieje(self, kluczPub: str):
         ...
 
-    def ustaw_klucz(self, login: str, token: str, kluczPub: str):
+    def ustaw_klucz(self, login: str, kluczPub: str):
         ...
 
-    def dodaj_klucz_do_pokoju(self, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
+    def dodaj_klucz_do_pokoju(self, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
         ...
 
     # todo: nie potrzebna jest taka funkcja, wystarczy skorzystać z powyższej i ona zwróci czy istnieje?
-    def czy_klucz_pokoju_istnieje(self, kluczePubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str):
+    def czy_klucz_pokoju_istnieje(self, kluczPubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str):
         ...
 
     def czy_zweryfikowany(login: str) -> bool:
         ...
 
-    def usun_klucze_dla_uzytkownika(self, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, loginPosiadaczaKlucza: str):
+    def usun_klucze_dla_uzytkownika(self, nazwaPokoju: str, loginPosiadaczaKlucza: str):
         ...
 
-    def klucz_uzytkownika(self, loginAdmina: str, tokenAdmina: str, nickPosiadaczaKlucza: str) -> str:
+    def klucz_uzytkownika(self, nickPosiadaczaKlucza: str) -> str:
         ...
 
     
