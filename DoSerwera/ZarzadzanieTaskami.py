@@ -12,7 +12,7 @@ def obslugaTaskow(login: str, token: str, nazwaPokoju: str, dodawaneTaski: typin
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

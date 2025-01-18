@@ -14,7 +14,7 @@ def stworzProjekt(nazwaProjektu: str, login: str, haslo: str, nick: str, kluczPu
     
     token: str = Kody.wygenerujKod()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
-    Bazy.wstawUzytkownika(login,haslo,hashTok,"Właściciel",nick)
+    Bazy.wstawUzytkownika(login,haslo,hashTok,"Admin",nick)
     Bazy.ustawKlucz(login,hashTok,kluczPub)
     
     kluczePokoju: typing.Tuple[str,str] = Klucze.generujKluczePokoju()
@@ -38,7 +38,7 @@ def dodajZaproszenie(login: str, token: str, kodZaproszeniowy: str) -> typing.Tu
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyKodJuzJest: bool = Bazy.czyJestKod(kodZaproszeniowy)
@@ -60,7 +60,7 @@ def usunProjekt(nazwaProjektu: str, login: str, token: str) -> typing.Tuple[bool
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
     else:
@@ -78,7 +78,7 @@ def pobierzKluczPublicznyUzytkownika(login: str, token: str, nickUzytkownika: st
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
     
     if(not Bazy.czyNickIstnieje(nickUzytkownika)):

@@ -1,0 +1,785 @@
+Budowa JSONa komunikacyjnego:
+
+W przypadku pliku z żądaniem do serwer, kluczem pierwszego pola ma być 'operacja' i ma zawierać nazwę operacji (zgodną z zapisem poniżej); nazwy pozostałych kluczy są dowolne, o ile nie dotyczą dodawania/usuwania/modyfikacji tasków - wtedy klucze z danymi tasków MUSZĄ zawierać odpowiednio 'DodawanyTask', 'UsuwanyTask' lub 'ModyfikowanyTask' w swojej nazwie (reszta tekstu dowolna); kolejność danych dla każdej kolejnej operacji jest sztuwno ustalona i musi być zgodna ze schematem poniżej.
+
+Plik z odpowiedzią składa się z dwóch części - pierwsze pole słownika (z kluczem 'sukces') jest zmienną boolowską opisującą sukces operacji, zaś pozostałe podpisane są jako 'dana1', 'dana2' itd. i są zależne od typu operacji (i opisane poniżej). W przypadku, gdy wartością pola 'sukces' jest false, w zamian istnieje tylko 'dana1', która przechowuje kod błędu.
+
+"Niespełnianie założeń" oznacza niezgodność z założeniami dotyczącymi dozwolonych znaków, długości itd. Jako że jest to też sprawdzane po stronie klienta, to jest to bardziej zabezpieczenie na wypadek próby dostania się „na około".
+
+
+Operacje:
+
+1. LOGOWANIE
+
+Plik wysyłany na serwer:
+'operacja': 'logowanie'
+Dane:
+-nazwa projektu
+-login
+-hasło
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+-token sesji
+-rola w projekcie
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Niepoprawne dane"
+
+
+2. REJESTRACJA
+
+Plik wysyłany na serwer:
+'operacja': 'rejestracja'
+Dane:
+-nazwa projektu
+-kod zaproszeniowy
+-login (ZAHASHOWANY)
+-hasło (ZAHASHOWANE)
+-nick publiczny
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+-token sesji (do momentu weryfikacji przez admina, rolą jest 'niezweryfikowany')
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nick taki jak login"
+-"Niepoprawny kod"
+-"Dane już zajęte"
+
+
+3. TWORZENIE WŁASNEGO PROJEKTU
+
+Plik wysyłany na serwer:
+'operacja': 'tworzenie projektu'
+Dane:
+-nazwa projektu
+-login (ZAHASHOWANY)
+-hasło (ZAHASHOWANE)
+-nick publiczny
+-klucz publiczny
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+-token sesji (rolą jest automatycznie 'Właściciel')
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt istnieje"
+-"Dane nie spełniają założeń"
+-"Nick taki jak login"
+
+
+4. ZAPRASZANIE DO WŁASNEGO PROJEKTU (GENEROWANIE KODU ZAPROSZENIOWEGO)
+
+Plik wysyłany na serwer:
+'operacja': 'zapraszanie'
+Dane:
+-nazwa projektu
+-login
+-token
+-kod zaproszeniowy, który chcemy dodać (wygenerowany przez klienta)
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych] - true oznacza po prostu, że klient może wyświetlić wygenerowany kod na ekranie, ponieważ jest on poprawny
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Wyślij nowy kod" - oznacza, że klient powinien automatycznie wygenerować nowy kod i wysłać taki zestaw (projekt-login-token-nowy kod) ponownie, aż do otrzymania true
+-"Niepoprawne dane"
+-"Brak uprawnień"
+
+
+5. USUWANIE WŁASNEGO PROJEKTU
+
+Plik wysyłany na serwer:
+'operacja': 'usuwanie projektu'
+Dane:
+-nazwa projektu
+-login
+-token
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+
+
+
+6. TWORZENIE POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'tworzenie pokoju'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Pokój już istnieje"
+
+
+
+
+7. USUWANIE POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'usuwanie pokoju'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nie można usunąć pokoju głównego"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+
+
+
+8. DODAWANIE OSÓB DO POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'dodawanie do pokoju'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nick dodawanego użytkownika
+-klucz publiczny pokoju zaszyfrowany kluczem publicznym dodawanego użytkownika
+-klucz prywatny pokoju zaszyfrowany kluczem publicznym dodawanego użytkownika
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nick drugiego użytkownika nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Pokój nie istnieje"
+-"Drugi użytkownik nie istnieje"
+-"Drugi użytkownik już należy do pokoju"
+-"Drugi użytkownik niezweryfikowany"
+
+
+
+9. USUWANIE OSÓB Z POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'usuwanie z pokoju'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nick usuwanego użytkownika
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nick drugiego użytkownika nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Pokój nie istnieje"
+-"Nie można usunąć właściciela projektu z pokoju"
+
+
+10. POBRANIE LISTY POKOJÓW, DO KTÓRYCH SIĘ NALEŻY
+
+Plik wysyłany na serwer:
+'operacja': 'lista pokojow'
+Dane:
+-nazwa projektu
+-login
+-token
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+każda kolejna dana zawiera trójkę postaci  [nazwa pokoju, do którego się należy; klucz publiczny (szyfrujący) tego pokoju zaszyfrowany kluczem publicznym requestującego użytkownika; klucz prywatny (odszyfrowujący) tego pokoju zaszyfrowany kluczem publicznym requestującego użytkownika]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Niepoprawne dane"
+
+
+11. DODAWANIE, USUWANIE LUB ZMIANA TASKÓW (tak, to jest jedna operacja) - tylko Admin
+
+Plik wysyłany na serwer:
+'operacja': 'modyfikacja taskow'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-kolejne zmodyfikowane taski, z nazwami kluczy opisanymi na starcie pliku; każdy ma być postaci: [int, str, [int, int, int], [float, float], List[int]], czyli [id, nazwa, [dzień, miesiąc, rok], [koordynat x, koordynat y], [lista id tasków, od których jest zależny]]; nazwę musisz zaszyfrować
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'; na razie nie jest opisane); nazwy musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Pokój nie istnieje"
+
+
+12. POBRANIE LISTY TASKÓW POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'pobierz taski'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+lista tasków pokoju (na razie nie jest opisane); nazwy musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+
+
+13. ZAZNACZENIE TASKA JAKO WYKONANEGO
+
+Plik wysyłany na serwer:
+'operacja': 'zaznacz task'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-id taska
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'; na razie nie jest opisane); nazwy musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+-"Inne taski uniemożliwiają wykonanie operacji"
+
+
+14. ODZNACZENIE TASKA JAKO NIEWYKONANEGO
+
+Plik wysyłany na serwer:
+'operacja': 'odznacz task'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-id taska
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'; na razie nie jest opisane); nazwy musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+-"Inne taski uniemożliwiają wykonanie operacji"
+
+
+15. POBRANIE CHATU POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'pobierz chat'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+lista 100 ostatnich wiadomości pokoju (na razie nie jest opisane); treści musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+
+
+16. AKTUALIZACJA CHATU POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'zaktualizuj chat'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nick autora ostatniej posiadanej wiadomości
+-kod daty ostatniej posiadanej wiadomości
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+lista wiadomości pokoju od czasu ostatniej posiadanej wiadomości (na razie nie jest opisane); treści musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nick drugiego użytkownika nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+
+
+17. WYSŁANIE WIADOMOŚCI
+
+Plik wysyłany na serwer:
+'operacja': 'zaktualizuj chat'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nick autora ostatniej posiadanej wiadomości
+-kod daty ostatniej posiadanej wiadomości
+-treść wysyłanej wiadomości; musisz zaszyfrować
+-kod daty wysyłanej wiadomości
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+lista wiadomości pokoju od czasu ostatniej posiadanej wiadomości (na razie nie jest opisane); treści musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nick drugiego użytkownika nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+
+
+18. POBRANIE KALENDARZA POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'pobierz kalendarz'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+lista wydarzeń kalendarza pokoju (na razie nie jest opisane); treści wydarzeń musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+
+
+19. DODAWANIE WPISU DO KALENDARZA
+
+Plik wysyłany na serwer:
+'operacja': 'dodawanie wpisu kalendarza'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nazwa wydarzenia; musisz zaszyfrować
+-trójka [int,int,int] określająca datę wydarzenia postaci [dzień,miesiąc,rok]
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+-"Wpis już istnieje"
+
+
+20. USUWANIE WPISU Z KALENDARZA
+
+Plik wysyłany na serwer:
+'operacja': 'usuwanie wpisu kalendarza'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nazwa wydarzenia; musisz zaszyfrować
+-trójka [int,int,int] określająca datę wydarzenia postaci [dzień,miesiąc,rok]
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+
+
+21. MODYFIKACJA WPISU KALENDARZA
+
+Plik wysyłany na serwer:
+'operacja': 'modyfikacja wpisu kalendarza'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-stara nazwa wydarzenia; musisz zaszyfrować
+-trójka [int,int,int] określająca starą datę wydarzenia postaci [dzień,miesiąc,rok]
+-nowa nazwa wydarzenia; musisz zaszyfrować
+-trójka [int,int,int] określająca nową datę wydarzenia postaci [dzień,miesiąc,rok]
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+-"Wpis nie istnieje"
+-"Nowy wpis już istnieje"
+
+
+22. DODAWANIE PLIKU
+
+Plik wysyłany na serwer:
+'operacja': 'dodawanie pliku'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nazwa pliku; musisz zaszyfrować
+-zawartość pliku w postaci str; musisz zaszyforwać
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nazwa pliku nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+-"Plik już istnieje"
+
+
+23. USUWANIE PLIKU
+
+Plik wysyłany na serwer:
+'operacja': 'usuwanie pliku'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nazwa pliku; musisz zaszyfrować
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nazwa pliku nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+-"Brak uprawnień"
+
+
+24. POBIERANIE PLIKU
+
+Plik wysyłany na serwer:
+'operacja': 'pobranie pliku'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+-nazwa pliku; musisz zaszyfrować
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+zawartośc pliku w postaci str; musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Nazwa pliku nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+-"Plik nie istnieje"
+
+
+24. POBRANIE LISTY PLIKÓW POKOJU
+
+Plik wysyłany na serwer:
+'operacja': 'pobranie listy plikow'
+Dane:
+-nazwa projektu
+-login
+-token
+-nazwa pokoju
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+lista plików z pokoju, postaci:
+-autor
+-nazwa
+-autor
+-nazwa
+-...; nazwy musisz odszyfrować
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nazwa pokoju nie spełnia założeń"
+-"Niepoprawne dane"
+-"Pokój nie istnieje"
+-"Użytkownik nie należy do pokoju"
+
+
+25. USTAWIANIE WŁASNEGO KLUCZA PUBLICZNEGO
+
+Plik wysyłany na serwer:
+'operacja': 'ustawianie klucza'
+Dane:
+-nazwa projektu
+-login
+-token
+-klucz publiczny, który chcemy dodać (wygenerowany przez klienta, razem z przechowywanym przez niego kluczem prywatnym)
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych] - true oznacza po prostu, że klient może zapisać wygenerowaną parę kluczy
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Wyślij nowy klucz" - oznacza, że klient powinien automatycznie wygenerować nową parę kluczy i wysłać zestaw (projekt-login-token-nowy klucz pub.) ponownie, aż do otrzymania true
+-"Niepoprawne dane"
+
+
+26. POBIERANIE KLUCZA PUBLICZNEGO INNEGO UŻYTKOWNIKA
+
+Plik wysyłany na serwer:
+'operacja': 'pobieranie klucza uzytkownika'
+Dane:
+-nazwa projektu
+-login
+-token
+-nick użytkownika którego klucz publiczny pobieramy
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+-klucz publiczny wybranego użytkownika
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Drugi użytkownik nie istnieje"
+
+
+27. POBIERANIE LISTY NIEZWERYFIKOWANYCH UŻYTKOWNIKÓW
+
+Plik wysyłany na serwer:
+'operacja': 'lista niezweryfikowanych'
+Dane:
+-nazwa projektu
+-login
+-token
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+każda kolejna dana to kolejny nick niezweryfikowanego uytkownika
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+
+
+28. ZMIANA ROLI INNEGO UŻYTKOWNIKA
+
+Plik wysyłany na serwer:
+'operacja': 'zmiana roli'
+Dane:
+-nazwa projektu
+-login
+-token
+-nick użytkownika którego rolę zmieniamy
+-nowa rola
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nick drugiego użytkownika nie spełnia założeń"
+-"Nowa rola nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Nie można ustawić takiej roli"
+-"Drugi użytkownik nie istnieje"
+-"Drugi użytkownik niezweryfikowany"
+-"Nie można zmienić roli właściciela"
+
+
+29. WERYFIKACJA INNEGO UŻYTKOWNIKA
+
+Plik wysyłany na serwer:
+'operacja': 'weryfikacja'
+Dane:
+-nazwa projektu
+-login
+-token
+-nick weryfikowanego użytkownika
+-nowa rola
+-klucz publiczny pokoju głównego zaszyfrowany kluczem publicznym weryfikowanego użytkownika
+-klucz prywatny pokoju głównego zaszyfrowany kluczem publicznym weryfikowanego użytkownika
+
+Plik z odpowiedzią:
+Dla 'sukces': true:
+[brak danych]
+
+Możliwe błędy:
+-"Nazwa projektu nie spełnia założeń"
+-"Projekt nie istnieje"
+-"Dane nie spełniają założeń"
+-"Nick drugiego użytkownika nie spełnia założeń"
+-"Nowa rola nie spełnia założeń"
+-"Niepoprawne dane"
+-"Brak uprawnień"
+-"Nie można ustawić takiej roli"
+-"Drugi użytkownik nie istnieje"
+-"Drugi użytkownik już zweryfikowany"
+
+
+
+
+Oprócz tego, możliwe są również następujące dwa błędy:
+-"Nieznana operacja"
+-"Wystąpił nieznany błąd"

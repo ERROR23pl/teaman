@@ -13,7 +13,7 @@ def dodajDoKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKale
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -43,7 +43,7 @@ def usunZKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalend
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)
@@ -69,7 +69,7 @@ def modyfikujWpisKalendarza(login: str, token: str, nazwaPokoju: str, wpis: o.Wp
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(nazwaPokoju)

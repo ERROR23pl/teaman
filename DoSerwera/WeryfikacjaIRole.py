@@ -10,10 +10,10 @@ def zweryfikuj(login: str, token: str, nickWeryfikowanego: str, nowaRola: str, n
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
     
-    if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
+    if(nowaRola=="Admin" or nowaRola=="Niezweryfikowany"):
         return False, ["Nie można ustawić takiej roli"]
     
     if(not Bazy.czyNickIstnieje(nickWeryfikowanego)):
@@ -37,7 +37,7 @@ def listaNiezweryfikowanych(login: str, token: str) -> typing.Tuple[bool,typing.
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
     
     lista = Bazy.listaNiezweryfikowanych(hashLog,hashTok)
@@ -51,10 +51,10 @@ def ustawRole(login: str, token: str, nick: str, nowaRola: str) -> typing.Tuple[
     if(not Bazy.autoryzacjaTokenem(hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Właściciel"):
+    if(Bazy.rolaUzytkownika(hashLog,hashTok)!="Admin"):
         return False, ["Brak uprawnień"]
     
-    if(nowaRola=="Właściciel" or nowaRola=="Niezweryfikowany"):
+    if(nowaRola=="Admin" or nowaRola=="Niezweryfikowany"):
         return False, ["Nie można ustawić takiej roli"]
     
     if(not Bazy.czyNickIstnieje(nick)):
