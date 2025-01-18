@@ -13,6 +13,10 @@ import WeryfikacjaIRole as Wer
 import Obiekty as o
 import typing
 import hashlib as hash
+import sys
+sys.path.insert(1, '../Database')
+import SQLLite as Baza
+
 
 
 #TODO plik w rozwoju; po zakończeniu, przerzucić case'y do osobnych plików, a tu tylko wywołania
