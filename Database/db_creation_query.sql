@@ -75,8 +75,8 @@ CREATE TABLE Wiadomosci (
 CREATE TABLE Wydarzenia (
     id INTEGER,
     pokoj VARCHAR(255) NOT NULL,
-    nazwa_wydarzenia VARCHAR(255) NOT NULL, -- ! ENCODED
-    data_wydarzenia DATE NOT NULL,
+    nazwa VARCHAR(255) NOT NULL, -- ! ENCODED
+    data DATE NOT NULL,
 
     PRIMARY KEY(id AUTOINCREMENT),
 
@@ -111,4 +111,6 @@ CREATE TABLE KolejnoscTaskow (
 
 
 INSERT INTO Role VALUES ("admin");
+INSERT INTO Role VALUES ("user");
+INSERT INTO Role VALUES ("not_verified");
 INSERT INTO Uzytkownicy VALUES ("admin", "admin_login", "admin_haslo", "admin_token", "admin", NULL, NULL); -- todo: delete this line, when python script creates a first admin.
