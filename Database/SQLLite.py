@@ -279,7 +279,6 @@ class SQLLiteDB:
         for task in listaTaskow:
             ...
 
-    # ? Czy bool tut
     def ukoncz_task(self, nazwaPokoju: str, idTaska: int) -> bool:
         self.execute(
             "SELECT * FROM Taski WHERE id = ?",
