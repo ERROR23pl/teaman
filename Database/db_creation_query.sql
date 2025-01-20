@@ -35,31 +35,37 @@ CREATE TABLE Pokoje (
 );
 
 CREATE TABLE KluczeDoPokojow (
-    id INTEGER PRIMARY KEY,
+    id INTEGER,
     pokoj VARCHAR(255) NOT NULL,
     uzytkownik VARCHAR(128) NOT NULL,
     klucz_publiczny VARCHAR(128), -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
     klucz_prywatny VARCHAR(128), -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
+
+    PRIMARY KEY(id AUTOINCREMENT),
 
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa),
     CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(login)
 );
 
 CREATE TABLE CzlonkowiePokojow (
-    id INTEGER PRIMARY KEY,
+    id INTEGER,
     uzytkownik VARCHAR(128) NOT NULL,
     pokoj VARCHAR(255) NOT NULL,
+
+    PRIMARY KEY(id AUTOINCREMENT),
 
     CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(login),
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
 CREATE TABLE Wiadomosci (
-    id INTEGER PRIMARY KEY,
+    id INTEGER,
     pokoj VARCHAR(255) NOT NULL,
     tresc TEXT NOT NULL, --! ENCODED
     data_wyslania TIME NOT NULL,
     autor VARCHAR(128) NOT NULL,
+
+    PRIMARY KEY(id AUTOINCREMENT),
 
     CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(nazwa),
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
@@ -67,16 +73,18 @@ CREATE TABLE Wiadomosci (
 
 
 CREATE TABLE Wydarzenia (
-    id INTEGER PRIMARY KEY,
+    id INTEGER,
     pokoj VARCHAR(255) NOT NULL,
-    nazwa_wydarzenia VARCHAR(255) NOT NULL, -- ! ENCODED
-    data_wydarzenia DATE NOT NULL,
+    nazwa VARCHAR(255) NOT NULL, -- ! ENCODED
+    data DATE NOT NULL,
+
+    PRIMARY KEY(id AUTOINCREMENT),
 
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
 CREATE TABLE Taski (
-    id INTEGER PRIMARY KEY,
+    id INTEGER,
     tekst TEXT, --! ENCODED
     zrobiony BOOLEAN NOT NULL,
     pokoj VARCHAR(255) NOT NULL,
@@ -85,13 +93,17 @@ CREATE TABLE Taski (
     canvas_x REAL,
     canvas_y REAL,
 
+    PRIMARY KEY(id AUTOINCREMENT),
+
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
 CREATE TABLE KolejnoscTaskow (
-    id INTEGER PRIMARY KEY,
+    id INTEGER,
     task INTEGER NOT NULL,
     task_wymagany INTEGER NOT NULL, -- todo: check if task != task_wymagany.
+
+    PRIMARY KEY(id AUTOINCREMENT),
 
     CONSTRAINT task FOREIGN KEY (task) REFERENCES Taski(id),
     CONSTRAINT task_wymagany FOREIGN KEY (task_wymagany) REFERENCES Taski(id)
@@ -99,4 +111,6 @@ CREATE TABLE KolejnoscTaskow (
 
 
 INSERT INTO Role VALUES ("admin");
+INSERT INTO Role VALUES ("user");
+INSERT INTO Role VALUES ("not_verified");
 INSERT INTO Uzytkownicy VALUES ("admin", "admin_login", "admin_haslo", "admin_token", "admin", NULL, NULL); -- todo: delete this line, when python script creates a first admin.

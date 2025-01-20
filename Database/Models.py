@@ -85,7 +85,7 @@ class Rola:
 class Task:
     def __init__(self):
         self.id: int = None
-        self.tekst: str = None # ! Encoded!
+        self.tekst: str = None # ! Encoded
         self.zrobiony: bool = None
         self.pokoj: str = None
         self.deadline: datetime = None
