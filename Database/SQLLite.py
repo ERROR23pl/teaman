@@ -82,7 +82,7 @@ class SQLLiteDB:
         return self.cursor.fetchone[0]
 
 
-    # --------------- Uzytkownicy ---------------
+    # --------------- Logowanie ---------------
 
     def czy_login_istnieje(self, login:str) -> bool:
         self.execute(
