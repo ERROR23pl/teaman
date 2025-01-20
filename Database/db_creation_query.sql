@@ -3,7 +3,8 @@
 -- * if varchar is used, maybe try to make some kind of wrapper around the string to make sure no bugs can crawl up
 
 -- todo: add AUTOINCREMENT to every id
-
+-- todo: check if hash length == 128. If not change the varchars.
+-- todo: Jak długi jest klucz publiczny? Zmienić w miejsach ! KEY
 
 -- to może być publiczne, przecież to nie są nasze informacje
 CREATE TABLE Role (
@@ -11,21 +12,21 @@ CREATE TABLE Role (
 );
 
 CREATE TABLE Uzytkownicy (
-    nazwa VARCHAR(128), -- nazwa_publiczna, nie musi być hashowana, chyba? -- todo: zastanowić się nad tym
+    nazwa VARCHAR(128), -- nazwa_publiczna
     login VARCHAR(128), --! HASH
     haslo VARCHAR(128), --! HASH
-    token VARCHAR(128),
+    token VARCHAR(128), --! HASH
     rola VARCHAR(255) NOT NULL,
-    last_update DATE,
+    last_update TIME,
 
     -- ! klucz publiczny jest null tylko i wyłącznie pomiędzy stworzeniem użytkowanika a zaakceptowaniem klucza przez serwer (unique)
-    klucz_publiczny VARCHAR(64) UNIQUE, -- todo: jak długi jest klucz publiczny?
+    klucz_publiczny VARCHAR(64) UNIQUE, -- ! KEY
 
     CONSTRAINT rola FOREIGN KEY (rola) REFERENCES Role(nazwa)
 );
 
 CREATE TABLE KodyZaproszeniowe (
-    kod VARCHAR(255) PRIMARY KEY, -- todo: jak długie są kody zaproszeniowe?
+    kod VARCHAR(128) PRIMARY KEY, -- ! HASH
     data_dodania DATE NOT NULL
 );
 
@@ -33,12 +34,23 @@ CREATE TABLE Pokoje (
     nazwa VARCHAR(255) PRIMARY KEY
 );
 
+CREATE TABLE KluczeDoPokojow (
+    id INTEGER PRIMARY KEY,
+    pokoj VARCHAR(255) NOT NULL,
+    uzytkownik VARCHAR(128) NOT NULL,
+    klucz_publiczny VARCHAR(128), -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
+    klucz_prywatny VARCHAR(128), -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
+
+    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa),
+    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(login)
+);
+
 CREATE TABLE CzlonkowiePokojow (
     id INTEGER PRIMARY KEY,
     uzytkownik VARCHAR(128) NOT NULL,
     pokoj VARCHAR(255) NOT NULL,
 
-    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa),
+    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(login),
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
 );
 
@@ -57,7 +69,7 @@ CREATE TABLE Wiadomosci (
 CREATE TABLE Wydarzenia (
     id INTEGER PRIMARY KEY,
     pokoj VARCHAR(255) NOT NULL,
-    nazwa_wydarzenia VARCHAR(255) NOT NULL,
+    nazwa_wydarzenia VARCHAR(255) NOT NULL, -- ! ENCODED
     data_wydarzenia DATE NOT NULL,
 
     CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa)
@@ -68,7 +80,7 @@ CREATE TABLE Taski (
     tekst TEXT, --! ENCODED
     zrobiony BOOLEAN NOT NULL,
     pokoj VARCHAR(255) NOT NULL,
-    deadline DATE, -- task bez deadline'a może mieć deadline == null
+    deadline DATE, -- task bez deadline'a może mieć deadline == NULL
     
     canvas_x REAL,
     canvas_y REAL,
@@ -78,22 +90,11 @@ CREATE TABLE Taski (
 
 CREATE TABLE KolejnoscTaskow (
     id INTEGER PRIMARY KEY,
-    task integer NOT NULL,
-    task_wymagany INTEGER NOT NULL,
+    task INTEGER NOT NULL,
+    task_wymagany INTEGER NOT NULL, -- todo: check if task != task_wymagany.
 
     CONSTRAINT task FOREIGN KEY (task) REFERENCES Taski(id),
     CONSTRAINT task_wymagany FOREIGN KEY (task_wymagany) REFERENCES Taski(id)
-);
-
-CREATE TABLE KluczeDoPokojow (
-    id INTEGER PRIMARY KEY,
-    pokoj VARCHAR(255) NOT NULL,
-    uzytkownik VARCHAR(128) NOT NULL,
-    klucz_publiczny VARCHAR(128), --! KEY
-    klucz_prywatny VARCHAR(64), --! KEY
-
-    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa),
-    CONSTRAINT uzytkownik FOREIGN KEY (uzytkownik) REFERENCES Uzytkownicy(nazwa)
 );
 
 
