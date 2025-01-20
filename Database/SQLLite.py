@@ -80,7 +80,10 @@ class SQLLiteDB:
         )
 
         return self.cursor.fetchone[0]
-    
+
+
+    # --------------- Uzytkownicy ---------------
+
     def czy_login_istnieje(self, login:str) -> bool:
         self.execute(
             "SELECT * FROM Uzytkownicy WHERE login = ?",
@@ -135,7 +138,7 @@ class SQLLiteDB:
 
 
     # --------------- kody zaproszeniowe ---------------
-    # todo: test 
+
     def istnieje_kod_zpr(self, kod_zapr: str) -> bool:
         self.execute(
             "SELECT * FROM KodyZaproszeniowe WHERE kod = ?",
@@ -143,14 +146,12 @@ class SQLLiteDB:
         )
         return self.cursor.fetchone() is not None
 
-    # todo: test
     def dodaj_kod_zaproszniowy(self, kod_zapr: str):
         self.exec_and_commit(
             "INSERT INTO KodyZaproszeniowe VALUES (?, CURRENT_DATE)",
             kod_zapr
         )
 
-    # todo: test
     def usun_kod_zaproszeniowy(self, kod_zapr: str):
         self.exec_and_commit(
             "DELETE FROM KodyZaproszeniowe WHERE kod = ?",
@@ -185,9 +186,6 @@ class SQLLiteDB:
             login,
             haslo
         )
-
-    
-        
 
     def czyszczenie_polnocne(self):
         self.exec_and_commit(
