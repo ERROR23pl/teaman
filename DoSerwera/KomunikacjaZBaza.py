@@ -82,7 +82,6 @@ def wstawUzytkownika(baza: Baza.SQLLiteDB, login: str, haslo: str, token: str, r
     dataAktywnosci(baza,login,token)
     return None
 
-# ? raczej nie będzie usuwania bazy bez usuwania całego projektu
 def usunBaze(baza: Baza.SQLLiteDB, nazwaProj: str) -> None:
     #nazwa projektu przetestowana pod względem bezpieczeństwa
     
@@ -92,7 +91,7 @@ def usunBaze(baza: Baza.SQLLiteDB, nazwaProj: str) -> None:
 def czyBazaIstnieje(nazwaProj: str) -> bool:
     #nazwa projektu przetestowana pod względem bezpieczeństwa
     
-    wynik: bool = Baza.SQLLiteDB.baza_istnieje("./Bazy/"+nazwaProj)
+    wynik: bool = Baza.SQLLiteDB.baza_istnieje("./Bazy/"+nazwaProj+".db")
     return wynik
 
 def czyszczeniePolnocowe(baza: Baza.SQLLiteDB) -> None:

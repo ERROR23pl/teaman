@@ -35,7 +35,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         if(operacja=="logowanie"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -53,7 +53,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="rejestracja"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -90,7 +90,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             if(login.wart==hash.sha3_512(nick.wart.encode()).hexdigest()):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick taki jak login"])   #niepoprawne dane - nazwa publiczna nie może być taka jak login
             
-            baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+            baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.stworzProjekt(baza,nazwaProjektu.wart,login.wart,haslo.wart,nick.wart,kluczPub.wart)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
@@ -98,7 +98,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="zapraszanie"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -122,7 +122,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="usuwanie projektu"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -140,7 +140,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="tworzenie pokoju"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -164,7 +164,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="usuwanie pokoju"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -191,7 +191,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="dodawanie do pokoju"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -223,7 +223,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="usuwanie z pokoju"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -253,7 +253,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="lista pokojow"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -273,7 +273,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="modyfikacja taskow"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -306,7 +306,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="pobierz taski"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -331,7 +331,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="zaznacz task"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -362,7 +362,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="odznacz task"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -392,7 +392,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="pobierz chat"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -416,7 +416,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="zaktualizuj chat"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -447,7 +447,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="wyslij wiadomosc"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -478,7 +478,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="pobierz kalendarz"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -502,7 +502,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="dodawanie wpisu kalendarza"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -528,7 +528,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="usuwanie wpisu kalendarza"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -554,7 +554,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="modyfikacja wpisu kalendarza"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -581,7 +581,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="dodawanie pliku"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -612,7 +612,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="usuwanie pliku"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -642,7 +642,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="pobranie pliku"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -672,7 +672,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="pobranie listy plikow"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -696,7 +696,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="ustawianie klucza"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -720,7 +720,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="pobieranie klucza uzytkownika"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -739,7 +739,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="lista niezweryfikowanych"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -758,7 +758,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="zmiana roli"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
@@ -788,7 +788,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
         
         elif(operacja=="weryfikacja"):
             if(czyProjektIstnieje):
-                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart)
+                baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
             else:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt nie istnieje"])   #niepoprawna nazwa projektu
             
