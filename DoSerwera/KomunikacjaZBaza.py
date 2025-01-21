@@ -95,7 +95,7 @@ def czyBazaIstnieje(nazwaProj: str) -> bool:
     return wynik
 
 def czyszczeniePolnocowe(baza: Baza.SQLLiteDB) -> None:
-    baza.czyszczenie_polnocne
+    baza.czyszczenie_polnocne()
     return None
 
 def czyJestPokoj(baza: Baza.SQLLiteDB, nazwaPokoju: str) -> bool:
