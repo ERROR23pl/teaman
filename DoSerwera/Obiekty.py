@@ -30,11 +30,20 @@ class Wiadomosc:
         
 
 class WpisKalendarza:
+    # todo: implement, przyjmij data w formie "YYYY-MM-DD"
+    @classmethod
+    def from_date_str(nazwaWpisu: str, data: str) -> typing.Self:
+        return WpisKalendarza(nazwaWpisu, ...) # zamiast ... coś parsującego stringa do tuple[int, int, int]
+    
     def __init__(self,nazwaWpisu: str, data: typing.Tuple[int,int,int]):
         self.nazwa: str = Nazwy.zabezpieczCudzyslowy(nazwaWpisu)
         self.dzien: int = data[0]
         self.miesiac: int = data[1]
         self.rok: int = data[2]
+
+    # # todo: implement, zwróć "YYYY-MM-DD"
+    def get_date(self) -> str:
+        ...
 
 
 class nazwa:        # nazwa projektu lub pokoju, login, nick

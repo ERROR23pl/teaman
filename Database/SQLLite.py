@@ -20,8 +20,8 @@ DB_CREATION_QUERY_PATH = "db_creation_query.sql"
 class SQLLiteDB:
     # todo: metoda do implementacji
     @classmethod
-    def baza_istnieje(cls, path):
-        ...
+    def baza_istnieje(cls, path) -> bool:
+        os.path.exists(path)
 
     def __init__(self, file_path: str) -> None:
         init_database = not os.path.exists(file_path)
@@ -109,15 +109,6 @@ class SQLLiteDB:
 
         return self.cursor.fetchone() is not None
     
-    def authenticate_admin(self, login: str, token: str) -> bool:
-        self.execute(
-            "SELECT * FROM Uzytkownicy WHERE login = ? AND token = ? AND rola = 'admin';",
-            login,
-            token
-        )
-
-        return self.cursor.fetchone() is not None
-    
     def rola_uzytkownika(self, login: str, token: str) -> str:
         self.execute(
             "SELECT rola FROM Uzytkownicy WHERE login = ? AND token = ?",
@@ -135,6 +126,14 @@ class SQLLiteDB:
         )
 
         return self.cursor.fetchone() is not None
+    
+    def czy_zweryfikowany(self, login: str) -> bool:
+        self.execute(
+            "SELECT * WHERE login = ? AND rola <> 'not_verified'",
+            login
+        )
+
+        return self.cursor.fetchone() is None
 
 
     # --------------- kody zaproszeniowe ---------------
@@ -161,7 +160,6 @@ class SQLLiteDB:
 
 
     # --------------- Użytkownicy ---------------
-    # ? todo: czy to nie admin powinien dodawać użytkowników?
     def wstaw_uzytkownika(self, login: str, haslo: str, token: str, rola: str, nick: str):
         self.exec_and_commit(
             "INSERT INTO Uzytownicy(nazwa, login, haslo, token, rola) VALUES (?, ?, ?, ?, ?)",
@@ -196,10 +194,7 @@ class SQLLiteDB:
             "UPDATE Uzytkownicy SET token = NULL WHERE (julianday(CURRENT_DATE) - julianday(last_update)) > 1"
         )
 
-    def ustaw_role(self, loginAdmina: str, tokenAdmina: str, loginZmienianego: str, nowaRola: str):
-        if not self.authenticate_admin(loginAdmina, tokenAdmina):
-            raise AuthenticationError
-        
+    def ustaw_role(self, loginZmienianego: str, nowaRola: str):
         self.exec_and_commit(
             "UPDATE Uzytkownicy SET rola = ? WHERE login = ?",
             loginZmienianego,
@@ -208,7 +203,7 @@ class SQLLiteDB:
 
     def lista_niezweryfikowanych(self):
         self.execute(
-            "SELECT login FROM Uzytkownicy WHERE rola = not_verified"
+            "SELECT login FROM Uzytkownicy WHERE rola = 'not_verified'"
         )
 
         return self.cursor.fetchall()
@@ -239,44 +234,34 @@ class SQLLiteDB:
 
 
     def dodaj_do_pokoju(self, nazwa_pokoju: str, dodawany_login: str):
-        nick_uzytkownika = self.login_to_nick(dodawany_login)
-                
         self.exec_and_commit(
             "INSERT INTO CzlonkowiePokojow(uzytkownik, pokoj) VALUES (?, ?)",
-            nick_uzytkownika,
+            dodawany_login,
             nazwa_pokoju,
         )
 
 
-
     def usun_z_pokoju(self, nazwa_pokoju: str, usuwany_login: str):
-        nick_uzytkownika = self.login_to_nick(usuwany_login)
-        
         self.exec_and_commit(
             "DELETE FROM CzlonkowiePokojow WHERE uzytkownik = ? AND pokoj = ?",
-            nick_uzytkownika,
+            usuwany_login,
             nazwa_pokoju
         )
 
 
     def czy_uzytkownik_w_pokoju(self, nazwa_pokoju: str, login: str) -> bool:
-        nick_uzytkownika = self.login_to_nick(login)
-
         self.execute(
             "SELECT * FROM CzlonkowiePokoju WHERE uzytkownik = ? AND pokoj = ?",
-            nick_uzytkownika,
+            login,
             nazwa_pokoju
         )
 
         return self.cursor.fetchone() is not None
 
     def pokoje_czlonkowskie(self, login: str) -> List[str]:
-        # todo: authenticate
-        nick = self.login_to_nick(login)
-        
         self.execute(
             "SELECT pokoj, klucz_publiczny, klucz_prywatny FROM KluczeDoPokojow WHERE uzytkownik = ?",
-            nick
+            login
         )
 
         return self.cursor.fetchall()
@@ -390,18 +375,14 @@ class SQLLiteDB:
     # --------------- Kalendarze ---------------
     def wpis_istnieje(self, nazwaPokoju: str, wpis: WpisKalendarza) -> bool:
         self.execute(
-            "SELECT * FROM Wydarzenia WHERE pokoj = ? AND nazwa = ? AND data = ?",
+            "SELECT * FROM Wydarzenia WHERE pokoj = ? AND nazwa = ?",
             nazwaPokoju,
             wpis.nazwa,
-            wpis.get_date()
         )
 
         return self.cursor.fetchone is not None
 
-    def kalendarz_dodaj_wpis(self, login: str, token: str, nazwaPokoju: str, wpis: WpisKalendarza):
-        if not self.authenticate(login, token):
-            raise AuthenticationError
-        
+    def kalendarz_dodaj_wpis(self, nazwaPokoju: str, wpis: WpisKalendarza):
         self.exec_and_commit(
             "INSERT INTO Wydarzenia (pokoj, nazwa, data) VALUES (?, ?, ?)",
             nazwaPokoju,
@@ -409,21 +390,14 @@ class SQLLiteDB:
             wpis.get_date()
         )
     
-    def kalendarz_usun_wpis(self, login: str, token: str, nazwaPokoju: str, wpis: WpisKalendarza):
-        if not self.authenticate(login, token):
-            raise AuthenticationError
-        
+    def kalendarz_usun_wpis(self, nazwaPokoju: str, wpis: WpisKalendarza):        
         self.exec_and_commit(
-            "DELETE FROM Wydarzenia WHERE pokoj = ? AND nazwa = ? AND data = ?",
+            "DELETE FROM Wydarzenia WHERE pokoj = ? AND nazwa = ?",
             nazwaPokoju,
-            wpis.nazwa,
-            wpis.get_date()
+            wpis.nazwa
         )
 
-    def kalendarz_modyfikuj_wpis(self, login: str, token: str, nazwaPokoju: str, wpis: WpisKalendarza, noweDane: WpisKalendarza):
-        if not self.authenticate(login, token):
-            raise AuthenticationError
-
+    def kalendarz_modyfikuj_wpis(self, nazwaPokoju: str, wpis: WpisKalendarza, noweDane: WpisKalendarza):
         self.exec_and_commit(
             "UPDATE Wydarzenia SET nazwa = ?, data = ? WHERE pokoj = ? AND nazwa = ? AND data = ?",
             noweDane.nazwa,
@@ -433,10 +407,7 @@ class SQLLiteDB:
             wpis.get_date()
         )
 
-    def pobierz_kalendarz(self, login: str, token: str, nazwaPokoju: str):
-        if not self.authenticate(login, token):
-            raise AuthenticationError
-        
+    def pobierz_kalendarz(self, nazwaPokoju: str) -> typing.List[WpisKalendarza]:
         self.execute(
             "SELECT nazwa, data FROM Wydarzenia WHERE pokoj = ? ORDER BY data ASC",
             nazwaPokoju
@@ -444,7 +415,7 @@ class SQLLiteDB:
 
         result = []
         for nazwa, data in self.cursor.fetchall():
-            result.append(WpisKalendarza.from_date_str(nazwaPokoju, nazwa, data))
+            result.append(WpisKalendarza.from_date_str(nazwa, data))
 
         return result
 
@@ -479,19 +450,14 @@ class SQLLiteDB:
 
         return self.cursor.fetchone() is not None
 
-    def ustaw_klucz(self, login: str, token: str, kluczPub: str):
-        if not self.authenticate(login, token):
-            raise AuthenticationError
-        
+    def ustaw_klucz(self, login: str, kluczPub: str):
         self.exec_and_commit(
             "UPDATE Uzytkownicy SET klucz_publiczny = ? WHERE login = ?",
-            kluczPub
+            kluczPub,
+            login
         )
 
-    def dodaj_klucz_do_pokoju(self, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
-        if not self.authenticate_admin(loginAdmina, tokenAdmina):
-            raise AuthenticationError
-
+    def dodaj_klucz_do_pokoju(self, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
         self.exec_and_commit(
             "INSERT INTO KluczeDoPokojow(pokoj, uzytkownik, klucz_publiczny, klucz_prywatny) VALUES (?, ?, ?, ?)",
             nazwaPokoju,
@@ -502,7 +468,7 @@ class SQLLiteDB:
 
     def czy_klucz_pokoju_istnieje(self, kluczPubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str):
         self.execute(
-            "SELECT * FROM KluczeDoPokojow WHERE klucz_publiczny = ? AND klucz_prywatny = ? AND uzytkownik =?",
+            "SELECT * FROM KluczeDoPokojow WHERE klucz_publiczny = ? AND klucz_prywatny = ? AND uzytkownik = ?",
             kluczPubPokoju,
             kluczPrivPokoju,
             loginWlasciciela,
@@ -510,36 +476,21 @@ class SQLLiteDB:
 
         return self.cursor.fetchone() is not None
 
-    # ? Co ta funkcja właściwie ma robić?
-    def czy_zweryfikowany(self, login: str) -> bool:
-        self.execute(
-            "SELECT * WHERE login = ? AND rola <> not_verified",
-            login
-        )
 
-        return self.cursor.fetchone() is None
-
-
-    def usun_klucze_dla_uzytkownika(self, loginAdmina: str, tokenAdmina: str, nazwaPokoju: str, loginPosiadaczaKlucza: str):
-        if not self.authenticate_admin(loginAdmina, tokenAdmina):
-            raise AuthenticationError
-        
+    def usun_klucze_dla_uzytkownika(self, nazwaPokoju: str, loginPosiadaczaKlucza: str):
         self.exec_and_commit(
             "DELETE FROM KluczeDoPokojow WHERE nazwaPokoju = ? AND uzytkownik = ?",
             nazwaPokoju,
             loginPosiadaczaKlucza,
         )
 
-    def klucz_uzytkownika(self, loginAdmina: str, tokenAdmina: str, loginPosiadaczaKlucza: str) -> str:
-        if not self.authenticate_admin(loginAdmina, tokenAdmina):
-            raise AuthenticationError
-        
+    def klucz_uzytkownika(self, loginPosiadaczaKlucza: str) -> str:
         self.exec(
             "SELECT klucz_publiczny FROM Uzytkownicy WHERE login = ?",
             loginPosiadaczaKlucza
         )
 
-        return self.cursor.fetchone()[0]
+        return self.cursor.fetchone()[0] # todo: sprawdzić czy to działa
 
 
 if __name__ == "__main__":

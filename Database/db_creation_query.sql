@@ -75,7 +75,7 @@ CREATE TABLE Wiadomosci (
 CREATE TABLE Wydarzenia (
     id INTEGER,
     pokoj VARCHAR(255) NOT NULL,
-    nazwa VARCHAR(255) NOT NULL, -- ! ENCODED
+    nazwa VARCHAR(255) NOT NULL UNIQUE, -- ! ENCODED
     data DATE NOT NULL,
 
     PRIMARY KEY(id AUTOINCREMENT),
