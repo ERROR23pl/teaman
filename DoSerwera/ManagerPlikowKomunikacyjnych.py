@@ -21,19 +21,19 @@ def analizaPliku(otrzymanyPlik) -> typing.List:
         for wpis in dane:
             if("DodawanyTask" in str(wpis)):
                 try:
-                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4])
+                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4],dane[wpis][5])
                     dodawaneTaski.append(nowyTask)
                 except:
                     None
             elif("UsuwanyTask" in str(wpis)):
                 try:
-                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4])
+                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4],dane[wpis][5])
                     usuwaneTaski.append(nowyTask)
                 except:
                     None
             elif("ModyfikowanyTask" in str(wpis)):
                 try:
-                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4])
+                    nowyTask: o.Task = o.Task(dane[wpis][0],dane[wpis][1],dane[wpis][2],dane[wpis][3],dane[wpis][4],dane[wpis][5])
                     zmienianeTaski.append(nowyTask)
                 except:
                     None

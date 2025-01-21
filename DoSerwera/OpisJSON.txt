@@ -260,7 +260,7 @@ Dane:
 -login
 -token
 -nazwa pokoju
--kolejne zmodyfikowane taski, z nazwami kluczy opisanymi na starcie pliku; każdy ma być postaci: [int, str, [int, int, int], [float, float], List[int]], czyli [id, nazwa, [dzień, miesiąc, rok], [koordynat x, koordynat y], [lista id tasków, od których jest zależny]]; nazwę musisz zaszyfrować
+-kolejne zmodyfikowane taski, z nazwami kluczy opisanymi na starcie pliku; każdy ma być postaci: [int, bool, str, [int, int, int], [float, float], List[int]], czyli [id, czy_ukończony, nazwa, [dzień, miesiąc, rok], [koordynat x, koordynat y], [lista id tasków, od których jest zależny]]; nazwę musisz zaszyfrować
 
 Plik z odpowiedzią:
 Dla 'sukces': true:

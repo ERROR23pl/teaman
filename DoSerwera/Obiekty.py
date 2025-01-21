@@ -5,9 +5,10 @@ import ManagerKodow as Kody
 import ManagerKluczy as Klucze
 
 class Task:
-    def __init__(self, idTaska: int, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):
+    def __init__(self, idTaska: int, czyUkonczony: bool, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):
         if(Nazwy.przetestujNazwe(nazwaTaska)):
             self.id: int = idTaska
+            self.ukonczony: bool = czyUkonczony
             self.nazwa: str = nazwaTaska
             self.dzien: int = data[0]
             self.miesiac: int = data[1]
@@ -33,7 +34,8 @@ class WpisKalendarza:
     # todo: implement, przyjmij data w formie "YYYY-MM-DD"
     @classmethod
     def from_date_str(nazwaWpisu: str, data: str) -> typing.Self:
-        return WpisKalendarza(nazwaWpisu, ...) # zamiast ... coś parsującego stringa do tuple[int, int, int]
+        daneDaty = str.split(data,"-")
+        return WpisKalendarza(nazwaWpisu, daneDaty[2], daneDaty[1], daneDaty[0])
     
     def __init__(self,nazwaWpisu: str, data: typing.Tuple[int,int,int]):
         self.nazwa: str = Nazwy.zabezpieczCudzyslowy(nazwaWpisu)
@@ -41,9 +43,8 @@ class WpisKalendarza:
         self.miesiac: int = data[1]
         self.rok: int = data[2]
 
-    # # todo: implement, zwróć "YYYY-MM-DD"
     def get_date(self) -> str:
-        ...
+        return str(self.rok)+"-"+str(self.miesiac)+"-"+str(self.dzien)
 
 
 class nazwa:        # nazwa projektu lub pokoju, login, nick
