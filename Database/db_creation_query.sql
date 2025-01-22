@@ -110,7 +110,7 @@ CREATE TABLE KolejnoscTaskow (
 );
 
 
-INSERT INTO Role VALUES ("admin");
+INSERT INTO Role VALUES ("Admin");
 INSERT INTO Role VALUES ("user");
-INSERT INTO Role VALUES ("not_verified");
-INSERT INTO Uzytkownicy VALUES ("admin", "admin_login", "admin_haslo", "admin_token", "admin", NULL, NULL); -- todo: delete this line, when python script creates a first admin.
+INSERT INTO Role VALUES ("Niezweryfikowany");
+INSERT INTO Uzytkownicy VALUES ("Admin", "admin_login", "admin_haslo", "admin_token", "Admin", NULL, NULL); -- todo: delete this line, when python script creates a first admin.

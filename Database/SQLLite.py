@@ -21,7 +21,7 @@ class SQLLiteDB:
     # todo: metoda do implementacji
     @classmethod
     def baza_istnieje(cls, path) -> bool:
-        os.path.exists(path)
+        return os.path.exists(path)
 
     def __init__(self, file_path: str) -> None:
         init_database = not os.path.exists(file_path)
@@ -129,7 +129,7 @@ class SQLLiteDB:
     
     def czy_zweryfikowany(self, login: str) -> bool:
         self.execute(
-            "SELECT * WHERE login = ? AND rola <> 'not_verified'",
+            "SELECT * WHERE login = ? AND rola <> 'Niezweryfikowany'",
             login
         )
 
@@ -203,7 +203,7 @@ class SQLLiteDB:
 
     def lista_niezweryfikowanych(self):
         self.execute(
-            "SELECT login FROM Uzytkownicy WHERE rola = 'not_verified'"
+            "SELECT login FROM Uzytkownicy WHERE rola = 'Niezweryfikowany'"
         )
 
         return self.cursor.fetchall()
