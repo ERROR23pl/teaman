@@ -31,9 +31,8 @@ class Wiadomosc:
         
 
 class WpisKalendarza:
-    # todo: implement, przyjmij data w formie "YYYY-MM-DD"
     @classmethod
-    def from_date_str(nazwaWpisu: str, data: str) -> typing.Self:
+    def from_date_str(nazwaWpisu: str, data: str):
         daneDaty = str.split(data,"-")
         return WpisKalendarza(nazwaWpisu, daneDaty[2], daneDaty[1], daneDaty[0])
     

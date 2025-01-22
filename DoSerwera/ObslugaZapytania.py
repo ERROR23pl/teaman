@@ -1,8 +1,7 @@
 import ManagerPlikowKomunikacyjnych as Pliki
 import LaczenieZProjektem as LogIRej
 import WlasnyProjekt as WlProj
-#import KomunikacjaZBaza as Bazy
-import MockTestowyKomunikacjiZBaza as Bazy
+import KomunikacjaZBaza as Bazy
 import ZarzadzaniePokojami as Pokoje
 import ZarzadzanieCzlonkamiPokojow as CzlPokojow
 import ZarzadzanieTaskami as Taski
@@ -16,6 +15,7 @@ import hashlib as hash
 import sys
 sys.path.insert(1, '../Database')
 import SQLLite as Baza
+# import Database.SQLLite as Baza
 
 
 

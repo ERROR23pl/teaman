@@ -59,6 +59,7 @@ else:
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "Haslo12345!"
         slownik['dana3'] = "NickUzytkownika711"
+        slownik['dana4'] = "klucz123"
     
     elif(nr==7):
         #Test zapraszania do projektu
