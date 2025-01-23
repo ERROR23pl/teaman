@@ -169,7 +169,7 @@ class SQLLiteDB:
     # --------------- Użytkownicy ---------------
     def wstaw_uzytkownika(self, login: str, haslo: str, token: str, rola: str, nick: str):
         self.exec_and_commit(
-            "INSERT INTO Uzytkownicy(nazwa, login, haslo, token, rola) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO Uzytkownicy(login, haslo, token, rola, nazwa) VALUES (?, ?, ?, ?, ?)",
             login,
             haslo,
             token,
