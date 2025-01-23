@@ -1,6 +1,7 @@
 import ObslugaZapytania as OZ
 import sys
 import json
+import hashlib as hash
 
 if(len(sys.argv)<2):
     print("Nie podano numeru testu!\n")
@@ -47,17 +48,17 @@ else:
         #Test rejestracji
         slownik['operacja'] = "rejestracja"
         slownik['projekt'] = "Projekt12345"
-        slownik['dana1'] = "1234567890abcde12345AA"
-        slownik['dana2'] = "Uzytkownik711"
-        slownik['dana3'] = "Haslo12345!"
+        slownik['dana1'] = "1234567890abcde12345AA"     # tu zwrócony w terminalu kod zaproszeniowy
+        slownik['dana2'] = hash.sha3_512(("Uzytkownik711").encode()).hexdigest()
+        slownik['dana3'] = hash.sha3_512(("Haslo12345!").encode()).hexdigest()
         slownik['dana4'] = "NickUzytkownika711"
     
     elif(nr==6):
         #Test tworzenia projektu
         slownik['operacja'] = "tworzenie projektu"
         slownik['projekt'] = "Projekt12345"
-        slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "Haslo12345!"
+        slownik['dana1'] = hash.sha3_512(("Uzytkownik711").encode()).hexdigest()
+        slownik['dana2'] = hash.sha3_512(("Haslo12345!").encode()).hexdigest()
         slownik['dana3'] = "NickUzytkownika711"
         slownik['dana4'] = "klucz123"
     
@@ -66,7 +67,7 @@ else:
         slownik['operacja'] = "zapraszanie"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "1234567890abcde12345AA"
     
     elif(nr==8):
@@ -74,14 +75,14 @@ else:
         slownik['operacja'] = "usuwanie projektu"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
     
     elif(nr==9):
         #Test tworzenia pokoju
         slownik['operacja'] = "tworzenie pokoju"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
     
     elif(nr==10):
@@ -89,7 +90,7 @@ else:
         slownik['operacja'] = "usuwanie pokoju"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
     
     elif(nr==11):
@@ -97,7 +98,7 @@ else:
         slownik['operacja'] = "dodawanie do pokoju"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "DodawanyUzytkownik123"
         slownik['dana5'] = "klucz123"
@@ -108,7 +109,7 @@ else:
         slownik['operacja'] = "usuwanie z pokoju"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "UsuwanyUzytkownik123"
     
@@ -117,14 +118,14 @@ else:
         slownik['operacja'] = "lista pokojow"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
     
     elif(nr==14):
         #Test modyfikacji (dodawanie, usuwanie, modyfikacja) tasków (od razu razem z pobraniem)
         slownik['operacja'] = "modyfikacja taskow"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['DodawanyTask1'] = [1,"nazwaTaska1",[12,2,2025],[100.06,157.0],[2,3,5]]
         slownik['DodawanyTask2'] = [2,"nazwaTaska2",[1,1,2025],[120.06,17.0],[3]]
@@ -140,7 +141,7 @@ else:
         slownik['operacja'] = "zaznacz task"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = 1
     
@@ -149,7 +150,7 @@ else:
         slownik['operacja'] = "odznacz task"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = 1
     
@@ -158,7 +159,7 @@ else:
         slownik['operacja'] = "pobierz chat"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
     
     elif(nr==18):
@@ -166,7 +167,7 @@ else:
         slownik['operacja'] = "zaktualizuj chat"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Uzytkownik711711"
         slownik['dana5'] = 1234567788
@@ -176,7 +177,7 @@ else:
         slownik['operacja'] = "wyslij wiadomosc"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Uzytkownik711711"
         slownik['dana5'] = 1234567788
@@ -188,7 +189,7 @@ else:
         slownik['operacja'] = "pobierz kalendarz"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
     
     elif(nr==21):
@@ -196,7 +197,7 @@ else:
         slownik['operacja'] = "dodawanie wpisu kalendarza"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Wpis12345"
         slownik['dana5'] = [6,7,2025]
@@ -206,7 +207,7 @@ else:
         slownik['operacja'] = "usuwanie wpisu kalendarza"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Wpis12345"
         slownik['dana5'] = [6,7,2025]
@@ -216,7 +217,7 @@ else:
         slownik['operacja'] = "modyfikacja wpisu kalendarza"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Wpis12345"
         slownik['dana5'] = [6,7,2025]
@@ -228,7 +229,7 @@ else:
         slownik['operacja'] = "dodawanie pliku"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Plik711.uwu"
         slownik['dana5'] = "Zdecydowanie bardzo ważna zawartość pliku\nUwU"
@@ -238,7 +239,7 @@ else:
         slownik['operacja'] = "usuwanie pliku"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Plik711.uwu"
     
@@ -247,7 +248,7 @@ else:
         slownik['operacja'] = "pobranie pliku"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
         slownik['dana4'] = "Plik711.uwu"
     
@@ -256,7 +257,7 @@ else:
         slownik['operacja'] = "pobranie listy plikow"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
 
     elif(nr==28):
@@ -264,7 +265,7 @@ else:
         slownik['operacja'] = "ustawianie klucza"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "klucz1234567890"
     
     elif(nr==29):
@@ -272,7 +273,7 @@ else:
         slownik['operacja'] = "pobieranie klucza uzytkownika"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "NickInnegoUzytkownika12711"
     
     elif(nr==30):
@@ -280,14 +281,14 @@ else:
         slownik['operacja'] = "lista niezweryfikowanych"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
 
     elif(nr==31):
         #Test ustawiania użytkownikowi nowej roli
         slownik['operacja'] = "zmiana roli"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "NickInnegoUzytkownika12711"
         slownik['dana4'] = "NowaRola123456788"
     
@@ -296,7 +297,7 @@ else:
         slownik['operacja'] = "weryfikacja"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
-        slownik['dana2'] = "token12345token0987654321A"
+        slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "NickInnegoUzytkownika12711"
         slownik['dana4'] = "NowaRola123456788"
         slownik['dana5'] = "ZdecydowanieZaszyfrowanyKluczPubliczny"

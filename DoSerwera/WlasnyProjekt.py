@@ -16,7 +16,7 @@ def stworzProjekt(baza: Baza.SQLLiteDB, nazwaProjektu: str, login: str, haslo: s
     Bazy.wstawUzytkownika(baza,login,haslo,hashTok,"Admin",nick)
     Bazy.ustawKlucz(baza,login,kluczPub)
     
-    kluczePokoju: typing.Tuple[str,str] = Klucze.generujKluczePokoju()
+    kluczePokoju: typing.List[str] = Klucze.generujKluczePokoju()
     kluczePokoju[0] = Klucze.zaszyfruj(kluczPub,kluczePokoju[0])
     kluczePokoju[1] = Klucze.zaszyfruj(kluczPub,kluczePokoju[1])
     
