@@ -15,7 +15,7 @@ def dodajDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju:
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
@@ -30,7 +30,7 @@ def dodajDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju:
         
         else:
             if(not (Bazy.czyWpisIstnieje(baza,nazwaPokoju,wpis))):
-                Bazy.dodajWpisDoKalendarza(baza,login,token,nazwaPokoju,wpis)
+                Bazy.dodajWpisDoKalendarza(baza,login,nazwaPokoju,wpis)
                 return True, [""]
             
             else:
@@ -45,7 +45,7 @@ def usunZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
@@ -59,7 +59,7 @@ def usunZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            Bazy.usunWpisZKalendarza(baza,login,token,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
+            Bazy.usunWpisZKalendarza(baza,login,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
             return True, [""]
 
 
@@ -71,7 +71,7 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaP
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
@@ -92,7 +92,7 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaP
                 return False, ["Nowy wpis już istnieje"]
             
             else:
-                Bazy.modyfikujWpisKalendarza(baza,login,token,nazwaPokoju,wpis,noweDane)
+                Bazy.modyfikujWpisKalendarza(baza,login,nazwaPokoju,wpis,noweDane)
                 return True, [""]
 
 
@@ -115,5 +115,5 @@ def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: 
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.pobierzKalendarz(baza,login,token,nazwaPokoju)
+            lista: typing.List[str] = Bazy.pobierzKalendarz(baza,login,nazwaPokoju)
             return True, lista

@@ -14,7 +14,7 @@ def stworzPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) 
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojJuzJest: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
@@ -23,8 +23,8 @@ def stworzPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) 
         return False, ["Pokój już istnieje"]
     
     else:
-        Bazy.stworzPokoj(baza,hashLog,hashTok,nazwaPokoju)
-        kluczPubAdmina: str = Bazy.kluczUzytkownika(baza,login,token,login)
+        Bazy.stworzPokoj(baza,hashLog,nazwaPokoju)
+        kluczPubAdmina: str = Bazy.kluczUzytkownika(baza,login,login)
         czyTakiKluczPokojuJuzIstnieje: bool = True
         
         while(czyTakiKluczPokojuJuzIstnieje):
@@ -33,8 +33,8 @@ def stworzPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) 
             kluczePokoju[1] = Klucze.zaszyfruj(kluczPubAdmina,kluczePokoju[1])
             czyTakiKluczPokojuJuzIstnieje = Bazy.czyKluczPokojuJuzIstnieje(baza,kluczePokoju[0],kluczePokoju[1],login)   #dwa pokoje nie mogą mieć tej samej pary kluczy (a każdy pokój ma w bazie swoje klucze zaszyfrowane przez właściciela)
         
-        Bazy.dodajDoPokoju(baza,hashLog,hashTok,nazwaPokoju,hashLog)        #dodaj siebie (właściciela) do pokoju
-        Bazy.dodajKluczPokoju(baza,login,hashTok,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],login)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym właściciela
+        Bazy.dodajDoPokoju(baza,hashLog,nazwaPokoju,hashLog)        #dodaj siebie (właściciela) do pokoju
+        Bazy.dodajKluczPokoju(baza,login,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],login)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym właściciela
         return True, [""]
 
 
@@ -46,13 +46,13 @@ def usunPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) ->
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
     
     if(czyPokojIstnieje):                               #jeśli nie istniał, to usuwanie uznane za udane
-        Bazy.usunPokoj(baza,hashLog,hashTok,nazwaPokoju)
+        Bazy.usunPokoj(baza,hashLog,nazwaPokoju)
         
     return True, [""]
 
@@ -66,5 +66,5 @@ def listaPokojow(baza: Baza.SQLLiteDB, login: str, token: str) -> typing.Tuple[b
         return False, ["Niepoprawne dane"]
     
     else:
-        lista: typing.List[str] = Bazy.pokojeCzlonkowskie(baza,hashLog,hashTok)
+        lista: typing.List[str] = Bazy.pokojeCzlonkowskie(baza,hashLog)
         return True, lista

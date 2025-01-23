@@ -69,7 +69,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             if(login==hash.sha3_512(nick.wart.encode()).hexdigest()):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick taki jak login"])   #niepoprawne dane - nazwa publiczna nie może być taka jak login
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaRejestracji(baza,nazwaProjektu.wart,kodZapr.wart,login.wart,haslo.wart,nick.wart)
+            rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaRejestracji(baza,kodZapr.wart,login.wart,haslo.wart,nick.wart)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
 

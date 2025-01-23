@@ -18,14 +18,14 @@ def probaLogowania(baza: Baza.SQLLiteDB, login: str, haslo: str) -> typing.Tuple
     else:
         token: str = Kody.wygenerujKod()
         hashTok: str = hash.sha3_512(token.encode()).hexdigest()
-        Bazy.ustawToken(baza,hashLog,hashHas,hashTok)
-        rola: str = Bazy.rolaUzytkownika(baza,hashLog,hashTok)
+        Bazy.ustawToken(baza,hashLog,hashTok)
+        rola: str = Bazy.rolaUzytkownika(baza,hashLog)
         
         return True, [token, rola]
 
 
 
-def probaRejestracji(baza: Baza.SQLLiteDB, nazwaProjektu: str, kodZaproszeniowy: str, hashLog: str, hashHas: str, nick: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [token sesji]]
+def probaRejestracji(baza: Baza.SQLLiteDB, kodZaproszeniowy: str, hashLog: str, hashHas: str, nick: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [token sesji]]
     #login i hasło już zahashowane
     hashKod: str = hash.sha3_512(kodZaproszeniowy.encode()).hexdigest()
     
@@ -60,5 +60,5 @@ def probaUstawieniaKluczaPublicznego(baza: Baza.SQLLiteDB, login: str, token: st
         return False, ["Wyślij nowy klucz"]
     
     else:
-        Bazy.ustawKlucz(baza,hashLog,hashTok,kluczPub)
+        Bazy.ustawKlucz(baza,hashLog,kluczPub)
         return True, [""]

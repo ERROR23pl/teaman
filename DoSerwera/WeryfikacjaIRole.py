@@ -13,7 +13,7 @@ def zweryfikuj(baza: Baza.SQLLiteDB, login: str, token: str, nickWeryfikowanego:
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
     
     if(nowaRola=="Admin" or nowaRola=="Niezweryfikowany"):
@@ -26,10 +26,13 @@ def zweryfikuj(baza: Baza.SQLLiteDB, login: str, token: str, nickWeryfikowanego:
     if(Bazy.czyZweryfikowany(baza,loginWeryfikowanego)):
         return False, ["Drugi użytkownik już zweryfikowany"]
     
+    if(not Bazy.czyRolaIstnieje(baza, nowaRola)):
+        return False, ["Taka rola nie istnieje"]
+    
     else:
-        Bazy.ustawRole(baza,hashLog,hashTok,loginWeryfikowanego,nowaRola)
-        Bazy.dodajDoPokoju(baza,hashLog,hashTok,nazwaProjektu,loginWeryfikowanego)        #dodaj zweryfikowanego użytkownika do pokoju głównego
-        Bazy.dodajKluczPokoju(baza,login,hashTok,nazwaProjektu,kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[0],kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[1],loginWeryfikowanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym zweryfikowanego użytkownika
+        Bazy.ustawRole(baza,hashLog,loginWeryfikowanego,nowaRola)
+        Bazy.dodajDoPokoju(baza,hashLog,nazwaProjektu,loginWeryfikowanego)        #dodaj zweryfikowanego użytkownika do pokoju głównego
+        Bazy.dodajKluczPokoju(baza,login,nazwaProjektu,kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[0],kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[1],loginWeryfikowanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym zweryfikowanego użytkownika
         return True, [""]
 
 
@@ -40,10 +43,10 @@ def listaNiezweryfikowanych(baza: Baza.SQLLiteDB, login: str, token: str) -> typ
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
     
-    lista = Bazy.listaNiezweryfikowanych(baza,hashLog,hashTok)
+    lista = Bazy.listaNiezweryfikowanych(baza,hashLog)
     return True, lista
 
 
@@ -54,7 +57,7 @@ def ustawRole(baza: Baza.SQLLiteDB, login: str, token: str, nick: str, nowaRola:
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
     
     if(nowaRola=="Admin" or nowaRola=="Niezweryfikowany"):
@@ -70,6 +73,9 @@ def ustawRole(baza: Baza.SQLLiteDB, login: str, token: str, nick: str, nowaRola:
     if(loginEdytowanego==hashLog):
         return False,["Nie można zmienić roli właściciela"]
     
+    if(not Bazy.czyRolaIstnieje(baza, nowaRola)):
+        return False, ["Taka rola nie istnieje"]
+    
     else:
-        Bazy.ustawRole(baza,hashLog,hashTok,loginEdytowanego,nowaRola)
+        Bazy.ustawRole(baza,hashLog,loginEdytowanego,nowaRola)
         return True, [""]

@@ -13,7 +13,7 @@ def dodajDoPokoju(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
@@ -34,8 +34,8 @@ def dodajDoPokoju(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str
             return False, ["Drugi użytkownik niezweryfikowany"]
 
         else:        
-            Bazy.dodajDoPokoju(baza,hashLog,hashTok,nazwaPokoju,loginDodawanego)
-            Bazy.dodajKluczPokoju(baza,login,hashTok,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],loginDodawanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym dodawanego użytkownika
+            Bazy.dodajDoPokoju(baza,hashLog,nazwaPokoju,loginDodawanego)
+            Bazy.dodajKluczPokoju(baza,login,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],loginDodawanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym dodawanego użytkownika
             return True, [""]
 
 
@@ -47,7 +47,7 @@ def usunZPokoju(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, 
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
@@ -63,6 +63,6 @@ def usunZPokoju(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, 
         if(loginUsuwanego==hashLog):
             return False, ["Nie można usunąć właściciela projektu z pokoju"]
         
-        Bazy.usunZPokoju(baza,hashLog,hashTok,nazwaPokoju,loginUsuwanego)   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
-        Bazy.usunKluczeDlaUzytkownika(baza,hashLog,hashTok,nazwaPokoju,loginUsuwanego)   #usunięcie kluczy serwera zaszyfrowanych kluczem publicznym usuniętego użytkownika
+        Bazy.usunZPokoju(baza,hashLog,nazwaPokoju,loginUsuwanego)   #nawet, gdyby takiej osoby nie było, to i tak efekt usunięcia jest ten sam, więc nie jest testowane 
+        Bazy.usunKluczeDlaUzytkownika(baza,hashLog,nazwaPokoju,loginUsuwanego)   #usunięcie kluczy serwera zaszyfrowanych kluczem publicznym usuniętego użytkownika
         return True, [""]

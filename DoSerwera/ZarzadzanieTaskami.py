@@ -14,7 +14,7 @@ def obslugaTaskow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str
     if(not Bazy.autoryzacjaTokenem(baza,hashLog,hashTok)):
         return False, ["Niepoprawne dane"]
     
-    if(Bazy.rolaUzytkownika(baza,hashLog,hashTok)!="Admin"):
+    if(Bazy.rolaUzytkownika(baza,hashLog)!="Admin"):
         return False, ["Brak uprawnień"]
         
     czyPokojIstnieje: bool = Bazy.czyJestPokoj(baza,nazwaPokoju)
@@ -23,9 +23,9 @@ def obslugaTaskow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str
         return False, ["Pokój nie istnieje"]
     
     else:
-        Bazy.dodajTaski(baza,login,token,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
-        Bazy.usunTaski(baza,login,token,nazwaPokoju,usuwaneTaski)
-        Bazy.zauktualizujWlasnosciTaskow(baza,login,token,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane
+        Bazy.dodajTaski(baza,login,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
+        Bazy.usunTaski(baza,login,nazwaPokoju,usuwaneTaski)
+        Bazy.zauktualizujWlasnosciTaskow(baza,login,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane
         
         return True, [""]
 
@@ -49,7 +49,7 @@ def oznaczJakoWykonany(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyMozna: bool = Bazy.ukonczTask(baza,login,token,nazwaPokoju,idTaska)
+            czyMozna: bool = Bazy.ukonczTask(baza,login,nazwaPokoju,idTaska)
             
             if(czyMozna):
                 return True, [""]
@@ -77,7 +77,7 @@ def oznaczJakoNiewykonany(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPok
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(baza,login,token,nazwaPokoju,idTaska)
+            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(baza,login,nazwaPokoju,idTaska)
             
             if(czyMozna):
                 return True, [""]
@@ -105,5 +105,5 @@ def pobierzTaski(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str)
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.listaTaskow(baza,login,token,nazwaPokoju)
+            lista: typing.List[str] = Bazy.listaTaskow(baza,login,nazwaPokoju)
             return True, lista

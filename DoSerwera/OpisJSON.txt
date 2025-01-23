@@ -746,6 +746,7 @@ Możliwe błędy:
 -"Drugi użytkownik nie istnieje"
 -"Drugi użytkownik niezweryfikowany"
 -"Nie można zmienić roli właściciela"
+-"Taka rola nie istnieje"
 
 
 29. WERYFIKACJA INNEGO UŻYTKOWNIKA
@@ -776,6 +777,7 @@ Możliwe błędy:
 -"Nie można ustawić takiej roli"
 -"Drugi użytkownik nie istnieje"
 -"Drugi użytkownik już zweryfikowany"
+-"Taka rola nie istnieje"
 
 
 

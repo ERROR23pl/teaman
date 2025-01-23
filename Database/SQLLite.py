@@ -99,6 +99,14 @@ class SQLLiteDB:
         )
 
         return self.cursor.fetchone() is not None
+    
+    def czy_rola_istnieje(self, rola:str) -> bool:
+        self.execute(
+            "SELECT * FROM Role WHERE nazwa = ?",
+            rola
+        )
+
+        return self.cursor.fetchone() is not None
 
     def authenticate(self, login: str, token: str) -> bool:
         self.execute(
@@ -109,11 +117,10 @@ class SQLLiteDB:
 
         return self.cursor.fetchone() is not None
     
-    def rola_uzytkownika(self, login: str, token: str) -> str:
+    def rola_uzytkownika(self, login: str) -> str:
         self.execute(
-            "SELECT rola FROM Uzytkownicy WHERE login = ? AND token = ?",
-            login,
-            token
+            "SELECT rola FROM Uzytkownicy WHERE login = ?",
+            login
         )
 
         return self.cursor.fetchone()[0]
@@ -162,7 +169,7 @@ class SQLLiteDB:
     # --------------- Użytkownicy ---------------
     def wstaw_uzytkownika(self, login: str, haslo: str, token: str, rola: str, nick: str):
         self.exec_and_commit(
-            "INSERT INTO Uzytownicy(nazwa, login, haslo, token, rola) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO Uzytkownicy(nazwa, login, haslo, token, rola) VALUES (?, ?, ?, ?, ?)",
             login,
             haslo,
             token,
@@ -170,19 +177,17 @@ class SQLLiteDB:
             nick
         )
     
-    def ustaw_date_aktywnosci_teraz(self, login: str, token: str):
+    def ustaw_date_aktywnosci_teraz(self, login: str):
         self.exec_and_commit(
-            "UPDATE Uzytownicy SET last_update = CURRENT_DATE WHERE login = ? AND token = ?",
-            login,
-            token
+            "UPDATE Uzytkownicy SET last_update = CURRENT_DATE WHERE login = ?",
+            login
         )
 
-    def ustaw_token(self, login: str, haslo: str, token: str) -> None:
+    def ustaw_token(self, login: str, token: str) -> None:
         self.exec_and_commit(
-            "UPDATE Uzytownicy SET Token = ? WHERE login = ? AND haslo = ?",
+            "UPDATE Uzytkownicy SET Token = ? WHERE login = ?",
             token,
-            login,
-            haslo
+            login
         )
 
     def czyszczenie_polnocne(self):
