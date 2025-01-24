@@ -3,8 +3,8 @@ import typing
 import ManagerKodow as Kody
 import KomunikacjaZBaza as Bazy
 import sys
-sys.path.insert(1, '../Database')
-import SQLLite as Baza
+# sys.path.insert(1, '../Database')
+import Database.SQLLite as Baza
 
 
 
