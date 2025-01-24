@@ -12,10 +12,7 @@ import WeryfikacjaIRole as Wer
 import Obiekty as o
 import typing
 import hashlib as hash
-import sys
-sys.path.insert(1, '../Database')
-import SQLLite as Baza
-# import Database.SQLLite as Baza
+import Database.SQLLite as Baza
 
 
 

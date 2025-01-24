@@ -2,9 +2,7 @@ import hashlib as hash
 import typing
 import Obiekty as o
 import KomunikacjaZBaza as Bazy
-import sys
-sys.path.insert(1, '../Database')
-import SQLLite as Baza
+import Database.SQLLite as Baza
 
 
 

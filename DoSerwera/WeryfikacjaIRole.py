@@ -1,9 +1,7 @@
 import hashlib as hash
 import typing
 import KomunikacjaZBaza as Bazy
-import sys
-sys.path.insert(1, '../Database')
-import SQLLite as Baza
+import Database.SQLLite as Baza
 
 
 def zweryfikuj(baza: Baza.SQLLiteDB, login: str, token: str, nickWeryfikowanego: str, nowaRola: str, nazwaProjektu: str, kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego: typing.Tuple[str,str]) -> typing.Tuple[bool,typing.List[str]]:   #[sukces operacji, [""]]

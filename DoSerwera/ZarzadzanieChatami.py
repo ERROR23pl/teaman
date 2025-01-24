@@ -2,9 +2,7 @@ import hashlib as hash
 import typing
 import Obiekty as o
 import KomunikacjaZBaza as Bazy
-import sys
-sys.path.insert(1, '../Database')
-import SQLLite as Baza
+import Database.SQLLite as Baza
 
 
 def pobierzChat(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, 100 ostatnich wiadomości z chatu pokoju w formie listy stringów]

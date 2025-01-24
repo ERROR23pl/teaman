@@ -2,9 +2,7 @@ import typing
 import hashlib as hash
 import ManagerKluczy as Klucze
 import KomunikacjaZBaza as Bazy
-import sys
-sys.path.insert(1, '../Database')
-import SQLLite as Baza
+import Database.SQLLite as Baza
 
 
 def stworzPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]

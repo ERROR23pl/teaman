@@ -1,8 +1,8 @@
 import typing
-import DoSerwera.ManagerNazw as Nazwy
-import DoSerwera.ManagerHasel as Hasla
-import DoSerwera.ManagerKodow as Kody
-import DoSerwera.ManagerKluczy as Klucze
+import ManagerNazw as Nazwy
+import ManagerHasel as Hasla
+import ManagerKodow as Kody
+import ManagerKluczy as Klucze
 
 class Task:
     def __init__(self, idTaska: int, czyUkonczony: bool, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):

@@ -1,9 +1,6 @@
 import typing
 import Obiekty as o
-import sys
-sys.path.insert(1, '../Database')
 import Database.SQLLite as Baza
-# import Database.SQLLite as Baza # todo: Ryszard sprawdź czy ci teraz działa
 
 # todo: zaimplementować w bazie danych
 
