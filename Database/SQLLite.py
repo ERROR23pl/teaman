@@ -136,11 +136,11 @@ class SQLLiteDB:
     
     def czy_zweryfikowany(self, login: str) -> bool:
         self.execute(
-            "SELECT * FROM Uzytkownicy WHERE login = ? AND rola <> 'Niezweryfikowany'",
+            "SELECT * FROM Uzytkownicy WHERE login = ? AND rola = 'Niezweryfikowany'",
             login
         )
 
-        return self.cursor.fetchone() is not None
+        return self.cursor.fetchone() is None
 
 
     # --------------- kody zaproszeniowe ---------------
@@ -256,13 +256,14 @@ class SQLLiteDB:
 
     def czy_uzytkownik_w_pokoju(self, nazwa_pokoju: str, login: str) -> bool:
         self.execute(
-            "SELECT * FROM CzlonkowiePokojów WHERE uzytkownik = ? AND pokoj = ?",
+            "SELECT * FROM CzlonkowiePokojow WHERE uzytkownik = ? AND pokoj = ?",
             login,
             nazwa_pokoju
         )
 
         return self.cursor.fetchone() is not None
 
+    # todo: test
     def pokoje_czlonkowskie(self, login: str) -> List[str]:
         self.execute(
             "SELECT pokoj, klucz_publiczny, klucz_prywatny FROM KluczeDoPokojow WHERE uzytkownik = ?",
@@ -366,14 +367,17 @@ class SQLLiteDB:
 
         return self.cursor.fetchall()
         
-    # * wszystkie daty będą przechowywane w obiekcie date z modułu datetime
-    # * stworzenie daty ze stringa: date.fromisoformat("YYYY-MM-DD")
-    # * wszystkie time będą w obiekcie datetime
+
     def aktualizacja_chatu(self, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: date):
         ...
 
-    def dodaj_wiadomosc(self, login: str, azwaPokoju: str, wiadomosc: str, data: int):
-        ...
+    def dodaj_wiadomosc(self, login: str, nazwaPokoju: str, wiadomosc: str, data: int):
+        self.exec_and_commit(
+            "INSERT INTO Wiadomosci (pokoj, tresc, data_wyslania, autor) VALUES (?, ?, CURRENT_DATE, ?)",
+            nazwaPokoju,
+            wiadomosc,
+            login,
+        )
 
 
 
@@ -385,7 +389,7 @@ class SQLLiteDB:
             wpis.nazwa,
         )
 
-        return self.cursor.fetchone is not None
+        return self.cursor.fetchone() is not None
 
     def kalendarz_dodaj_wpis(self, nazwaPokoju: str, wpis: WpisKalendarza):
         self.exec_and_commit(
@@ -406,7 +410,7 @@ class SQLLiteDB:
         self.exec_and_commit(
             "UPDATE Wydarzenia SET nazwa = ?, data = ? WHERE pokoj = ? AND nazwa = ? AND data = ?",
             noweDane.nazwa,
-            noweDane.data,
+            noweDane.get_date(),
             nazwaPokoju,
             wpis.nazwa,
             wpis.get_date()
@@ -419,8 +423,9 @@ class SQLLiteDB:
         )
 
         result = []
+        # print(dat.strftime("YYYY-MM-DD"))
         for nazwa, data in self.cursor.fetchall():
-            result.append(WpisKalendarza.from_date_str(nazwa, data))
+            result.append(WpisKalendarza.from_date_str(nazwa, str(data)))
 
         return result
 

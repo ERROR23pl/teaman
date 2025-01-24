@@ -32,9 +32,9 @@ class Wiadomosc:
 
 class WpisKalendarza:
     @classmethod
-    def from_date_str(nazwaWpisu: str, data: str):
+    def from_date_str(cls, nazwaWpisu: str, data: str):
         daneDaty = str.split(data,"-")
-        return WpisKalendarza(nazwaWpisu, daneDaty[2], daneDaty[1], daneDaty[0])
+        return WpisKalendarza(nazwaWpisu, (daneDaty[2], daneDaty[1], daneDaty[0]))
     
     def __init__(self,nazwaWpisu: str, data: typing.Tuple[int,int,int]):
         self.nazwa: str = Nazwy.zabezpieczCudzyslowy(nazwaWpisu)
