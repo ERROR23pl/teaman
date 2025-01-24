@@ -256,7 +256,11 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, 
 def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    lista: typing.List[str] = baza.pobierz_kalendarz(nazwaPokoju)
+    wynik = baza.pobierz_kalendarz(nazwaPokoju)
+    lista = []
+    for w in wynik:
+        data = w[1].timetuple()
+        lista.append([w[0],[data[2],data[1],data[0]]])
     dataAktywnosci(baza,login)
     return lista
 

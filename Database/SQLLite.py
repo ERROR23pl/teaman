@@ -334,7 +334,7 @@ class SQLLiteDB:
                 idTaska
             )
 
-        return task_isnt_blocked # todo: change to raise 2 different errors
+        return task_exists and task_isnt_blocked # todo: change to raise 2 different errors
 
         
 
@@ -356,7 +356,7 @@ class SQLLiteDB:
                 nazwaPokoju,
                 idTaska
             )
-        return task_isnt_blocked # todo: change to raise 2 different errors
+        return task_exists and task_isnt_blocked # todo: change to raise 2 different errors
 
     def lista_taskow(self, nazwaPokoju: str):
         self.execute(
@@ -436,12 +436,7 @@ class SQLLiteDB:
             nazwaPokoju
         )
 
-        result = []
-        # print(dat.strftime("YYYY-MM-DD"))
-        for nazwa, data in self.cursor.fetchall():
-            result.append(WpisKalendarza.from_date_str(nazwa, str(data)))
-
-        return result
+        return self.cursor.fetchall()
 
 
     # --------------- Pliki ---------------
