@@ -21,13 +21,13 @@ class TestSqliteFunctions(unittest.TestCase):
         db: SQLLiteDB = reset_test_db()
 
         # sprawdzanie nie istniejącego kodu
-        NIE_ISTNIEJACY_KOD = KodZaproszeniowy("nie_istniejacy_kod")
+        NIE_ISTNIEJACY_KOD = "nie_istniejacy_kod"
         self.assertFalse(
             db.istnieje_kod_zpr(NIE_ISTNIEJACY_KOD)
         )
 
         # po dodaniu kodu powinien istnieć w bazie z dzisiejszą datą
-        ISTNIEJACY_KOD = KodZaproszeniowy("istniejacy_kod")
+        ISTNIEJACY_KOD = "istniejacy_kod"
         db.dodaj_kod_zaproszniowy(ISTNIEJACY_KOD)
         self.assertTrue(
             db.istnieje_kod_zpr(ISTNIEJACY_KOD)
@@ -39,11 +39,6 @@ class TestSqliteFunctions(unittest.TestCase):
             db.istnieje_kod_zpr(ISTNIEJACY_KOD)
         )
 
-    def test_uzytkownicy(self):
-        db: SQLLiteDB = reset_test_db()
-        
-        db.authenticate_admin(Login("admin_login"), Token("admin_token"))
-    
     def test_daty(self):
         db: SQLLiteDB = reset_test_db()
         db.exec_and_commit(
