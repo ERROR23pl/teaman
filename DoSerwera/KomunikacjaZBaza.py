@@ -1,6 +1,7 @@
 import typing
 import Obiekty as o
 import Database.SQLLite as Baza
+import datetime
 
 # todo: zaimplementować w bazie danych
 
@@ -187,7 +188,12 @@ def odznaczTaskJakoNieukonczony(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: s
 def listaTaskow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    lista: typing.List[str] = baza.lista_taskow(nazwaPokoju)
+    wynik: typing.List[str] = baza.lista_taskow(nazwaPokoju)
+    lista=[]
+    for w in wynik:
+        data = w[4].timetuple()[:3]
+        lista.append([w[0],w[1],bool(w[2]),[data[2],data[1],data[0]],[w[5],w[6]]])
+        
     dataAktywnosci(baza,login)
     return lista
 

@@ -308,17 +308,18 @@ class SQLLiteDB:
         for task in listaTaskow:
             self.dodaj_task(nazwaPokoju, task)
 
-    def usun_taski(self, nazwaPokoju: str, listaTaskow: Task):
+    def usun_taski(self, nazwaPokoju: str, listaTaskow: list[Task]):
         for task in listaTaskow:
             self.usun_task(nazwaPokoju, task)
 
-    def zaktualizuj_wlasnosci_taskow(self, nazwaPokoju: str, listaTaskow: Task):
+    def zaktualizuj_wlasnosci_taskow(self, nazwaPokoju: str, listaTaskow: list[Task]):
         for task in listaTaskow:
             self.aktualizuj_task(nazwaPokoju, task)
 
     def ukoncz_task(self, nazwaPokoju: str, idTaska: int) -> bool:
         self.execute(
-            "SELECT * FROM Taski WHERE id = ?",
+            "SELECT * FROM Taski WHERE pokoj=? AND id = ?",
+            nazwaPokoju,
             idTaska
         )
 
@@ -328,7 +329,8 @@ class SQLLiteDB:
 
         if task_exists and task_isnt_blocked:
             self.exec_and_commit(
-                "UPDATE Taski SET zrobiony = 'TRUE' WHERE id = ?",
+                "UPDATE Taski SET zrobiony = 1 WHERE pokoj=? AND id = ?",
+                nazwaPokoju,
                 idTaska
             )
 
@@ -338,12 +340,23 @@ class SQLLiteDB:
 
     def odznacz_task(self, nazwaPokoju: str, idTaska: int) -> bool:
         # todo: check if it's even possible.
-        
-        self.exec_and_commit(
-            "UPDATE Taski SET zrobiony = 'FALSE' WHERE pokoj = ? AND id = ?",
+        self.execute(
+            "SELECT * FROM Taski WHERE pokoj=? AND id = ?",
             nazwaPokoju,
             idTaska
         )
+
+        task_exists = self.cursor.fetchone() is not None
+
+        task_isnt_blocked = True # todo: change this into a prepared statement 
+
+        if task_exists and task_isnt_blocked:
+            self.exec_and_commit(
+                "UPDATE Taski SET zrobiony = 0 WHERE pokoj = ? AND id = ?",
+                nazwaPokoju,
+                idTaska
+            )
+        return task_isnt_blocked # todo: change to raise 2 different errors
 
     def lista_taskow(self, nazwaPokoju: str):
         self.execute(

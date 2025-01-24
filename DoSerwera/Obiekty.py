@@ -5,7 +5,12 @@ import ManagerKodow as Kody
 import ManagerKluczy as Klucze
 
 class Task:
-    def __init__(self, idTaska: int, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):
+    @classmethod
+    def from_date_str(cls, nazwaWpisu: str, data: str):
+        daneDaty = str.split(data,"-")
+        return WpisKalendarza(nazwaWpisu, (daneDaty[2], daneDaty[1], daneDaty[0]))
+        
+    def __init__(self, idTaska: int, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):        
         if(Nazwy.przetestujNazwe(nazwaTaska)):
             self.id: int = idTaska
             self.nazwa: str = nazwaTaska
@@ -17,6 +22,9 @@ class Task:
             self.wymaganeTaski: typing.List[int] = listaZaleznosci
         else:
             raise NameError("")
+        
+    def get_date(self) -> str:
+        return str(self.rok)+"-"+str(self.miesiac)+"-"+str(self.dzien)
 
 
 class Wiadomosc:
