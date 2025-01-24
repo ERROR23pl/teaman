@@ -372,7 +372,10 @@ def ustawRole(baza: Baza.SQLLiteDB, loginAdmina: str, loginZmienianego: str, now
 def listaNiezweryfikowanych(baza: Baza.SQLLiteDB, login: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
-    lista: typing.List[str] = baza.lista_niezweryfikowanych()
+    wynik: typing.List = baza.lista_niezweryfikowanych()
+    lista=[]
+    for tupla in wynik:
+        lista.append(tupla[0])
     dataAktywnosci(baza,login)
     return lista
 

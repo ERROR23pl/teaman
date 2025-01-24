@@ -71,7 +71,7 @@ class SQLLiteDB:
             nick
         )
 
-        return self.cursor.fetchone[0]
+        return self.cursor.fetchone()[0]
     
     def login_to_nick(self, login: str):
         self.execute(
@@ -79,7 +79,7 @@ class SQLLiteDB:
             login
         )
 
-        return self.cursor.fetchone[0]
+        return self.cursor.fetchone()[0]
 
 
     # --------------- Logowanie ---------------
@@ -136,11 +136,11 @@ class SQLLiteDB:
     
     def czy_zweryfikowany(self, login: str) -> bool:
         self.execute(
-            "SELECT * WHERE login = ? AND rola <> 'Niezweryfikowany'",
+            "SELECT * FROM Uzytkownicy WHERE login = ? AND rola <> 'Niezweryfikowany'",
             login
         )
 
-        return self.cursor.fetchone() is None
+        return self.cursor.fetchone() is not None
 
 
     # --------------- kody zaproszeniowe ---------------
@@ -202,8 +202,8 @@ class SQLLiteDB:
     def ustaw_role(self, loginZmienianego: str, nowaRola: str):
         self.exec_and_commit(
             "UPDATE Uzytkownicy SET rola = ? WHERE login = ?",
-            loginZmienianego,
             nowaRola,
+            loginZmienianego
         )
 
     def lista_niezweryfikowanych(self):
@@ -256,7 +256,7 @@ class SQLLiteDB:
 
     def czy_uzytkownik_w_pokoju(self, nazwa_pokoju: str, login: str) -> bool:
         self.execute(
-            "SELECT * FROM CzlonkowiePokoju WHERE uzytkownik = ? AND pokoj = ?",
+            "SELECT * FROM CzlonkowiePokojów WHERE uzytkownik = ? AND pokoj = ?",
             login,
             nazwa_pokoju
         )
@@ -484,7 +484,7 @@ class SQLLiteDB:
 
     def usun_klucze_dla_uzytkownika(self, nazwaPokoju: str, loginPosiadaczaKlucza: str):
         self.exec_and_commit(
-            "DELETE FROM KluczeDoPokojow WHERE nazwaPokoju = ? AND uzytkownik = ?",
+            "DELETE FROM KluczeDoPokojow WHERE pokoj = ? AND uzytkownik = ?",
             nazwaPokoju,
             loginPosiadaczaKlucza,
         )
