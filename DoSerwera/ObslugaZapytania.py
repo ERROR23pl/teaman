@@ -59,14 +59,14 @@ def ObsluzZapytanie(plikKomunikacyjny):
             
             try:
                 kodZapr: o.kod = o.kod(str(zapytanie[2]))
-                login: o.nazwa = o.nazwa(str(zapytanie[3]))
-                haslo: o.haslo = o.haslo(str(zapytanie[4]))
+                login: o.hash = o.hash(str(zapytanie[3]))
+                haslo: o.hash = o.hash(str(zapytanie[4]))
                 nick: o.nazwa = o.nazwa(str(zapytanie[5]))
             
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-            if(login==hash.sha3_512(nick.wart.encode()).hexdigest()):
+            if(login.wart==hash.sha3_512(nick.wart.encode()).hexdigest()):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick taki jak login"])   #niepoprawne dane - nazwa publiczna nie może być taka jak login
             
             rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaRejestracji(baza,kodZapr.wart,login.wart,haslo.wart,nick.wart)
@@ -79,8 +79,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Projekt istnieje"])   #nie można stworzyć projektu, bo już istnieje
             
             try:
-                login: o.nazwa = o.nazwa(str(zapytanie[2]))
-                haslo: o.haslo = o.haslo(str(zapytanie[3]))
+                login: o.hash = o.hash(str(zapytanie[2]))
+                haslo: o.hash = o.hash(str(zapytanie[3]))
                 nick: o.nazwa = o.nazwa(str(zapytanie[4]))
                 kluczPub: o.klucz = o.klucz(str(zapytanie[5]))
             
@@ -110,7 +110,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
             try:
-                kodZapr: o.kod = o.kod(str(zapytanie[4]))
+                kodZapr: o.hash = o.hash(str(zapytanie[4]))
             
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Wyślij nowy kod"])   #niepoprawny kod - prośba o nowy

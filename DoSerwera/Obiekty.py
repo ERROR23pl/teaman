@@ -84,3 +84,10 @@ class nazwaPliku:        # nazwa pliku
             self.wart: str = dane
         else:
             raise NameError("")
+
+class hash:        # hash
+    def __init__(self, dane: str):
+        if(Nazwy.przetestujHash(dane)):
+            self.wart: str = dane
+        else:
+            raise NameError("")

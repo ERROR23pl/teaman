@@ -5,11 +5,11 @@ from datetime import date, datetime
 import os
 
 from Database import Database
+from Models import AuthenticationError
 from DoSerwera.Obiekty import *
-DB_CREATION_QUERY_PATH = "./Database/db_creation_query.sql"
-DB_ERASE_DATA_QUERY_PATH = "./Database/db_delete_query.sql"
 
 # ! todo: change this in the final project!!!
+DB_CREATION_QUERY_PATH = "db_creation_query.sql"
 # todo: Czy metody to modyfikowania bazy powinny automatycznie commitować zmiany?
 # todo: error/none handling
 # ! todo: w wielu metodach zapomniałem zrobić self.commit() ups, trzeba będzie to naprawić
@@ -18,6 +18,7 @@ DB_ERASE_DATA_QUERY_PATH = "./Database/db_delete_query.sql"
 # ! todo: allow Admin and others to change password
 
 class SQLLiteDB:
+    # todo: metoda do implementacji
     @classmethod
     def baza_istnieje(cls, path) -> bool:
         return os.path.exists(path)
@@ -42,14 +43,6 @@ class SQLLiteDB:
                 self.execute(statement)
 
         self.commit()
-
-    def reset_database(self):
-        with open(DB_ERASE_DATA_QUERY_PATH, "r", encoding="utf-8") as query:
-            for statement in query.read().split(";"):
-                self.execute(statement)
-        
-        self.commit()
-        self.initialize_database()
 
     def execute(self, query: str, *args: List[Any]) -> Cursor:
         return self.cursor.execute(query, tuple(args)) # ? Do I need to turn args into a tuple?
@@ -215,7 +208,7 @@ class SQLLiteDB:
 
     def lista_niezweryfikowanych(self):
         self.execute(
-            "SELECT login FROM Uzytkownicy WHERE rola = 'Niezweryfikowany'"
+            "SELECT nazwa FROM Uzytkownicy WHERE rola = 'Niezweryfikowany'"
         )
 
         return self.cursor.fetchall()
@@ -224,7 +217,7 @@ class SQLLiteDB:
     # --------------- Pokoje ---------------
     def istnieje_pokoj(self, nazwa_pokoju: str) -> bool:
         self.execute(
-            "SELECT * FROM Pokoj WHERE nazwa = ?",
+            "SELECT * FROM Pokoje WHERE nazwa = ?",
             nazwa_pokoju
         )
         
@@ -497,7 +490,7 @@ class SQLLiteDB:
         )
 
     def klucz_uzytkownika(self, loginPosiadaczaKlucza: str) -> str:
-        self.exec(
+        self.execute(
             "SELECT klucz_publiczny FROM Uzytkownicy WHERE login = ?",
             loginPosiadaczaKlucza
         )

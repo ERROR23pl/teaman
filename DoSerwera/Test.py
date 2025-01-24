@@ -48,7 +48,7 @@ else:
         #Test rejestracji
         slownik['operacja'] = "rejestracja"
         slownik['projekt'] = "Projekt12345"
-        slownik['dana1'] = "1234567890abcde12345AA"     # tu zwrócony w terminalu kod zaproszeniowy
+        slownik['dana1'] = "1234567890abcde12345AA"
         slownik['dana2'] = hash.sha3_512(("Uzytkownik711").encode()).hexdigest()
         slownik['dana3'] = hash.sha3_512(("Haslo12345!").encode()).hexdigest()
         slownik['dana4'] = "NickUzytkownika711"
@@ -68,7 +68,7 @@ else:
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
-        slownik['dana3'] = "1234567890abcde12345AA"
+        slownik['dana3'] = hash.sha3_512(("1234567890abcde12345AA").encode()).hexdigest()
     
     elif(nr==8):
         #Test usuwania projektu
