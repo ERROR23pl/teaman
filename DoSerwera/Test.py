@@ -132,7 +132,10 @@ else:
         slownik['DodawanyTask3'] = [3,"nazwaTaska3",[10,1,2025],[20.06,1007.47],[4,5]]
         slownik['DodawanyTask4'] = [4,"nazwa4",[20,12,2024],[220.06,1004.7],[5]]
         slownik['DodawanyTask5'] = [5,"nazwaTaska5",[1,12,2024],[426.66,711.711],[]]
-        slownik['UsuwanyTask1'] = [6,"nazwaTaska6",[11,12,2026],[46.66,71.711],[7]]
+        slownik['UsuwanyTask1'] = [6,"nazwaTaska6",[11,12,2026],[46.66,71.711],[3]]
+        slownik['DodawanyTask6'] = [7,"nazwaTaska7",[1,12,2026],[469.66,71.711],[1]]
+        slownik['DodawanyTask7'] = [8,"nazwaTaska8",[14,7,2026],[568.66,711.711],[1]]
+        slownik['UsuwanyTask1'] = [6,"nazwaTaska6",[11,12,2026],[46.66,71.711],[3]]
         slownik['ModyfikowanyTask1'] = [7,"nazwaTaska7",[1,12,2026],[469.66,71.711],[8]]
         slownik['ModyfikowanyTask2'] = [8,"nazwaTaska8",[14,7,2026],[568.66,711.711],[1,2,3,4,5]]
     

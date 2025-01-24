@@ -111,6 +111,11 @@ CREATE TABLE KolejnoscTaskow (
 
 
 INSERT INTO Role VALUES ("Admin");
-INSERT INTO Role VALUES ("user");
+INSERT INTO Role VALUES ("Uzytkownik");
+INSERT INTO Role VALUES ("Grafik");
+INSERT INTO Role VALUES ("Developer");
+INSERT INTO Role VALUES ("Tester");
+INSERT INTO Role VALUES ("Programista");
+INSERT INTO Role VALUES ("Manager");
+INSERT INTO Role VALUES ("Praktykant");
 INSERT INTO Role VALUES ("Niezweryfikowany");
-INSERT INTO Uzytkownicy VALUES ("Admin", "admin_login", "admin_haslo", "admin_token", "Admin", NULL, NULL); -- todo: delete this line, when python script creates a first admin.

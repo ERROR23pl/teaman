@@ -773,7 +773,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick celu
             
             try:
-                nowaRola: o.nazwa = o.nazwa(str(zapytanie[5]))
+                nowaRola: o.rola = o.rola(str(zapytanie[5]))
             
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nowa rola nie spełnia założeń"])   #niepoprawna rola
@@ -803,7 +803,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick celu
             
             try:
-                nowaRola: o.nazwa = o.nazwa(str(zapytanie[5]))
+                nowaRola: o.rola = o.rola(str(zapytanie[5]))
             
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nowa rola nie spełnia założeń"])   #niepoprawna rola

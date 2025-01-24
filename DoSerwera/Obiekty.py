@@ -5,10 +5,9 @@ import ManagerKodow as Kody
 import ManagerKluczy as Klucze
 
 class Task:
-    def __init__(self, idTaska: int, czyUkonczony: bool, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):
+    def __init__(self, idTaska: int, nazwaTaska: str, data: typing.Tuple[int,int,int], koordynaty: typing.Tuple[float,float], listaZaleznosci: typing.List[int]):
         if(Nazwy.przetestujNazwe(nazwaTaska)):
             self.id: int = idTaska
-            self.ukonczony: bool = czyUkonczony
             self.nazwa: str = nazwaTaska
             self.dzien: int = data[0]
             self.miesiac: int = data[1]
@@ -88,6 +87,14 @@ class nazwaPliku:        # nazwa pliku
 class hash:        # hash
     def __init__(self, dane: str):
         if(Nazwy.przetestujHash(dane)):
+            self.wart: str = dane
+        else:
+            raise NameError("")
+
+
+class rola:        # nazwa projektu lub pokoju, login, nick
+    def __init__(self, dane: str):
+        if(Nazwy.przetestujRole(dane)):
             self.wart: str = dane
         else:
             raise NameError("")
