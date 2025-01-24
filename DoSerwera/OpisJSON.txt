@@ -261,10 +261,11 @@ Dane:
 -token
 -nazwa pokoju
 -kolejne zmodyfikowane taski, z nazwami kluczy opisanymi na starcie pliku; każdy ma być postaci: [int,  str, [int, int, int], [float, float], List[int]], czyli [id, nazwa, [dzień, miesiąc, rok], [koordynat x, koordynat y], [lista id tasków, od których jest zależny]]; nazwę musisz zaszyfrować
+    przy czym w przypadku nowododawanych tasków, możesz wysłać dowolnego inta jako id, bo id jest nadawane dopiero w bazie danych; w rezultacie będziesz miał poprawne id
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'; na razie nie jest opisane); nazwy musisz odszyfrować
+nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'); nazwy musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
@@ -288,7 +289,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-lista tasków pokoju (na razie nie jest opisane); nazwy musisz odszyfrować
+lista tasków pokoju postaci tupli: [int,  str, [int, int, int], [float, float], List[int]], czyli [id, nazwa, [dzień, miesiąc, rok], [koordynat x, koordynat y], [lista id tasków, od których jest zależny]]; nazwy musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
@@ -313,7 +314,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'; na razie nie jest opisane); nazwy musisz odszyfrować
+nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'); nazwy musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
@@ -339,7 +340,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'; na razie nie jest opisane); nazwy musisz odszyfrować
+nowa lista tasków pokoju (rezultat jak dla 'pobierz taski'); nazwy musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
@@ -443,7 +444,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-lista wydarzeń kalendarza pokoju (na razie nie jest opisane); treści wydarzeń musisz odszyfrować
+lista wydarzeń kalendarza pokoju w postaci listy tupli [str, [int, int, int]] - [nazwa, [dzień, miesiąc, rok]]; treści wydarzeń musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"

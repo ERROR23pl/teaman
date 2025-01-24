@@ -3,8 +3,6 @@ import Obiekty as o
 import Database.SQLLite as Baza
 import datetime
 
-# todo: zaimplementować w bazie danych
-
 def czyLoginIstnieje(baza: Baza.SQLLiteDB, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
 
@@ -33,7 +31,6 @@ def czyNickIstnieje(baza: Baza.SQLLiteDB, nickPubliczny: str) -> bool:
     return wynik
 
 
-# todo: zaimplementować w bazie danych
 def rolaUzytkownika(baza: Baza.SQLLiteDB, login: str) -> str:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
@@ -136,7 +133,6 @@ def czyUzytkownikJestWPokoju(baza: Baza.SQLLiteDB, nazwaPokoju: str, login: str)
     wynik: bool = baza.czy_uzytkownik_w_pokoju(nazwaPokoju,login)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def pokojeCzlonkowskie(baza: Baza.SQLLiteDB, login: str) -> typing.List[str]:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
     
@@ -144,7 +140,6 @@ def pokojeCzlonkowskie(baza: Baza.SQLLiteDB, login: str) -> typing.List[str]:
     dataAktywnosci(baza,login)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def dodajTaski(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
@@ -152,7 +147,6 @@ def dodajTaski(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, listaTaskow: 
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def usunTaski(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
@@ -160,7 +154,6 @@ def usunTaski(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, listaTaskow: t
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def zauktualizujWlasnosciTaskow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, listaTaskow: typing.List[o.Task]) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i nazwy tasków przetestowane pod względem bezpieczeństwa
     
@@ -168,7 +161,6 @@ def zauktualizujWlasnosciTaskow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: s
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def ukonczTask(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, idTaska: int) -> bool:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
@@ -176,7 +168,6 @@ def ukonczTask(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, idTaska: int)
     dataAktywnosci(baza,login)
     return czyMozna
 
-# todo: zaimplementować w bazie danych
 def odznaczTaskJakoNieukonczony(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, idTaska: int) -> bool:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
@@ -184,7 +175,6 @@ def odznaczTaskJakoNieukonczony(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: s
     dataAktywnosci(baza,login)
     return czyMozna
 
-# todo: zaimplementować w bazie danych
 def listaTaskow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
@@ -197,7 +187,6 @@ def listaTaskow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.Li
     dataAktywnosci(baza,login)
     return lista
 
-# todo: zaimplementować w bazie danych
 def pobierzChat(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
@@ -213,7 +202,6 @@ def aktualizacjaChatu(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, autorO
     dataAktywnosci(baza,login)
     return lista
 
-# todo: zaimplementować w bazie danych
 def dodajWiadomosc(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wiadomosc: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wiadomości z zabezpieczonymi cudzysłowami
     
@@ -221,14 +209,12 @@ def dodajWiadomosc(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wiadomosc
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def czyWpisIstnieje(baza: Baza.SQLLiteDB, nazwaPokoju: str, wpis: o.WpisKalendarza) -> bool:
     #nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
     wynik: bool = baza.wpis_istnieje(nazwaPokoju,wpis)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def dodajWpisDoKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
@@ -236,7 +222,6 @@ def dodajWpisDoKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wp
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def usunWpisZKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
@@ -244,7 +229,6 @@ def usunWpisZKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wpis
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treści wpisów z zabezpieczonymi cudzysłowami
     
@@ -252,7 +236,6 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, 
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
@@ -310,14 +293,12 @@ def autorPliku(baza: Baza.SQLLiteDB, nazwaPokoju: str, nazwaPliku: str, dana: st
     wynik: str = baza.autor_pliku(nazwaPokoju,nazwaPliku,dana)    
     return wynik
 
-# todo: zaimplementować w bazie danych
 def czyKluczIstnieje(baza: Baza.SQLLiteDB, kluczPub: str) -> bool:
     #klucz przetestowany pod względem bezpieczeństwa
     
     wynik: bool = baza.klucz_istnieje(kluczPub)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def ustawKlucz(baza: Baza.SQLLiteDB, login: str, kluczPub: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; klucz przetestowany pod względem bezpieczeństwa
     
@@ -325,7 +306,6 @@ def ustawKlucz(baza: Baza.SQLLiteDB, login: str, kluczPub: str) -> None:
     dataAktywnosci(baza,login)
     return None
 
-# todo: zaimplementować w bazie danych
 def dodajKluczPokoju(baza: Baza.SQLLiteDB, loginAdmina: str, nazwaPokoju: str, kluczPubPokoju: str, kluczPrivPokoju: str, loginPosiadaczaKlucza: str):
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i klucze przetestowane pod względem bezpieczeństwa
     
@@ -333,21 +313,18 @@ def dodajKluczPokoju(baza: Baza.SQLLiteDB, loginAdmina: str, nazwaPokoju: str, k
     dataAktywnosci(baza,loginAdmina)
     return None
 
-# todo: zaimplementować w bazie danych
 def czyKluczPokojuJuzIstnieje(baza: Baza.SQLLiteDB, kluczPubPokoju: str, kluczPrivPokoju: str, loginWlasciciela: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa; klucze przetestowane pod względem bezpieczeństwa
     
     wynik: bool = baza.czy_klucz_pokoju_istnieje(kluczPubPokoju,kluczPrivPokoju,loginWlasciciela)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def czyZweryfikowany(baza: Baza.SQLLiteDB, login: str) -> bool:
     #login zahashowany oraz przetestowany pod względem bezpieczeństwa
     
     wynik: bool = baza.czy_zweryfikowany(login)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def usunKluczeDlaUzytkownika(baza: Baza.SQLLiteDB, loginAdmina: str, nazwaPokoju: str, loginPosiadaczaKlucza: str):
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
@@ -355,7 +332,6 @@ def usunKluczeDlaUzytkownika(baza: Baza.SQLLiteDB, loginAdmina: str, nazwaPokoju
     dataAktywnosci(baza,loginAdmina)
     return None
 
-# todo: zaimplementować w bazie danych
 def kluczUzytkownika(baza: Baza.SQLLiteDB, loginAdmina: str, loginPosiadaczaKlucza: str) -> str:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
@@ -363,14 +339,12 @@ def kluczUzytkownika(baza: Baza.SQLLiteDB, loginAdmina: str, loginPosiadaczaKluc
     dataAktywnosci(baza,loginAdmina)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def loginUzytkownika(baza: Baza.SQLLiteDB, nick: str) -> str:
     #nick przetestowany pod względem bezpieczeństwa
     
     wynik: str = baza.nick_to_login(nick)
     return wynik
 
-# todo: zaimplementować w bazie danych
 def ustawRole(baza: Baza.SQLLiteDB, loginAdmina: str, loginZmienianego: str, nowaRola: str) -> None:
     #loginy i token zahashowane oraz przetestowane pod względem bezpieczeństwa; rola przetestowana pod względem bezpieczeństwa
     
@@ -378,7 +352,6 @@ def ustawRole(baza: Baza.SQLLiteDB, loginAdmina: str, loginZmienianego: str, now
     dataAktywnosci(baza,loginAdmina)
     return None
 
-# todo: zaimplementować w bazie danych
 def listaNiezweryfikowanych(baza: Baza.SQLLiteDB, login: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa
     
@@ -388,7 +361,6 @@ def listaNiezweryfikowanych(baza: Baza.SQLLiteDB, login: str) -> typing.List[str
         lista.append(tupla[0])
     dataAktywnosci(baza,login)
     return lista
-
 
 def czyRolaIstnieje(baza: Baza.SQLLiteDB, rola: str) -> bool:
     #rola przetestowana pod względem bezpieczeństwa
