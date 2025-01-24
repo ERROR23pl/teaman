@@ -371,12 +371,13 @@ class SQLLiteDB:
     def aktualizacja_chatu(self, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: date):
         ...
 
-    def dodaj_wiadomosc(self, login: str, nazwaPokoju: str, wiadomosc: str, data: int):
+    def dodaj_wiadomosc(self, login: str, nazwaPokoju: str, wiadomosc: str):
+        nick:str = self.login_to_nick(login)
         self.exec_and_commit(
             "INSERT INTO Wiadomosci (pokoj, tresc, data_wyslania, autor) VALUES (?, ?, CURRENT_DATE, ?)",
             nazwaPokoju,
             wiadomosc,
-            login,
+            nick
         )
 
 
@@ -386,7 +387,7 @@ class SQLLiteDB:
         self.execute(
             "SELECT * FROM Wydarzenia WHERE pokoj = ? AND nazwa = ?",
             nazwaPokoju,
-            wpis.nazwa,
+            wpis.nazwa
         )
 
         return self.cursor.fetchone() is not None

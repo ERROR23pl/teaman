@@ -467,7 +467,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick autora ostatniej wiadomości  
             
-            wiadomosc: o.Wiadomosc = o.Wiadomosc(int(zapytanie[8]),False,trescWiadomosci=str(zapytanie[7]))
+            wiadomosc: o.Wiadomosc = o.Wiadomosc(0,False,trescWiadomosci=str(zapytanie[7]))
             rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.wyslijWiadomosc(baza,login.wart,token.wart,nazwaPokoju.wart,ostatniaPosiadana,wiadomosc)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])

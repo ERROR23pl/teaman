@@ -70,6 +70,6 @@ def wyslijWiadomosc(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            Bazy.dodajWiadomosc(baza,login,nazwaPokoju,nowaWiadomosc.tresc,nowaWiadomosc.data)
+            Bazy.dodajWiadomosc(baza,login,nazwaPokoju,nowaWiadomosc.tresc)
             lista: typing.List[str] = Bazy.aktualizacjaChatu(baza,login,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
             return True, lista

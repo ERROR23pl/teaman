@@ -208,10 +208,10 @@ def aktualizacjaChatu(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, autorO
     return lista
 
 # todo: zaimplementować w bazie danych
-def dodajWiadomosc(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wiadomosc: str, data: int) -> None:
+def dodajWiadomosc(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wiadomosc: str) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wiadomości z zabezpieczonymi cudzysłowami
     
-    baza.dodaj_wiadomosc(login,nazwaPokoju,wiadomosc,data)
+    baza.dodaj_wiadomosc(login,nazwaPokoju,wiadomosc)
     dataAktywnosci(baza,login)
     return None
 

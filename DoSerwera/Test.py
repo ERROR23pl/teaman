@@ -182,7 +182,6 @@ else:
         slownik['dana4'] = "Uzytkownik711711"
         slownik['dana5'] = 1234567788
         slownik['dana6'] = "Wiadomość'admina"
-        slownik['dana7'] = 123456795
     
     elif(nr==20):
         #Test pobierania kalendarza

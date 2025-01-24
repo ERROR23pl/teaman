@@ -415,7 +415,6 @@ Dane:
 -nick autora ostatniej posiadanej wiadomości
 -kod daty ostatniej posiadanej wiadomości
 -treść wysyłanej wiadomości; musisz zaszyfrować
--kod daty wysyłanej wiadomości
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
