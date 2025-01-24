@@ -1,7 +1,7 @@
-import ObslugaZapytania as OZ
 import sys
 import json
 import hashlib as hash
+import requests
 
 if(len(sys.argv)<2):
     print("Nie podano numeru testu!\n")
@@ -307,9 +307,8 @@ else:
     else:
         slownik['operacja'] = "Nieznany numer testu"
 
-    wynik = OZ.ObsluzZapytanie(koder.encode(slownik))
-    print(wynik)
+    wynik = requests.post("http://localhost:8000",json=koder.encode(slownik))
     dekoder = json.JSONDecoder()
-    dane: dict = dekoder.decode(wynik)
+    dane: dict = dekoder.decode(wynik.text)
     print(dane)
     
