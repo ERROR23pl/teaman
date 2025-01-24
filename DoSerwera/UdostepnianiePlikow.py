@@ -1,9 +1,7 @@
 import hashlib as hash
 import typing
 import KomunikacjaZBaza as Bazy
-import sys
-sys.path.insert(1, '../Database')
-import SQLLite as Baza
+import Database.SQLLite as Baza
 
 
 def dodajPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
