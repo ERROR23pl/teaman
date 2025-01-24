@@ -143,7 +143,7 @@ class SQLLiteDB:
     
     def czy_zweryfikowany(self, login: str) -> bool:
         self.execute(
-            "SELECT * WHERE login = ? AND rola <> 'Niezweryfikowany'",
+            "SELECT * FROM Uzytkownicy WHERE login = ? AND rola = 'Niezweryfikowany'",
             login
         )
 
@@ -209,8 +209,8 @@ class SQLLiteDB:
     def ustaw_role(self, loginZmienianego: str, nowaRola: str):
         self.exec_and_commit(
             "UPDATE Uzytkownicy SET rola = ? WHERE login = ?",
-            loginZmienianego,
             nowaRola,
+            loginZmienianego
         )
 
     def lista_niezweryfikowanych(self):
@@ -224,7 +224,7 @@ class SQLLiteDB:
     # --------------- Pokoje ---------------
     def istnieje_pokoj(self, nazwa_pokoju: str) -> bool:
         self.execute(
-            "SELECT * FROM Pokoj WHERE nazwa = ?",
+            "SELECT * FROM Pokoje WHERE nazwa = ?",
             nazwa_pokoju
         )
         
@@ -263,13 +263,14 @@ class SQLLiteDB:
 
     def czy_uzytkownik_w_pokoju(self, nazwa_pokoju: str, login: str) -> bool:
         self.execute(
-            "SELECT * FROM CzlonkowiePokoju WHERE uzytkownik = ? AND pokoj = ?",
+            "SELECT * FROM CzlonkowiePokojow WHERE uzytkownik = ? AND pokoj = ?",
             login,
             nazwa_pokoju
         )
 
         return self.cursor.fetchone() is not None
 
+    # todo: test
     def pokoje_czlonkowskie(self, login: str) -> List[str]:
         self.execute(
             "SELECT pokoj, klucz_publiczny, klucz_prywatny FROM KluczeDoPokojow WHERE uzytkownik = ?",
@@ -373,14 +374,17 @@ class SQLLiteDB:
 
         return self.cursor.fetchall()
         
-    # * wszystkie daty będą przechowywane w obiekcie date z modułu datetime
-    # * stworzenie daty ze stringa: date.fromisoformat("YYYY-MM-DD")
-    # * wszystkie time będą w obiekcie datetime
+
     def aktualizacja_chatu(self, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: date):
         ...
 
-    def dodaj_wiadomosc(self, login: str, azwaPokoju: str, wiadomosc: str, data: int):
-        ...
+    def dodaj_wiadomosc(self, login: str, nazwaPokoju: str, wiadomosc: str, data: int):
+        self.exec_and_commit(
+            "INSERT INTO Wiadomosci (pokoj, tresc, data_wyslania, autor) VALUES (?, ?, CURRENT_DATE, ?)",
+            nazwaPokoju,
+            wiadomosc,
+            login,
+        )
 
 
 
@@ -392,7 +396,7 @@ class SQLLiteDB:
             wpis.nazwa,
         )
 
-        return self.cursor.fetchone is not None
+        return self.cursor.fetchone() is not None
 
     def kalendarz_dodaj_wpis(self, nazwaPokoju: str, wpis: WpisKalendarza):
         self.exec_and_commit(
@@ -413,7 +417,7 @@ class SQLLiteDB:
         self.exec_and_commit(
             "UPDATE Wydarzenia SET nazwa = ?, data = ? WHERE pokoj = ? AND nazwa = ? AND data = ?",
             noweDane.nazwa,
-            noweDane.data,
+            noweDane.get_date(),
             nazwaPokoju,
             wpis.nazwa,
             wpis.get_date()
@@ -426,8 +430,9 @@ class SQLLiteDB:
         )
 
         result = []
+        # print(dat.strftime("YYYY-MM-DD"))
         for nazwa, data in self.cursor.fetchall():
-            result.append(WpisKalendarza.from_date_str(nazwa, data))
+            result.append(WpisKalendarza.from_date_str(nazwa, str(data)))
 
         return result
 
@@ -491,13 +496,13 @@ class SQLLiteDB:
 
     def usun_klucze_dla_uzytkownika(self, nazwaPokoju: str, loginPosiadaczaKlucza: str):
         self.exec_and_commit(
-            "DELETE FROM KluczeDoPokojow WHERE nazwaPokoju = ? AND uzytkownik = ?",
+            "DELETE FROM KluczeDoPokojow WHERE pokoj = ? AND uzytkownik = ?",
             nazwaPokoju,
             loginPosiadaczaKlucza,
         )
 
     def klucz_uzytkownika(self, loginPosiadaczaKlucza: str) -> str:
-        self.exec(
+        self.exec_and_commit(
             "SELECT klucz_publiczny FROM Uzytkownicy WHERE login = ?",
             loginPosiadaczaKlucza
         )
