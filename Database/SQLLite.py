@@ -304,17 +304,50 @@ class SQLLiteDB:
             task.id
         )
     
+    def dodaj_zaleznosc_taska(self, idTaska: int, odKtoregoZalezny: int):
+        self.exec_and_commit(
+            "INSERT INTO KolejnoscTaskow(task,task_wymagany) VALUES (?, ?)",
+            idTaska,
+            odKtoregoZalezny
+        )
+    
+    def usun_zaleznosci_taska(self, idTaska: int):
+        self.exec_and_commit(
+            "DELETE FROM KolejnoscTaskow WHERE task = ?",
+            idTaska
+        )
+    
+    
+    def usun_zaleznosci_od_taska(self, idTaska: int):
+        self.exec_and_commit(
+            "DELETE FROM KolejnoscTaskow WHERE task_wymagany = ?",
+            idTaska
+        )
+    
+    
+    
     def dodaj_taski(self, nazwaPokoju: str, listaTaskow: list[Task]):
         for task in listaTaskow:
             self.dodaj_task(nazwaPokoju, task)
+        for task in listaTaskow:
+            for zaleznosc in task.wymaganeTaski:
+                self.dodaj_zaleznosc_taska(task.id,zaleznosc)
+        
 
     def usun_taski(self, nazwaPokoju: str, listaTaskow: list[Task]):
         for task in listaTaskow:
+            self.usun_zaleznosci_taska(task.id)
+            self.usun_zaleznosci_od_taska(task.id)
             self.usun_task(nazwaPokoju, task)
 
     def zaktualizuj_wlasnosci_taskow(self, nazwaPokoju: str, listaTaskow: list[Task]):
         for task in listaTaskow:
             self.aktualizuj_task(nazwaPokoju, task)
+        
+        for task in listaTaskow:
+            self.usun_zaleznosci_taska(task.id)
+            for zaleznosc in task.wymaganeTaski:
+                self.dodaj_zaleznosc_taska(task.id,zaleznosc)
 
     def ukoncz_task(self, nazwaPokoju: str, idTaska: int) -> bool:
         self.execute(
@@ -364,7 +397,16 @@ class SQLLiteDB:
             nazwaPokoju
         )
 
-        return self.cursor.fetchall()
+        lista = self.cursor.fetchall()
+        for i in range(len(lista)):
+            lista[i]=list(lista[i])
+            self.execute(
+                "SELECT * FROM KolejnoscTaskow WHERE task = ?",
+                lista[i][0]
+            )
+            lista[i].append(self.cursor.fetchall())
+        
+        return lista
 
 
     # --------------- Chaty ---------------

@@ -178,11 +178,13 @@ def odznaczTaskJakoNieukonczony(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: s
 def listaTaskow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    wynik: typing.List[str] = baza.lista_taskow(nazwaPokoju)
+    wynik = baza.lista_taskow(nazwaPokoju)
     lista=[]
     for w in wynik:
         data = w[4].timetuple()[:3]
-        lista.append([w[0],w[1],bool(w[2]),[data[2],data[1],data[0]],[w[5],w[6]]])
+        lista.append([w[0],w[1],bool(w[2]),[data[2],data[1],data[0]],[w[5],w[6]],[]])
+        for zal in w[7]:
+            lista[-1][-1].append(zal[0])
         
     dataAktywnosci(baza,login)
     return lista
