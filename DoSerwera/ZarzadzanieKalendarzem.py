@@ -28,7 +28,7 @@ def dodajDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju:
         
         else:
             if(not (Bazy.czyWpisIstnieje(baza,nazwaPokoju,wpis))):
-                Bazy.dodajWpisDoKalendarza(baza,login,nazwaPokoju,wpis)
+                Bazy.dodajWpisDoKalendarza(baza,hashLog,nazwaPokoju,wpis)
                 return True, [""]
             
             else:
@@ -57,7 +57,7 @@ def usunZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            Bazy.usunWpisZKalendarza(baza,login,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
+            Bazy.usunWpisZKalendarza(baza,hashLog,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
             return True, [""]
 
 
@@ -90,7 +90,7 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaP
                 return False, ["Nowy wpis już istnieje"]
             
             else:
-                Bazy.modyfikujWpisKalendarza(baza,login,nazwaPokoju,wpis,noweDane)
+                Bazy.modyfikujWpisKalendarza(baza,hashLog,nazwaPokoju,wpis,noweDane)
                 return True, [""]
 
 
@@ -113,5 +113,5 @@ def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: 
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.pobierzKalendarz(baza,login,nazwaPokoju)
+            lista: typing.List[str] = Bazy.pobierzKalendarz(baza,hashLog,nazwaPokoju)
             return True, lista

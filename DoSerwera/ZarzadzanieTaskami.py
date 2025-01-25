@@ -21,9 +21,9 @@ def obslugaTaskow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str
         return False, ["Pokój nie istnieje"]
     
     else:
-        Bazy.dodajTaski(baza,login,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
-        Bazy.usunTaski(baza,login,nazwaPokoju,usuwaneTaski)
-        Bazy.zauktualizujWlasnosciTaskow(baza,login,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane
+        Bazy.dodajTaski(baza,hashLog,nazwaPokoju,dodawaneTaski)                #dodaje bez informacji o wierzchołkach incydentnych; jeśli task o jakimś ID istniał, jest nadpisywany
+        Bazy.usunTaski(baza,hashLog,nazwaPokoju,usuwaneTaski)
+        Bazy.zauktualizujWlasnosciTaskow(baza,hashLog,nazwaPokoju,dodawaneTaski+zmienianeTaski)       #operacje niemożliwe są pomijane
         
         return True, [""]
 
@@ -47,7 +47,7 @@ def oznaczJakoWykonany(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyMozna: bool = Bazy.ukonczTask(baza,login,nazwaPokoju,idTaska)
+            czyMozna: bool = Bazy.ukonczTask(baza,hashLog,nazwaPokoju,idTaska)
             
             if(czyMozna):
                 return True, [""]
@@ -75,7 +75,7 @@ def oznaczJakoNiewykonany(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPok
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(baza,login,nazwaPokoju,idTaska)
+            czyMozna: bool = Bazy.odznaczTaskJakoNieukonczony(baza,hashLog,nazwaPokoju,idTaska)
             
             if(czyMozna):
                 return True, [""]
@@ -103,5 +103,5 @@ def pobierzTaski(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str)
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.listaTaskow(baza,login,nazwaPokoju)
+            lista: typing.List[str] = Bazy.listaTaskow(baza,hashLog,nazwaPokoju)
             return True, lista

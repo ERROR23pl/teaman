@@ -24,7 +24,7 @@ def dodajPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, na
         else:
             czyMozna: bool = not (Bazy.czyPlikIstnieje(baza,nazwaPokoju,nazwaPliku))
             if(czyMozna):
-                Bazy.dodajPlik(baza,login,nazwaPokoju,nazwaPliku,zawartoscPliku)
+                Bazy.dodajPlik(baza,hashLog,nazwaPokoju,nazwaPliku,zawartoscPliku)
                 return True, [""]
             return False, ["Plik już istnieje"]
 
@@ -53,7 +53,7 @@ def usunPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, naz
                 return True, [""]         #jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
 
             if (Bazy.rolaUzytkownika(baza,hashLog)=="Admin" or Bazy.autorPliku(baza,nazwaPokoju,nazwaPliku,dana="login")==hashLog):
-                Bazy.usunPlik(baza,login,nazwaPokoju,nazwaPliku)
+                Bazy.usunPlik(baza,hashLog,nazwaPokoju,nazwaPliku)
                 return True, [""]
             
             return False, ["Brak uprawnień"]
@@ -82,7 +82,7 @@ def pobierzPlik(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, 
             if (not czyPlikJest):
                 return False, ["Plik nie istnieje"]
             
-            zawartosc: bytes = Bazy.pobierzPlik(baza,login,nazwaPokoju,nazwaPliku)
+            zawartosc: bytes = Bazy.pobierzPlik(baza,hashLog,nazwaPokoju,nazwaPliku)
             strZawartosci: str = zawartosc.decode()
             return True, [strZawartosci]
 
@@ -106,5 +106,5 @@ def pobierzListePlikow(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.listaPlikow(baza,login,nazwaPokoju)
+            lista: typing.List[str] = Bazy.listaPlikow(baza,hashLog,nazwaPokoju)
             return True, lista

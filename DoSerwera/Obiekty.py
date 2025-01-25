@@ -90,7 +90,7 @@ class hash:        # hash
             raise NameError("")
 
 
-class rola:        # nazwa projektu lub pokoju, login, nick
+class rola:        # rola użytkownika
     def __init__(self, dane: str):
         if(Nazwy.przetestujRole(dane)):
             self.wart: str = dane
