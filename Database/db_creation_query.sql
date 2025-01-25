@@ -109,6 +109,19 @@ CREATE TABLE KolejnoscTaskow (
     CONSTRAINT task_wymagany FOREIGN KEY (task_wymagany) REFERENCES Taski(id)
 );
 
+CREATE TABLE Pliki (
+    id INTEGER,
+    nazwa_pliku TEXT, --! ENCODED
+    pokoj VARCHAR(255) NOT NULL,
+    autor VARCHAR(128) NOT NULL,
+    zawartosc LONGBLOB NOT NULL,
+
+    PRIMARY KEY(id AUTOINCREMENT),
+
+    CONSTRAINT pokoj FOREIGN KEY (pokoj) REFERENCES Pokoje(nazwa),
+    CONSTRAINT autor FOREIGN KEY (autor) REFERENCES Uzytkownicy(nazwa)
+);
+
 
 INSERT INTO Role VALUES ("Admin");
 INSERT INTO Role VALUES ("Uzytkownik");

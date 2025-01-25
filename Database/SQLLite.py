@@ -441,22 +441,62 @@ class SQLLiteDB:
 
     # --------------- Pliki ---------------
     def plik_istnieje(self, nazwaPokoju: str, nazwaPliku: str) -> bool:
-        ...
+        self.execute(
+            "SELECT * FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            nazwaPokoju,
+            nazwaPliku
+        )
+
+        return self.cursor.fetchone() is not None
 
     def dodaj_plik(self, login: str, nazwaPokoju: str, nazwaPliku: str, zawartoscPliku: bytes):
-        ...
+        nick:str = self.login_to_nick(login)
+        self.exec_and_commit(
+            "INSERT INTO Pliki (pokoj, nazwa_pliku, autor, zawartosc) VALUES (?, ?, ?, ?)",
+            nazwaPokoju,
+            nazwaPliku,
+            nick,
+            zawartoscPliku
+        )
 
     def usun_plik(self, nazwaPokoju: str, nazwaPliku: str):
-        ...
+        self.exec_and_commit(
+            "DELETE FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            nazwaPokoju,
+            nazwaPliku
+        )
 
     def pobierz_plik(self, nazwaPokoju: str, nazwaPliku: str):
-        ...
+        self.execute(
+            "SELECT zawartosc FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            nazwaPokoju,
+            nazwaPliku
+        )
+        
+        return self.cursor.fetchone()[0]
     
     def lista_plikow(self, nazwaPokoju: str):
-        ...
+        self.execute(
+            "SELECT nazwa_pliku, autor FROM Pliki WHERE pokoj = ?",
+            nazwaPokoju,
+        )
+        
+        return self.cursor.fetchall()
 
     def autor_pliku(self, nazwaPokoju: str, nazwaPliku: str, dana: str):
-        ...
+        self.execute(
+            "SELECT autor FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            nazwaPokoju,
+            nazwaPliku
+        )
+        
+        login: str = self.cursor.fetchone()[0]
+        
+        if(dana=="login"):
+            return login
+        
+        else:
+            return self.login_to_nick(login)
 
 
 

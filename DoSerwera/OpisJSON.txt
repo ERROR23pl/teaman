@@ -636,12 +636,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-lista plików z pokoju, postaci:
--autor
--nazwa
--autor
--nazwa
--...; nazwy musisz odszyfrować
+lista plików z pokoju, postaci krotek [str, str] - [nazwa_pliku, nick_autora]; nazwy musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
