@@ -587,7 +587,7 @@ Dane:
 -login
 -token
 -nazwa pokoju
--nazwa pliku; musisz zaszyfrować
+-id pliku
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
@@ -598,7 +598,6 @@ Możliwe błędy:
 -"Projekt nie istnieje"
 -"Dane nie spełniają założeń"
 -"Nazwa pokoju nie spełnia założeń"
--"Nazwa pliku nie spełnia założeń"
 -"Niepoprawne dane"
 -"Pokój nie istnieje"
 -"Użytkownik nie należy do pokoju"
@@ -614,7 +613,7 @@ Dane:
 -login
 -token
 -nazwa pokoju
--nazwa pliku; musisz zaszyfrować
+-id pliku
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
@@ -625,7 +624,6 @@ Możliwe błędy:
 -"Projekt nie istnieje"
 -"Dane nie spełniają założeń"
 -"Nazwa pokoju nie spełnia założeń"
--"Nazwa pliku nie spełnia założeń"
 -"Niepoprawne dane"
 -"Pokój nie istnieje"
 -"Użytkownik nie należy do pokoju"
@@ -644,7 +642,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-lista plików z pokoju, postaci krotek [str, str] - [nazwa_pliku, nick_autora]; nazwy musisz odszyfrować
+lista plików z pokoju, postaci krotek [int, str, str] - [id pliku, nazwa_pliku, nick_autora]; nazwy musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"

@@ -629,13 +629,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            try:
-                nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
+            idPliku: int = int(zapytanie[5])
             
-            except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pliku nie spełnia założeń"])   #niepoprawna nazwa plikuu
-            
-            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.usunPlik(baza,login.wart,token.wart,nazwaPokoju.wart,nazwaPliku.wart)
+            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.usunPlik(baza,login.wart,token.wart,nazwaPokoju.wart,idPliku)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
@@ -659,13 +655,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            try:
-                nazwaPliku: o.nazwaPliku = o.nazwaPliku(str(zapytanie[5]))
+            idPliku: int = int(zapytanie[5])
             
-            except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pliku nie spełnia założeń"])   #niepoprawna nazwa pliku
-            
-            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.pobierzPlik(baza,login.wart,token.wart,nazwaPokoju.wart,nazwaPliku.wart)
+            rezultat: typing.Tuple[bool,typing.List[str]] = udPlikow.pobierzPlik(baza,login.wart,token.wart,nazwaPokoju.wart,idPliku)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         

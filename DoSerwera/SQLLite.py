@@ -480,11 +480,11 @@ class SQLLiteDB:
 
 
     # --------------- Pliki ---------------
-    def plik_istnieje(self, nazwaPokoju: str, nazwaPliku: str) -> bool:
+    def plik_istnieje(self, nazwaPokoju: str, idPliku: int) -> bool:
         self.execute(
-            "SELECT * FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            "SELECT * FROM Pliki WHERE pokoj = ? AND id = ?",
             nazwaPokoju,
-            nazwaPliku
+            idPliku
         )
 
         return self.cursor.fetchone() is not None
@@ -499,35 +499,35 @@ class SQLLiteDB:
             zawartoscPliku
         )
 
-    def usun_plik(self, nazwaPokoju: str, nazwaPliku: str):
+    def usun_plik(self, nazwaPokoju: str, idPliku: int):
         self.exec_and_commit(
-            "DELETE FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            "DELETE FROM Pliki WHERE pokoj = ? AND int = ?",
             nazwaPokoju,
-            nazwaPliku
+            idPliku
         )
 
-    def pobierz_plik(self, nazwaPokoju: str, nazwaPliku: str):
+    def pobierz_plik(self, nazwaPokoju: str, idPliku: int):
         self.execute(
-            "SELECT zawartosc FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            "SELECT zawartosc FROM Pliki WHERE pokoj = ? AND id = ?",
             nazwaPokoju,
-            nazwaPliku
+            idPliku
         )
         
         return self.cursor.fetchone()[0]
     
     def lista_plikow(self, nazwaPokoju: str):
         self.execute(
-            "SELECT nazwa_pliku, autor FROM Pliki WHERE pokoj = ?",
+            "SELECT id, nazwa_pliku, autor FROM Pliki WHERE pokoj = ?",
             nazwaPokoju,
         )
         
         return self.cursor.fetchall()
 
-    def autor_pliku(self, nazwaPokoju: str, nazwaPliku: str, dana: str):
+    def autor_pliku(self, nazwaPokoju: str, idPliku: int, dana: str):
         self.execute(
-            "SELECT autor FROM Pliki WHERE pokoj = ? AND nazwa_pliku = ?",
+            "SELECT autor FROM Pliki WHERE pokoj = ? AND id = ?",
             nazwaPokoju,
-            nazwaPliku
+            idPliku
         )
         
         login: str = self.cursor.fetchone()[0]

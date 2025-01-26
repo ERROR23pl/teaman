@@ -260,7 +260,7 @@ else:
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
-        slownik['dana4'] = rsa.encrypt("Plik711.uwu".encode(),kPubPok).hex()
+        slownik['dana4'] = 2
     
     elif(nr==26):
         #Test pobierania pliku
@@ -269,7 +269,7 @@ else:
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
-        slownik['dana4'] = rsa.encrypt("Plik711.uwu".encode(),kPubPok).hex()
+        slownik['dana4'] = 2
     
     elif(nr==27):
         #Test pobierania listy plików z pokoju
@@ -330,4 +330,3 @@ else:
     dekoder = json.JSONDecoder()
     dane: dict = dekoder.decode(wynik.text)
     print(dane)
-    

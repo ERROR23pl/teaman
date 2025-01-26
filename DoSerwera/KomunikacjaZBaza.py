@@ -250,10 +250,10 @@ def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typi
     return lista
 
 # todo: zaimplementować w bazie danych
-def czyPlikIstnieje(baza: Baza.SQLLiteDB, nazwaPokoju: str, nazwaPliku: str) -> bool:
+def czyPlikIstnieje(baza: Baza.SQLLiteDB, nazwaPokoju: str, idPliku: int) -> bool:
     #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    wynik: bool = baza.plik_istnieje(nazwaPokoju,nazwaPliku)
+    wynik: bool = baza.plik_istnieje(nazwaPokoju,idPliku)
     return wynik
 
 # todo: zaimplementować w bazie danych
@@ -265,18 +265,18 @@ def dodajPlik(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, nazwaPliku: st
     return None
 
 # todo: zaimplementować w bazie danych
-def usunPlik(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, nazwaPliku: str) -> None:
+def usunPlik(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, idPliku: int) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    baza.usun_plik(nazwaPokoju,nazwaPliku)
+    baza.usun_plik(nazwaPokoju,idPliku)
     dataAktywnosci(baza,login)
     return None
 
 # todo: zaimplementować w bazie danych
-def pobierzPlik(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, nazwaPliku: str):
+def pobierzPlik(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, idPliku: int):
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    wynik = baza.pobierz_plik(nazwaPokoju,nazwaPliku)
+    wynik = baza.pobierz_plik(nazwaPokoju,idPliku)
     dataAktywnosci(baza,login)
     return wynik
 
@@ -289,10 +289,10 @@ def listaPlikow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.Li
     return wynik
 
 # todo: zaimplementować w bazie danych
-def autorPliku(baza: Baza.SQLLiteDB, nazwaPokoju: str, nazwaPliku: str, dana: str = "nick") -> str:
+def autorPliku(baza: Baza.SQLLiteDB, nazwaPokoju: str, idPliku: int, dana: str = "nick") -> str:
     #nazwy pokoju i pliku przetestowane pod względem bezpieczeństwa
     
-    wynik: str = baza.autor_pliku(nazwaPokoju,nazwaPliku,dana)    
+    wynik: str = baza.autor_pliku(nazwaPokoju,idPliku,dana)    
     return wynik
 
 def czyKluczIstnieje(baza: Baza.SQLLiteDB, kluczPub: str) -> bool:
