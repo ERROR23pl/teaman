@@ -23,13 +23,35 @@ class Task:
 
 
 class Wiadomosc:
-    def __init__(self,kodDaty: int, czyMaBycAutor: bool, trescWiadomosci: str = "", autorWiadomosci: str = ""):
-        if((not czyMaBycAutor) or Nazwy.przetestujNazwe(autorWiadomosci)):
+    def __init__(self,kodDaty: typing.List[int], trescWiadomosci: str = ""):
+        if(type(kodDaty)==int):
             self.data = kodDaty
-            self.tresc: str = Nazwy.zabezpieczCudzyslowy(trescWiadomosci)
-            self.autor: str = autorWiadomosci
         else:
-            raise NameError("")
+            dataDzienna = str(kodDaty[0])
+            if(kodDaty[1]>=10):
+                dataDzienna=dataDzienna+"-"+str(kodDaty[1])
+            else:
+                dataDzienna=dataDzienna+"-0"+str(kodDaty[1])
+            if(kodDaty[2]>=10):
+                dataDzienna=dataDzienna+"-"+str(kodDaty[2])
+            else:
+                dataDzienna=dataDzienna+"-0"+str(kodDaty[2])
+            self.data = dataDzienna
+            
+            if(kodDaty[3]>=10):
+                czas=str(kodDaty[3])
+            else:
+                czas="0"+str(kodDaty[3])
+            if(kodDaty[4]>=10):
+                czas=czas+":"+str(kodDaty[4])
+            else:
+                czas=czas+":0"+str(kodDaty[4])
+            if(kodDaty[5]>=10):
+                czas=czas+":"+str(kodDaty[5])
+            else:
+                czas=czas+":0"+str(kodDaty[5])
+            self.czas = czas
+        self.tresc: str = Nazwy.zabezpieczCudzyslowy(trescWiadomosci)
         
 
 class WpisKalendarza:

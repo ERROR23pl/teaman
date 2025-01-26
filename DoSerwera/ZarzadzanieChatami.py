@@ -46,7 +46,7 @@ def zaktualizujChat(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            lista: typing.List[str] = Bazy.aktualizacjaChatu(baza,hashLog,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
+            lista: typing.List[str] = Bazy.aktualizacjaChatu(baza,hashLog,nazwaPokoju,[ostatniaPosiadana.data,ostatniaPosiadana.czas])
             return True, lista
 
 
@@ -71,8 +71,8 @@ def wyslijWiadomosc(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
         
         else:
             Bazy.dodajWiadomosc(baza,hashLog,nazwaPokoju,nowaWiadomosc.tresc)
-            if(ostatniaPosiadana.data==0 and ostatniaPosiadana.autor==""):
+            if(type(ostatniaPosiadana.data)==int and ostatniaPosiadana.data==0):
                 lista = Bazy.pobierzChat(baza,hashLog,nazwaPokoju)
             else:
-                lista = Bazy.aktualizacjaChatu(baza,hashLog,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
+                lista = Bazy.aktualizacjaChatu(baza,hashLog,nazwaPokoju,[ostatniaPosiadana.data,ostatniaPosiadana.czas])
             return True, lista

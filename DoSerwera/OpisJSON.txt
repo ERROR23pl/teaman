@@ -394,19 +394,17 @@ Dane:
 -login
 -token
 -nazwa pokoju
--nick autora ostatniej posiadanej wiadomości
-kod daty ostatniej posiadanej wiadomości - tuple [rok, miesiąc, dzień, godzina, minuta]
+-kod daty ostatniej posiadanej wiadomości - tuple [rok, miesiąc, dzień, godzina, minuta, sekunda]
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-lista wiadomości pokoju od czasu ostatniej posiadanej wiadomości postaci tupli [autor, [rok, miesiąc, dzień, godzina, minuta], treść]; treści musisz odszyfrować
+lista wiadomości pokoju od czasu ostatniej posiadanej wiadomości postaci tupli [autor, [rok, miesiąc, dzień, godzina, minuta, sekunda], treść]; treści musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
 -"Projekt nie istnieje"
 -"Dane nie spełniają założeń"
 -"Nazwa pokoju nie spełnia założeń"
--"Nick drugiego użytkownika nie spełnia założeń"
 -"Niepoprawne dane"
 -"Pokój nie istnieje"
 -"Użytkownik nie należy do pokoju"
@@ -421,20 +419,18 @@ Dane:
 -login
 -token
 -nazwa pokoju
--nick autora ostatniej posiadanej wiadomości; jeśli nie posiada się żadnych (nowy chat), to ""
--kod daty ostatniej posiadanej wiadomości - tuple [rok, miesiąc, dzień, godzina, minuta]; jeśli nie posiada się żadnych (nowy chat), to 0
+-kod daty ostatniej posiadanej wiadomości - tuple [rok, miesiąc, dzień, godzina, minuta, sekunda]; jeśli nie posiada się żadnych (nowy chat), to 0
 -treść wysyłanej wiadomości; musisz zaszyfrować
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-lista wiadomości pokoju od czasu ostatniej posiadanej wiadomości postaci tupli [autor, [rok, miesiąc, dzień, godzina, minuta], treść]; treści musisz odszyfrować
+lista wiadomości pokoju od czasu ostatniej posiadanej wiadomości postaci tupli [autor, [rok, miesiąc, dzień, godzina, minuta, sekunda], treść]; treści musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
 -"Projekt nie istnieje"
 -"Dane nie spełniają założeń"
 -"Nazwa pokoju nie spełnia założeń"
--"Nick drugiego użytkownika nie spełnia założeń"
 -"Niepoprawne dane"
 -"Pokój nie istnieje"
 -"Użytkownik nie należy do pokoju"

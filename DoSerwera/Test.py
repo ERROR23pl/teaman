@@ -189,8 +189,7 @@ else:
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
-        slownik['dana4'] = "Uzytkownik711"
-        slownik['dana5'] = 1234567788
+        slownik['dana5'] = [2025, 1, 26, 19, 52]
     
     elif(nr==19):
         #Test wysyłania wiadomości
@@ -199,8 +198,7 @@ else:
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
-        slownik['dana4'] = "Uzytkownik711711"
-        slownik['dana5'] = 1234567788
+        slownik['dana5'] = 0
         slownik['dana6'] = rsa.encrypt("Wiadomość'admina".encode(),kPubPok).hex()
     
     elif(nr==20):

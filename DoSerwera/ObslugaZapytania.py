@@ -430,11 +430,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            try:
-                ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),True,autorWiadomosci=str(zapytanie[5]))
-            
-            except:
-                return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick autora ostatniej wiadomości
+            ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(zapytanie[5])
             
             rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.zaktualizujChat(baza,login.wart,token.wart,nazwaPokoju.wart,ostatniaPosiadana)
     
@@ -461,16 +457,8 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            if(type(zapytanie[6])==int and int(zapytanie[6])==0 and str(zapytanie[5])==""): # nie ma się żadnych wiadomości z tego chatu
-                ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),False)
-            else:
-                try:
-                    ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),True,autorWiadomosci=str(zapytanie[5]))
-                
-                except:
-                    return Pliki.stworzPlikZOdpowiedzia(False,["Nick drugiego użytkownika nie spełnia założeń"])   #niepoprawny nick autora ostatniej wiadomości  
-            
-            wiadomosc: o.Wiadomosc = o.Wiadomosc(0,False,trescWiadomosci=str(zapytanie[7]))
+            ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(zapytanie[5]) 
+            wiadomosc: o.Wiadomosc = o.Wiadomosc(0,trescWiadomosci=str(zapytanie[6]))
             rezultat: typing.Tuple[bool,typing.List[str]] = Chaty.wyslijWiadomosc(baza,login.wart,token.wart,nazwaPokoju.wart,ostatniaPosiadana,wiadomosc)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
