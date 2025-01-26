@@ -12,7 +12,7 @@ import WeryfikacjaIRole as Wer
 import Obiekty as o
 import typing
 import hashlib as hash
-import Database.SQLLite as Baza
+import SQLLite as Baza
 
 
 

@@ -1,7 +1,7 @@
 import typing
 import hashlib as hash
 import KomunikacjaZBaza as Bazy
-import Database.SQLLite as Baza
+import SQLLite as Baza
     
     
 def dodajDoPokoju(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str, kluczePokoju: typing.Tuple[str,str]) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]

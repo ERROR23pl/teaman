@@ -3,7 +3,7 @@ import typing
 import ManagerKodow as Kody
 import ManagerKluczy as Klucze
 import KomunikacjaZBaza as Bazy
-import Database.SQLLite as Baza
+import SQLLite as Baza
 
 
 def stworzProjekt(baza: Baza.SQLLiteDB, nazwaProjektu: str, login: str, haslo: str, nick: str, kluczPub: str) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [token sesji]]

@@ -2,7 +2,7 @@ import hashlib as hash
 import typing
 import Obiekty as o
 import KomunikacjaZBaza as Bazy
-import Database.SQLLite as Baza
+import SQLLite as Baza
 
 
 

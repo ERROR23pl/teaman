@@ -4,9 +4,7 @@ from typing import List, Any
 from datetime import date, datetime
 import os
 
-from Database import Database
-from Models import AuthenticationError
-from DoSerwera.Obiekty import *
+from Obiekty import *
 
 # ! todo: change this in the final project!!!
 DB_CREATION_QUERY_PATH = "db_creation_query.sql"

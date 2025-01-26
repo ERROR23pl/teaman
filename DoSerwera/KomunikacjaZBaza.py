@@ -1,6 +1,6 @@
 import typing
 import Obiekty as o
-import Database.SQLLite as Baza
+import SQLLite as Baza
 import datetime
 
 def czyLoginIstnieje(baza: Baza.SQLLiteDB, login: str) -> bool:
