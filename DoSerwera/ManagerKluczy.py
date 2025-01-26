@@ -20,7 +20,7 @@ def klucz(klucz: str) -> rsa.PublicKey:
 
 
 def generujKluczePokoju():  #[klucz publiczny, klucz prywatny]
-    return rsa.newkeys(nbits=1024,poolsize=4)
+    return rsa.newkeys(nbits=2048,poolsize=4)
     
 
 

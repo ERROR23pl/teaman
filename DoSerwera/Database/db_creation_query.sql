@@ -20,7 +20,7 @@ CREATE TABLE Uzytkownicy (
     last_update TIME,
 
     -- ! klucz publiczny jest null tylko i wyłącznie pomiędzy stworzeniem użytkowanika a zaakceptowaniem klucza przez serwer (unique)
-    klucz_publiczny VARCHAR(64) UNIQUE, -- ! KEY
+    klucz_publiczny TEXT UNIQUE, -- ! KEY
 
     CONSTRAINT rola FOREIGN KEY (rola) REFERENCES Role(nazwa)
 );
@@ -38,8 +38,8 @@ CREATE TABLE KluczeDoPokojow (
     id INTEGER,
     pokoj VARCHAR(255) NOT NULL,
     uzytkownik VARCHAR(128) NOT NULL,
-    klucz_publiczny VARCHAR(128), -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
-    klucz_prywatny VARCHAR(128), -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
+    klucz_publiczny TEXT, -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
+    klucz_prywatny TEXT, -- todo: klucz zaszyfrowany kluczem, jaką ma długość? (jak niewiadomo to TEXT)
 
     PRIMARY KEY(id AUTOINCREMENT),
 

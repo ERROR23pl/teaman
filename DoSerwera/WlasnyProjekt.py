@@ -15,9 +15,10 @@ def stworzProjekt(baza: Baza.SQLLiteDB, nazwaProjektu: str, login: str, haslo: s
     Bazy.ustawKlucz(baza,login,kluczPub)
     kluczAdmina = Klucze.klucz(kluczPub)
     
-    kluczePokoju: typing.List[str] = Klucze.generujKluczePokoju()
-    kluczePokoju[0] = Klucze.zaszyfrujKluczPub(kluczAdmina,kluczePokoju[0])
-    kluczePokoju[1] = Klucze.zaszyfrujKluczPriv(kluczAdmina,kluczePokoju[1])
+    kluczePok: typing.List[str] = Klucze.generujKluczePokoju()
+    kluczePokoju=[]
+    kluczePokoju.append(Klucze.zaszyfrujKluczPub(kluczAdmina,kluczePok[0]))
+    kluczePokoju.append(Klucze.zaszyfrujKluczPriv(kluczAdmina,kluczePok[1]))
     
     try:
         Bazy.stworzPokoj(baza,login,nazwaProjektu)                #automatycznie stwórz pokój główny o nazwie takiej samej jak nazwa projektu

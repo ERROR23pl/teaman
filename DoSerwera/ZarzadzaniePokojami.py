@@ -26,10 +26,11 @@ def stworzPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) 
         czyTakiKluczPokojuJuzIstnieje: bool = True
         
         while(czyTakiKluczPokojuJuzIstnieje):
-            kluczePokoju = Klucze.generujKluczePokoju()
+            kluczePok = Klucze.generujKluczePokoju()
+            kluczePokoju=[]
             try:
-                kluczePokoju[0] = Klucze.zaszyfrujKluczPub(kluczPubAdmina,kluczePokoju[0])
-                kluczePokoju[1] = Klucze.zaszyfrujKluczPriv(kluczPubAdmina,kluczePokoju[1])
+                kluczePokoju.append(Klucze.zaszyfrujKluczPub(kluczPubAdmina,kluczePok[0]))
+                kluczePokoju.append(Klucze.zaszyfrujKluczPriv(kluczPubAdmina,kluczePok[1]))
                 czyTakiKluczPokojuJuzIstnieje = Bazy.czyKluczPokojuJuzIstnieje(baza,kluczePokoju[0],kluczePokoju[1],hashLog)   #dwa pokoje nie mogą mieć tej samej pary kluczy (a każdy pokój ma w bazie swoje klucze zaszyfrowane przez właściciela)
             except NameError:
                 return False, ["Za krótki klucz użytkownika"]
