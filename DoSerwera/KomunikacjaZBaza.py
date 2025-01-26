@@ -189,18 +189,28 @@ def listaTaskow(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.Li
     dataAktywnosci(baza,login)
     return lista
 
-def pobierzChat(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typing.List[str]:
+def pobierzChat(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str):
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa
     
-    lista: typing.List[str] = baza.pobierz_chat(nazwaPokoju)
+    wynik = baza.pobierz_chat(nazwaPokoju)
+    lista = []
+    for w in wynik:
+        data = w[1].split("-")
+        czas = w[2].split(":")
+        lista.append([w[0],[int(data[0]),int(data[1]),int(data[2]),int(czas[0]),int(czas[1])],w[3]])
     dataAktywnosci(baza,login)
     return lista
 
 # todo: zaimplementować w bazie danych
-def aktualizacjaChatu(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: int) -> typing.List[str]:
+def aktualizacjaChatu(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej) -> typing.List[str]:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju i autor ostatniej wiadomości przetestowane pod względem bezpieczeństwa
     
-    lista: typing.List[str] = baza.aktualizacja_chatu(nazwaPokoju,autorOstatnioPosiadanej,dataOstatnioPosiadanej)
+    wynik = baza.aktualizacja_chatu(nazwaPokoju,autorOstatnioPosiadanej,dataOstatnioPosiadanej)
+    lista = []
+    for w in wynik:
+        data = w[1].split("-")
+        czas = w[2].split(":")
+        lista.append([w[0],[int(data[0]),int(data[1]),int(data[2]),int(czas[0]),int(czas[1])],w[3]])
     dataAktywnosci(baza,login)
     return lista
 

@@ -461,7 +461,7 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            if(int(zapytanie[6])==0 and str(zapytanie[5])==""): # nie ma się żadnych wiadomości z tego chatu
+            if(type(zapytanie[6])==int and int(zapytanie[6])==0 and str(zapytanie[5])==""): # nie ma się żadnych wiadomości z tego chatu
                 ostatniaPosiadana: o.Wiadomosc = o.Wiadomosc(int(zapytanie[6]),False)
             else:
                 try:

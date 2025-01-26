@@ -25,7 +25,7 @@ class Task:
 class Wiadomosc:
     def __init__(self,kodDaty: int, czyMaBycAutor: bool, trescWiadomosci: str = "", autorWiadomosci: str = ""):
         if((not czyMaBycAutor) or Nazwy.przetestujNazwe(autorWiadomosci)):
-            self.data: int = kodDaty
+            self.data = kodDaty
             self.tresc: str = Nazwy.zabezpieczCudzyslowy(trescWiadomosci)
             self.autor: str = autorWiadomosci
         else:

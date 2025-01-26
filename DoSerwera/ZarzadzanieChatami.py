@@ -72,7 +72,7 @@ def wyslijWiadomosc(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
         else:
             Bazy.dodajWiadomosc(baza,hashLog,nazwaPokoju,nowaWiadomosc.tresc)
             if(ostatniaPosiadana.data==0 and ostatniaPosiadana.autor==""):
-                Bazy.pobierzChat(baza,hashLog,nazwaPokoju)
+                lista = Bazy.pobierzChat(baza,hashLog,nazwaPokoju)
             else:
-                lista: typing.List[str] = Bazy.aktualizacjaChatu(baza,hashLog,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
+                lista = Bazy.aktualizacjaChatu(baza,hashLog,nazwaPokoju,ostatniaPosiadana.autor,ostatniaPosiadana.data)
             return True, lista

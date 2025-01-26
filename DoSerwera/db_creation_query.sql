@@ -63,6 +63,7 @@ CREATE TABLE Wiadomosci (
     pokoj VARCHAR(255) NOT NULL,
     tresc TEXT NOT NULL, --! ENCODED
     data_wyslania TIME NOT NULL,
+    czas_wyslania TIME NOT NULL,
     autor VARCHAR(128) NOT NULL,
 
     PRIMARY KEY(id AUTOINCREMENT),

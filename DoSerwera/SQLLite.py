@@ -412,7 +412,7 @@ class SQLLiteDB:
     # * w oryginale chciałeś list[str] ale wydaje mi się że ptotrzebujesz więcej info niż tylko same treści (na przykład data wysłania) więc zwracam cały rezultat query
     def pobierz_chat(self, nazwa_pokoju: str, offset: int = 0, liczba_wiadomosci: int = 100):
         self.execute(
-            "SELECT autor, data_wyslania, tresc FROM Wiadomosci WHERE pokoj = ? ORDER BY data_wyslania DESC LIMIT ?, ?",
+            "SELECT autor, data_wyslania, czas_wyslania, tresc FROM Wiadomosci WHERE pokoj = ? ORDER BY data_wyslania, czas_wyslania DESC LIMIT ?, ?",
             nazwa_pokoju,
             offset,
             liczba_wiadomosci
@@ -421,13 +421,24 @@ class SQLLiteDB:
         return self.cursor.fetchall()
         
 
-    def aktualizacja_chatu(self, nazwaPokoju: str, autorOstatnioPosiadanej: str, dataOstatnioPosiadanej: date):
-        ...
+    def aktualizacja_chatu(self, nazwaPokoju: str, autorOstatnioPosiadanej: str, data):
+        self.execute(
+            "SELECT autor, data_wyslania, czas_wyslania, tresc FROM Wiadomosci WHERE pokoj = ? AND (data_wyslania > ? OR (data_wyslania = ? AND (HOUR(czas_wyslania) > ? OR (HOUR(czas_wyslania) = ? AND MINUTE(czas_wyslania) >= ?)))) ORDER BY data_wyslania, czas_wyslania DESC",
+            nazwaPokoju,
+            str(data[0])+"-"+str(data[1])+"-"+str(data[2]),
+            str(data[0])+"-"+str(data[1])+"-"+str(data[2]),
+            data[3],
+            data[3],
+            data[4]
+        )
+
+        return self.cursor.fetchall()
+        
 
     def dodaj_wiadomosc(self, login: str, nazwaPokoju: str, wiadomosc: str):
         nick:str = self.login_to_nick(login)
         self.exec_and_commit(
-            "INSERT INTO Wiadomosci (pokoj, tresc, data_wyslania, autor) VALUES (?, ?, CURRENT_DATE, ?)",
+            "INSERT INTO Wiadomosci (pokoj, tresc, data_wyslania, czas_wyslania, autor) VALUES (?, ?, CURRENT_DATE, CURRENT_TIME, ?)",
             nazwaPokoju,
             wiadomosc,
             nick
