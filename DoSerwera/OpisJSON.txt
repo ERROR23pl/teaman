@@ -452,7 +452,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
-lista wydarzeń kalendarza pokoju w postaci listy tupli [str, [int, int, int]] - [nazwa, [dzień, miesiąc, rok]]; treści wydarzeń musisz odszyfrować
+lista wydarzeń kalendarza pokoju w postaci listy tupli [int, str, [int, int, int]] - [id wpisu, nazwa, [dzień, miesiąc, rok]]; treści wydarzeń musisz odszyfrować
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"
@@ -501,8 +501,7 @@ Dane:
 -login
 -token
 -nazwa pokoju
--nazwa wydarzenia; musisz zaszyfrować
--trójka [int,int,int] określająca datę wydarzenia postaci [dzień,miesiąc,rok]
+-id wydarzenia
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
@@ -528,8 +527,7 @@ Dane:
 -login
 -token
 -nazwa pokoju
--stara nazwa wydarzenia; musisz zaszyfrować
--trójka [int,int,int] określająca starą datę wydarzenia postaci [dzień,miesiąc,rok]
+-id modyfikowanego wydarzenia
 -nowa nazwa wydarzenia; musisz zaszyfrować
 -trójka [int,int,int] określająca nową datę wydarzenia postaci [dzień,miesiąc,rok]
 

@@ -211,10 +211,10 @@ def dodajWiadomosc(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wiadomosc
     dataAktywnosci(baza,login)
     return None
 
-def czyWpisIstnieje(baza: Baza.SQLLiteDB, nazwaPokoju: str, wpis: o.WpisKalendarza) -> bool:
+def czyWpisIstnieje(baza: Baza.SQLLiteDB, nazwaPokoju: str, idWpisu: int) -> bool:
     #nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
-    wynik: bool = baza.wpis_istnieje(nazwaPokoju,wpis)
+    wynik: bool = baza.wpis_istnieje(nazwaPokoju,idWpisu)
     return wynik
 
 def dodajWpisDoKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
@@ -224,17 +224,17 @@ def dodajWpisDoKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wp
     dataAktywnosci(baza,login)
     return None
 
-def usunWpisZKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> None:
+def usunWpisZKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, idWpisu: int) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treść wpisu z zabezpieczonymi cudzysłowami
     
-    baza.kalendarz_usun_wpis(nazwaPokoju,wpis)
+    baza.kalendarz_usun_wpis(nazwaPokoju,idWpisu)
     dataAktywnosci(baza,login)
     return None
 
-def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> None:
+def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str, idWpisu: int, noweDane: o.WpisKalendarza) -> None:
     #login i token zahashowane oraz przetestowane pod względem bezpieczeństwa; nazwa pokoju przetestowana pod względem bezpieczeństwa; treści wpisów z zabezpieczonymi cudzysłowami
     
-    baza.kalendarz_modyfikuj_wpis(nazwaPokoju,wpis,noweDane)
+    baza.kalendarz_modyfikuj_wpis(nazwaPokoju,idWpisu,noweDane)
     dataAktywnosci(baza,login)
     return None
 

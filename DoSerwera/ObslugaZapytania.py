@@ -545,9 +545,9 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
+            idWpisu: int = int(zapytanie[5])
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.usunZKalendarza(baza,login.wart,token.wart,nazwaPokoju.wart,wpis)
+            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.usunZKalendarza(baza,login.wart,token.wart,nazwaPokoju.wart,idWpisu)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         
@@ -571,10 +571,10 @@ def ObsluzZapytanie(plikKomunikacyjny):
             except:
                 return Pliki.stworzPlikZOdpowiedzia(False,["Nazwa pokoju nie spełnia założeń"])   #niepoprawna nazwa pokoju
             
-            wpis: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[5]),zapytanie[6])
-            noweDane: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[7]),zapytanie[8])
+            idWpisu: int = int(zapytanie[5])
+            noweDane: o.WpisKalendarza = o.WpisKalendarza(str(zapytanie[6]),zapytanie[7])
             
-            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.modyfikujWpisKalendarza(baza,login.wart,token.wart,nazwaPokoju.wart,wpis,noweDane)
+            rezultat: typing.Tuple[bool,typing.List[str]] = Kalendarz.modyfikujWpisKalendarza(baza,login.wart,token.wart,nazwaPokoju.wart,idWpisu,noweDane)
 
             return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
         

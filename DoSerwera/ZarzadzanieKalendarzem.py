@@ -36,7 +36,7 @@ def dodajDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju:
 
 
 
-def usunZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def usunZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, idWpisu: int) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
@@ -57,12 +57,12 @@ def usunZKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: s
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            Bazy.usunWpisZKalendarza(baza,hashLog,nazwaPokoju,wpis)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
+            Bazy.usunWpisZKalendarza(baza,hashLog,nazwaPokoju,idWpisu)       #nawet, jeśli wpis nie nie istniał, to usunięcie zostaje uznane za udane
             return True, [""]
 
 
 
-def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, wpis: o.WpisKalendarza, noweDane: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
+def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, idWpisu: int, noweDane: o.WpisKalendarza) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
     hashLog: str = hash.sha3_512(login.encode()).hexdigest()
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     
@@ -83,14 +83,14 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaP
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            if(not Bazy.czyWpisIstnieje(baza,nazwaPokoju,wpis)):
+            if(not Bazy.czyWpisIstnieje(baza,nazwaPokoju,idWpisu)):
                 return False, ["Wpis nie istnieje"]
             
             elif(Bazy.czyWpisIstnieje(baza,nazwaPokoju,noweDane)):
                 return False, ["Nowy wpis już istnieje"]
             
             else:
-                Bazy.modyfikujWpisKalendarza(baza,hashLog,nazwaPokoju,wpis,noweDane)
+                Bazy.modyfikujWpisKalendarza(baza,hashLog,nazwaPokoju,idWpisu,noweDane)
                 return True, [""]
 
 

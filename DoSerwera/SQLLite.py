@@ -436,11 +436,11 @@ class SQLLiteDB:
 
 
     # --------------- Kalendarze ---------------
-    def wpis_istnieje(self, nazwaPokoju: str, wpis: WpisKalendarza) -> bool:
+    def wpis_istnieje(self, nazwaPokoju: str, idWpisu: int) -> bool:
         self.execute(
-            "SELECT * FROM Wydarzenia WHERE pokoj = ? AND nazwa = ?",
+            "SELECT * FROM Wydarzenia WHERE pokoj = ? AND id = ?",
             nazwaPokoju,
-            wpis.nazwa
+            idWpisu
         )
 
         return self.cursor.fetchone() is not None
@@ -453,26 +453,25 @@ class SQLLiteDB:
             wpis.get_date()
         )
     
-    def kalendarz_usun_wpis(self, nazwaPokoju: str, wpis: WpisKalendarza):        
+    def kalendarz_usun_wpis(self, nazwaPokoju: str, idWpisu: int):        
         self.exec_and_commit(
-            "DELETE FROM Wydarzenia WHERE pokoj = ? AND nazwa = ?",
+            "DELETE FROM Wydarzenia WHERE pokoj = ? AND id = ?",
             nazwaPokoju,
-            wpis.nazwa
+            idWpisu
         )
 
-    def kalendarz_modyfikuj_wpis(self, nazwaPokoju: str, wpis: WpisKalendarza, noweDane: WpisKalendarza):
+    def kalendarz_modyfikuj_wpis(self, nazwaPokoju: str, idWpisu: int, noweDane: WpisKalendarza):
         self.exec_and_commit(
-            "UPDATE Wydarzenia SET nazwa = ?, data = ? WHERE pokoj = ? AND nazwa = ? AND data = ?",
+            "UPDATE Wydarzenia SET nazwa = ?, data = ? WHERE pokoj = ? AND id = ?",
             noweDane.nazwa,
             noweDane.get_date(),
             nazwaPokoju,
-            wpis.nazwa,
-            wpis.get_date()
+            idWpisu
         )
 
     def pobierz_kalendarz(self, nazwaPokoju: str) -> typing.List[WpisKalendarza]:
         self.execute(
-            "SELECT nazwa, data FROM Wydarzenia WHERE pokoj = ? ORDER BY data ASC",
+            "SELECT id, nazwa, data FROM Wydarzenia WHERE pokoj = ? ORDER BY data ASC",
             nazwaPokoju
         )
 
