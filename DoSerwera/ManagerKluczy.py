@@ -44,7 +44,7 @@ def zaszyfrujKluczPriv(kluczUzytkownika: rsa.PublicKey, klucz: rsa.PrivateKey) -
     q = klucz.q
     
     try:
-        return rsa.encrypt(str(n).encode(), kluczUzytkownika).hex()+"."+rsa.encrypt(str(e).encode(), kluczUzytkownika).hex()+"."+rsa.encrypt(str(d).encode(), kluczUzytkownika).hex()+"."+rsa.encrypt(str(p).encode(), kluczUzytkownika), rsa.encrypt(str(q).encode(), kluczUzytkownika).hex()
+        return rsa.encrypt(str(n).encode(), kluczUzytkownika).hex()+"."+rsa.encrypt(str(e).encode(), kluczUzytkownika).hex()+"."+rsa.encrypt(str(d).encode(), kluczUzytkownika).hex()+"."+rsa.encrypt(str(p).encode(), kluczUzytkownika).hex()+"."+rsa.encrypt(str(q).encode(), kluczUzytkownika).hex()
 
     except:
         raise NameError("")
