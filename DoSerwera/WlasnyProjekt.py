@@ -13,15 +13,20 @@ def stworzProjekt(baza: Baza.SQLLiteDB, nazwaProjektu: str, login: str, haslo: s
     hashTok: str = hash.sha3_512(token.encode()).hexdigest()
     Bazy.wstawUzytkownika(baza,login,haslo,hashTok,"Admin",nick)
     Bazy.ustawKlucz(baza,login,kluczPub)
+    kluczAdmina = Klucze.klucz(kluczPub)
     
     kluczePokoju: typing.List[str] = Klucze.generujKluczePokoju()
-    kluczePokoju[0] = Klucze.zaszyfruj(kluczPub,kluczePokoju[0])
-    kluczePokoju[1] = Klucze.zaszyfruj(kluczPub,kluczePokoju[1])
+    kluczePokoju[0] = Klucze.zaszyfrujKluczPub(kluczAdmina,kluczePokoju[0])
+    kluczePokoju[1] = Klucze.zaszyfrujKluczPriv(kluczAdmina,kluczePokoju[1])
     
-    Bazy.stworzPokoj(baza,login,nazwaProjektu)                #automatycznie stwórz pokój główny o nazwie takiej samej jak nazwa projektu
-    Bazy.dodajDoPokoju(baza,login,nazwaProjektu,login)        #dodaj siebie (właściciela) do pokoju głównego
-    Bazy.dodajKluczPokoju(baza,login,nazwaProjektu,kluczePokoju[0],kluczePokoju[1],login)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym właściciela
-        
+    try:
+        Bazy.stworzPokoj(baza,login,nazwaProjektu)                #automatycznie stwórz pokój główny o nazwie takiej samej jak nazwa projektu
+        Bazy.dodajDoPokoju(baza,login,nazwaProjektu,login)        #dodaj siebie (właściciela) do pokoju głównego
+        Bazy.dodajKluczPokoju(baza,login,nazwaProjektu,kluczePokoju[0],kluczePokoju[1],login)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym właściciela
+    
+    except NameError:
+        return False, ["Za krótki klucz użytkownika"]
+    
     return True, [token]
 
 

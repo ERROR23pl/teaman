@@ -6,6 +6,12 @@ Plik z odpowiedzią składa się z dwóch części - pierwsze pole słownika (z 
 
 "Niespełnianie założeń" oznacza niezgodność z założeniami dotyczącymi dozwolonych znaków, długości itd. Jako że jest to też sprawdzane po stronie klienta, to jest to bardziej zabezpieczenie na wypadek próby dostania się „na około".
 
+Kwestie dotyczące kluczy:
+-użytkownik musi wygenerować własną parę kluczy dla długości 6144 (żeby móc szyfrować klucze pokojów)
+-na serwer klucze wysyłane są w postaci stringa str(n)+"."+str(e)
+-klucz publiczny serwera zwracany jest w postaci: [n klucza serwera, zaszyfrowane kluczem publicznym użytkownika i zamienione na hex]+"."+[to samo dla e]
+-klucz publiczny serwera zwracany jest w postaci analogicznej jako powyżej, tylko w kolejności n,e,d,p,q
+
 
 Operacje:
 
@@ -63,7 +69,7 @@ Dane:
 -login (ZAHASHOWANY)
 -hasło (ZAHASHOWANE)
 -nick publiczny
--klucz publiczny
+-klucz publiczny RSA, postaci: str(n)+"."+str(e)
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
@@ -74,6 +80,7 @@ Możliwe błędy:
 -"Projekt istnieje"
 -"Dane nie spełniają założeń"
 -"Nick taki jak login"
+-"Za krótki klucz użytkownika"
 
 
 4. ZAPRASZANIE DO WŁASNEGO PROJEKTU (GENEROWANIE KODU ZAPROSZENIOWEGO)
@@ -143,6 +150,7 @@ Możliwe błędy:
 -"Niepoprawne dane"
 -"Brak uprawnień"
 -"Pokój już istnieje"
+-"Za krótki klucz użytkownika"
 
 
 
@@ -656,7 +664,7 @@ Dane:
 -nazwa projektu
 -login
 -token
--klucz publiczny, który chcemy dodać (wygenerowany przez klienta, razem z przechowywanym przez niego kluczem prywatnym)
+-klucz publiczny RSA, postaci: str(n)+"."+str(e), który chcemy dodać (wygenerowany przez klienta, razem z przechowywanym przez niego kluczem prywatnym)
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
@@ -682,7 +690,7 @@ Dane:
 
 Plik z odpowiedzią:
 Dla 'sukces': true:
--klucz publiczny wybranego użytkownika
+-klucz publiczny RSA wybranego użytkownika, postaci: str(n)+"."+str(e)
 
 Możliwe błędy:
 -"Nazwa projektu nie spełnia założeń"

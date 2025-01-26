@@ -22,15 +22,18 @@ def stworzPokoj(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str) 
     
     else:
         Bazy.stworzPokoj(baza,hashLog,nazwaPokoju)
-        kluczPubAdmina: str = Bazy.kluczUzytkownika(baza,hashLog,hashLog)
+        kluczPubAdmina = Klucze.klucz(Bazy.kluczUzytkownika(baza,hashLog,hashLog))
         czyTakiKluczPokojuJuzIstnieje: bool = True
         
         while(czyTakiKluczPokojuJuzIstnieje):
-            kluczePokoju: typing.Tuple[str,str] = Klucze.generujKluczePokoju()
-            kluczePokoju[0] = Klucze.zaszyfruj(kluczPubAdmina,kluczePokoju[0])
-            kluczePokoju[1] = Klucze.zaszyfruj(kluczPubAdmina,kluczePokoju[1])
-            czyTakiKluczPokojuJuzIstnieje = Bazy.czyKluczPokojuJuzIstnieje(baza,kluczePokoju[0],kluczePokoju[1],hashLog)   #dwa pokoje nie mogą mieć tej samej pary kluczy (a każdy pokój ma w bazie swoje klucze zaszyfrowane przez właściciela)
-        
+            kluczePokoju = Klucze.generujKluczePokoju()
+            try:
+                kluczePokoju[0] = Klucze.zaszyfrujKluczPub(kluczPubAdmina,kluczePokoju[0])
+                kluczePokoju[1] = Klucze.zaszyfrujKluczPriv(kluczPubAdmina,kluczePokoju[1])
+                czyTakiKluczPokojuJuzIstnieje = Bazy.czyKluczPokojuJuzIstnieje(baza,kluczePokoju[0],kluczePokoju[1],hashLog)   #dwa pokoje nie mogą mieć tej samej pary kluczy (a każdy pokój ma w bazie swoje klucze zaszyfrowane przez właściciela)
+            except NameError:
+                return False, ["Za krótki klucz użytkownika"]
+            
         Bazy.dodajDoPokoju(baza,hashLog,nazwaPokoju,hashLog)        #dodaj siebie (właściciela) do pokoju
         Bazy.dodajKluczPokoju(baza,hashLog,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],hashLog)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym właściciela
         return True, [""]
