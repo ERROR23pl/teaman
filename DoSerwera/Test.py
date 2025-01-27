@@ -226,8 +226,7 @@ else:
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
-        slownik['dana4'] = rsa.encrypt("Wpis12345".encode(),kPubPok).hex()
-        slownik['dana5'] = [6,7,2025]
+        slownik['dana4'] = 1
     
     elif(nr==23):
         #Test modyfikowania wpisu kalendarza
@@ -236,8 +235,7 @@ else:
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
         slownik['dana3'] = "Pokoj123456788"
-        slownik['dana4'] = rsa.encrypt("Wpis12345".encode(),kPubPok).hex()
-        slownik['dana5'] = [6,7,2025]
+        slownik['dana4'] = 2
         slownik['dana6'] = rsa.encrypt("Wpis711".encode(),kPubPok).hex()
         slownik['dana7'] = [7,11,2025]
     

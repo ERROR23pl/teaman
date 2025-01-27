@@ -27,12 +27,8 @@ def dodajDoKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju:
             return False, ["Użytkownik nie należy do pokoju"]
         
         else:
-            if(not (Bazy.czyWpisIstnieje(baza,nazwaPokoju,wpis))):
-                Bazy.dodajWpisDoKalendarza(baza,hashLog,nazwaPokoju,wpis)
-                return True, [""]
-            
-            else:
-                return False, ["Wpis już istnieje"]
+            Bazy.dodajWpisDoKalendarza(baza,hashLog,nazwaPokoju,wpis)
+            return True, [""]
 
 
 
@@ -85,9 +81,6 @@ def modyfikujWpisKalendarza(baza: Baza.SQLLiteDB, login: str, token: str, nazwaP
         else:
             if(not Bazy.czyWpisIstnieje(baza,nazwaPokoju,idWpisu)):
                 return False, ["Wpis nie istnieje"]
-            
-            elif(Bazy.czyWpisIstnieje(baza,nazwaPokoju,noweDane)):
-                return False, ["Nowy wpis już istnieje"]
             
             else:
                 Bazy.modyfikujWpisKalendarza(baza,hashLog,nazwaPokoju,idWpisu,noweDane)

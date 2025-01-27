@@ -485,7 +485,6 @@ Możliwe błędy:
 -"Brak uprawnień"
 -"Pokój nie istnieje"
 -"Użytkownik nie należy do pokoju"
--"Wpis już istnieje"
 
 
 20. USUWANIE WPISU Z KALENDARZA
@@ -541,7 +540,6 @@ Możliwe błędy:
 -"Pokój nie istnieje"
 -"Użytkownik nie należy do pokoju"
 -"Wpis nie istnieje"
--"Nowy wpis już istnieje"
 
 
 22. DODAWANIE PLIKU

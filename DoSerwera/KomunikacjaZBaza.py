@@ -254,8 +254,8 @@ def pobierzKalendarz(baza: Baza.SQLLiteDB, login: str, nazwaPokoju: str) -> typi
     wynik = baza.pobierz_kalendarz(nazwaPokoju)
     lista = []
     for w in wynik:
-        data = w[1].timetuple()
-        lista.append([w[0],[data[2],data[1],data[0]]])
+        data = w[2].timetuple()
+        lista.append([w[0],w[1],[data[2],data[1],data[0]]])
     dataAktywnosci(baza,login)
     return lista
 
