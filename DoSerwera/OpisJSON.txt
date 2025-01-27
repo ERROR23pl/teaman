@@ -43,8 +43,8 @@ Plik wysyłany na serwer:
 Dane:
 -nazwa projektu
 -kod zaproszeniowy
--login (ZAHASHOWANY)
--hasło (ZAHASHOWANE)
+-login
+-hasło
 -nick publiczny
 
 Plik z odpowiedzią:
@@ -66,8 +66,8 @@ Plik wysyłany na serwer:
 'operacja': 'tworzenie projektu'
 Dane:
 -nazwa projektu
--login (ZAHASHOWANY)
--hasło (ZAHASHOWANE)
+-login
+-hasło
 -nick publiczny
 -klucz publiczny RSA, postaci: str(n)+"."+str(e)
 

@@ -33,17 +33,19 @@ def obsluzRejestracje(zapytanie: typing.List, nazwaProjektu: o.nazwa, czyProjekt
             
     try:
         kodZapr: o.kod = o.kod(str(zapytanie[2]))
-        login: o.hash = o.hash(str(zapytanie[3]))
-        haslo: o.hash = o.hash(str(zapytanie[4]))
+        login: o.nazwa = o.nazwa(str(zapytanie[3]))
+        haslo: o.haslo = o.haslo(str(zapytanie[4]))
         nick: o.nazwa = o.nazwa(str(zapytanie[5]))
             
     except:
         return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-    if(login.wart==hash.sha3_512(nick.wart.encode()).hexdigest()):
+    if(login.wart==nick.wart):
         return Pliki.stworzPlikZOdpowiedzia(False,["Nick taki jak login"])   #niepoprawne dane - nazwa publiczna nie może być taka jak login
-            
-    rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaRejestracji(baza,kodZapr.wart,login.wart,haslo.wart,nick.wart)
+    
+    hasLog: str = hash.sha3_512(login.wart.encode()).hexdigest()
+    hasHas: str = hash.sha3_512(haslo.wart.encode()).hexdigest()
+    rezultat: typing.Tuple[bool,typing.List[str]] = LogIRej.probaRejestracji(baza,kodZapr.wart,hasLog,hasHas,nick.wart)
 
     return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
 
@@ -54,19 +56,21 @@ def obsluzTworzenieProjektu(zapytanie: typing.List, nazwaProjektu: o.nazwa, czyP
         return Pliki.stworzPlikZOdpowiedzia(False,["Projekt istnieje"])   #nie można stworzyć projektu, bo już istnieje
             
     try:
-        login: o.hash = o.hash(str(zapytanie[2]))
-        haslo: o.hash = o.hash(str(zapytanie[3]))
+        login: o.nazwa = o.nazwa(str(zapytanie[2]))
+        haslo: o.haslo = o.haslo(str(zapytanie[3]))
         nick: o.nazwa = o.nazwa(str(zapytanie[4]))
         kluczPub: o.klucz = o.klucz(str(zapytanie[5]))
             
     except:
         return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
-    if(login.wart==hash.sha3_512(nick.wart.encode()).hexdigest()):
+    if(login.wart==nick.wart):
         return Pliki.stworzPlikZOdpowiedzia(False,["Nick taki jak login"])   #niepoprawne dane - nazwa publiczna nie może być taka jak login
-            
+    
+    hasLog: str = hash.sha3_512(login.wart.encode()).hexdigest()
+    hasHas: str = hash.sha3_512(haslo.wart.encode()).hexdigest()
     baza = Baza.SQLLiteDB("./Bazy/"+nazwaProjektu.wart+".db")
-    rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.stworzProjekt(baza,nazwaProjektu.wart,login.wart,haslo.wart,nick.wart,kluczPub.wart)
+    rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.stworzProjekt(baza,nazwaProjektu.wart,hasLog,hasHas,nick.wart,kluczPub.wart)
 
     return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
 
@@ -86,12 +90,13 @@ def obsluzZapraszanie(zapytanie: typing.List, nazwaProjektu: o.nazwa, czyProjekt
         return Pliki.stworzPlikZOdpowiedzia(False,["Dane nie spełniają założeń"])   #niepoprawne dane
             
     try:
-        kodZapr: o.hash = o.hash(str(zapytanie[4]))
+        kodZapr: o.kod = o.kod(str(zapytanie[4]))
             
     except:
         return Pliki.stworzPlikZOdpowiedzia(False,["Wyślij nowy kod"])   #niepoprawny kod - prośba o nowy
-            
-    rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.dodajZaproszenie(baza,login.wart,token.wart,kodZapr.wart)
+    
+    hasKod: str = hash.sha3_512(kodZapr.wart.encode()).hexdigest()     
+    rezultat: typing.Tuple[bool,typing.List[str]] = WlProj.dodajZaproszenie(baza,login.wart,token.wart,hasKod)
 
     return Pliki.stworzPlikZOdpowiedzia(rezultat[0],rezultat[1])
 

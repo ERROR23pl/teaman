@@ -1,6 +1,5 @@
 import sys
 import json
-import hashlib as hash
 import requests
 import rsa
 
@@ -66,16 +65,16 @@ else:
         slownik['operacja'] = "rejestracja"
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "1234567890abcde12345AA"
-        slownik['dana2'] = hash.sha3_512(("Uzytkownik711").encode()).hexdigest()
-        slownik['dana3'] = hash.sha3_512(("Haslo12345!").encode()).hexdigest()
+        slownik['dana2'] = "Uzytkownik711"
+        slownik['dana3'] = "Haslo12345!"
         slownik['dana4'] = "NickUzytkownika711"
     
     elif(nr==6):
         #Test tworzenia projektu
         slownik['operacja'] = "tworzenie projektu"
         slownik['projekt'] = "Projekt12345"
-        slownik['dana1'] = hash.sha3_512(("Uzytkownik711").encode()).hexdigest()
-        slownik['dana2'] = hash.sha3_512(("Haslo12345!").encode()).hexdigest()
+        slownik['dana1'] = "Uzytkownik711"
+        slownik['dana2'] = "Haslo12345!"
         slownik['dana3'] = "NickUzytkownika711"
         slownik['dana4'] = str(klPub.n)+"."+str(klPub.e)
     
@@ -85,7 +84,7 @@ else:
         slownik['projekt'] = "Projekt12345"
         slownik['dana1'] = "Uzytkownik711"
         slownik['dana2'] = "token12345token0987654321A"     # tu zwrócony w terminalu token
-        slownik['dana3'] = hash.sha3_512(("1234567890abcde12345AA").encode()).hexdigest()
+        slownik['dana3'] = "1234567890abcde12345AA"
     
     elif(nr==8):
         #Test usuwania projektu

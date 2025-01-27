@@ -49,15 +49,3 @@ def przetestujNazwePliku(nazwa: str) -> bool:        #test poprawności nazwy pl
                 return False    #to nie jest poprawna nazwa pliku
     
     return True     #to jest poprawna nazwa pliku
-
-
-def przetestujHash(nazwa: str) -> bool:
-    if(len(nazwa)!=128):
-        return False
-    
-    for znak in nazwa:
-        kodZnaku: int = ord(znak)
-        if ((kodZnaku not in range (48,58)) and (kodZnaku not in range (65,91)) and (kodZnaku not in range (97,123))):  #nie cyfra, nie wielka lub mała litera
-            return False 
-    
-    return True

@@ -104,13 +104,6 @@ class nazwaPliku:        # nazwa pliku
         else:
             raise NameError("")
 
-class hash:        # hash
-    def __init__(self, dane: str):
-        if(Nazwy.przetestujHash(dane)):
-            self.wart: str = dane
-        else:
-            raise NameError("")
-
 
 class rola:        # rola użytkownika
     def __init__(self, dane: str):
