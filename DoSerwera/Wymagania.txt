@@ -1,0 +1,38 @@
+Login, nazwa projektu, nazwa pokoju, nick, nazwa taska:
+-długość minimum 10 znaków
+-dopuszczone znaki: małe i wielkie litery alfabetu angielskiego, cyfry, znak _
+
+
+Hasło:
+-długość minimum 10 znaków
+-dopuszczone znaki: małe i wielkie litery alfabetu angielskiego, cyfry, znaki specjalne z zakresu kodów ASCII od 33 do 126 (obustronnie włącznie), oprócz niedozwolonych
+-minimum jedna wielka litera
+-minimum jedna mała litera
+-minimum jedna cyfra
+-minimum jeden dozwolony znak specjalny
+-zabronione symbole: . , - = / \ ' " oraz białe znaki
+
+
+Kod zaproszeniowy (ty generujesz!), token (ja generuję):
+-długość od 20 do 30 (obustronnie włącznie) znaków
+-dopuszczone znaki: małe i wielkie litery alfabetu angielskiego, cyfry
+
+
+Klucz użytkownika:
+-string ma być konkatenacją dwóch intów scastowanych na str, połączonych kropką
+
+
+Nazwa pliku:
+-długośc minium 1 znak
+-dopuszczone znaki: małe i wielkie litery alfabetu angielskiego, cyfry, znak _ oraz .
+-maksymalnie jedna kropka
+
+
+
+Rola:
+-długość minimum 1 znak
+-dopuszczone znaki: małe i wielkie litery alfabetu angielskiego, cyfry, znak _
+-jako że to wersja BETA, dozwolone role to: "Uzytkownik", "Grafik", "Developer", "Tester", "Programista", "Manager" i "Praktykant" oraz dwie role specjalne: "Admin" i "Niezweryfikowany"
+
+
+Klucze pokoju nie są w żaden sposób weryfikowane, jedynie zabezpieczane przed próbą SQL Injection; jeśli poda się niepoprawne, to po prostu nic się nie odszyfruje

@@ -2,6 +2,7 @@ import typing
 import hashlib as hash
 import KomunikacjaZBaza as Bazy
 import SQLLite as Baza
+import ManagerNazw as Nazwy
     
     
 def dodajDoPokoju(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str, dodawanaOsoba: str, kluczePokoju: typing.Tuple[str,str]) -> typing.Tuple[bool,typing.List[str]]: #[sukces operacji, [""]]
@@ -33,7 +34,7 @@ def dodajDoPokoju(baza: Baza.SQLLiteDB, login: str, token: str, nazwaPokoju: str
 
         else:        
             Bazy.dodajDoPokoju(baza,hashLog,nazwaPokoju,loginDodawanego)
-            Bazy.dodajKluczPokoju(baza,login,nazwaPokoju,kluczePokoju[0],kluczePokoju[1],loginDodawanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym dodawanego użytkownika
+            Bazy.dodajKluczPokoju(baza,login,nazwaPokoju,Nazwy.zabezpieczCudzyslowy(kluczePokoju[0]),Nazwy.zabezpieczCudzyslowy(kluczePokoju[1]),loginDodawanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczem publicznym dodawanego użytkownika
             return True, [""]
 
 

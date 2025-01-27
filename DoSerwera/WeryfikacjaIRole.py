@@ -2,6 +2,7 @@ import hashlib as hash
 import typing
 import KomunikacjaZBaza as Bazy
 import SQLLite as Baza
+import ManagerNazw as Nazwy
 
 
 def zweryfikuj(baza: Baza.SQLLiteDB, login: str, token: str, nickWeryfikowanego: str, nowaRola: str, nazwaProjektu: str, kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego: typing.Tuple[str,str]) -> typing.Tuple[bool,typing.List[str]]:   #[sukces operacji, [""]]
@@ -30,7 +31,7 @@ def zweryfikuj(baza: Baza.SQLLiteDB, login: str, token: str, nickWeryfikowanego:
     else:
         Bazy.ustawRole(baza,hashLog,loginWeryfikowanego,nowaRola)
         Bazy.dodajDoPokoju(baza,hashLog,nazwaProjektu,loginWeryfikowanego)        #dodaj zweryfikowanego użytkownika do pokoju głównego
-        Bazy.dodajKluczPokoju(baza,login,nazwaProjektu,kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[0],kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[1],loginWeryfikowanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym zweryfikowanego użytkownika
+        Bazy.dodajKluczPokoju(baza,login,nazwaProjektu,Nazwy.zabezpieczCudzyslowy(kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[0]),Nazwy.zabezpieczCudzyslowy(kluczePokojuGlownegoZaszyfrowaneKluczemWeryfikowanego[1]),loginWeryfikowanego)    #dodanie do tabeli kluczy, wygenerowanych kluczy pokoju głównego zaszyfrowanych kluczm publicznym zweryfikowanego użytkownika
         return True, [""]
 
 
