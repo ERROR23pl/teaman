@@ -323,6 +323,24 @@ class SQLLiteDB:
         )
     
     
+    def czy_mozna_zaznaczyc(self, idTaska: int):
+        self.execute(
+            "SELECT * FROM (KolejnoscTaskow JOIN Taski ON (KolejnoscTaskow.task_wymagany = Taski.id)) WHERE KolejnoscTaskow.task = ? AND Taski.zrobiony = 0",
+            idTaska
+        )
+
+        return self.cursor.fetchone() is None
+    
+    
+    def czy_mozna_odznaczyc(self, idTaska: int):
+        self.execute(
+            "SELECT * FROM (KolejnoscTaskow JOIN Taski ON (KolejnoscTaskow.task = Taski.id)) WHERE KolejnoscTaskow.task_wymagany = ? AND Taski.zrobiony = 1",
+            idTaska
+        )
+
+        return self.cursor.fetchone() is None
+    
+    
     
     def dodaj_taski(self, nazwaPokoju: str, listaTaskow: list[Task]):
         for task in listaTaskow:
@@ -356,7 +374,7 @@ class SQLLiteDB:
 
         task_exists = self.cursor.fetchone() is not None
 
-        task_isnt_blocked = True # todo: change this into a prepared statement 
+        task_isnt_blocked = self.czy_mozna_zaznaczyc(idTaska)
 
         if task_exists and task_isnt_blocked:
             self.exec_and_commit(
@@ -379,7 +397,7 @@ class SQLLiteDB:
 
         task_exists = self.cursor.fetchone() is not None
 
-        task_isnt_blocked = True # todo: change this into a prepared statement 
+        task_isnt_blocked = self.czy_mozna_zaznaczyc(idTaska)
 
         if task_exists and task_isnt_blocked:
             self.exec_and_commit(
