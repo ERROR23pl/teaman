@@ -334,7 +334,7 @@ class SQLLiteDB:
     
     def czy_mozna_odznaczyc(self, idTaska: int):
         self.execute(
-            "SELECT * FROM (KolejnoscTaskow JOIN Taski ON (KolejnoscTaskow.task = Taski.id)) WHERE KolejnoscTaskow.task_wymagany = ? AND Taski.zrobiony = 1",
+            "SELECT * FROM (Taski JOIN KolejnoscTaskow ON (Taski.id = KolejnoscTaskow.task)) WHERE KolejnoscTaskow.task_wymagany = ? AND Taski.zrobiony = 1",
             idTaska
         )
 
@@ -397,7 +397,7 @@ class SQLLiteDB:
 
         task_exists = self.cursor.fetchone() is not None
 
-        task_isnt_blocked = self.czy_mozna_zaznaczyc(idTaska)
+        task_isnt_blocked = self.czy_mozna_odznaczyc(idTaska)
 
         if task_exists and task_isnt_blocked:
             self.exec_and_commit(
